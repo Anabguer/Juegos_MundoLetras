@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1e40af">
+    <title>Sistema Apps - Colisan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .app-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .app-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-description {
+            font-size: 1rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .app-badge {
+            display: inline-block;
+            background: rgba(34, 197, 94, 0.8);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        .app-badge.new {
+            background: rgba(239, 68, 68, 0.8);
+        }
+
+        .footer {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .app-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🚀</div>
+            <h1 class="title">Sistema Apps</h1>
+            <p class="subtitle">Selecciona la aplicación que deseas usar</p>
+        </div>
+
+        <div class="apps-grid">
+            <!-- Mundo Letras - NUEVA -->
+            <a href="router.html?app=mundoletras" class="app-card">
+                <div class="app-icon">🔤</div>
+                <div class="app-name">Mundo Letras</div>
+                <div class="app-description">
+                    Juego de sopa de letras con más de 1000 niveles. 
+                    Desafía tu mente con diferentes mecánicas y temas.
+                </div>
+                <div class="app-badge new">¡NUEVO!</div>
+            </a>
+
+            <!-- Recetas (si existe) -->
+            <a href="router.html?app=recetas" class="app-card">
+                <div class="app-icon">👨‍🍳</div>
+                <div class="app-name">Recetas a Mi Aire</div>
+                <div class="app-description">
+                    Gestiona tus recetas favoritas y descubre nuevos sabores 
+                    con nuestra colección personalizada.
+                </div>
+                <div class="app-badge">Disponible</div>
+            </a>
+
+            <!-- MemoFlip (si existe) -->
+            <a href="router.html?app=memoflip" class="app-card">
+                <div class="app-icon">🧠</div>
+                <div class="app-name">MemoFlip</div>
+                <div class="app-description">
+                    Juego de memoria que desafía tu capacidad de recordar 
+                    patrones y secuencias.
+                </div>
+                <div class="app-badge">Disponible</div>
+            </a>
+
+            <!-- Placeholder para futuras apps -->
+            <div class="app-card" style="opacity: 0.5; cursor: not-allowed;">
+                <div class="app-icon">🚧</div>
+                <div class="app-name">Próximamente</div>
+                <div class="app-description">
+                    Más aplicaciones estarán disponibles pronto. 
+                    ¡Mantente atento!
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Colisan - Sistema Multi-Aplicación</p>
+            <p>Optimizado para dispositivos móviles</p>
+        </div>
+    </div>
+
+    <script>
+        // Prevenir zoom en dispositivos móviles
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+
+        // Analytics simple (opcional)
+        function trackAppSelection(appName) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'app_selection', {
+                    'app_name': appName,
+                    'timestamp': new Date().toISOString()
+                });
+            }
+        }
+
+        // Agregar tracking a los enlaces
+        document.querySelectorAll('.app-card[href]').forEach(link => {
+            link.addEventListener('click', function() {
+                const appName = this.querySelector('.app-name').textContent;
+                trackAppSelection(appName);
+                
+                // Log para debug
+                console.log('🎯 Navegando a:', appName);
+            });
+        });
+
+        // Mostrar información de debug en consola
+        console.log('🚀 Sistema Multi-Aplicación Hostalia');
+        console.log('📱 Apps disponibles:', ['mundoletras', 'recetas', 'memoflip']);
+        console.log('🔗 Base URL:', window.location.origin + window.location.pathname.replace('index.html', ''));
+    </script>
+</body>
+</html>

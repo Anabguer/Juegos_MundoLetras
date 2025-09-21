@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirigiendo...</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .loading {
+            text-align: center;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .app-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .error {
+            background: rgba(220, 38, 38, 0.9);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="spinner"></div>
+        <p>Redirigiendo a la aplicación...</p>
+        <div id="app-info" class="app-info"></div>
+        <div id="error-container"></div>
+    </div>
+
+    <script>
+        // Router inteligente para el sistema multi-aplicación
+        function getAppFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('app') || 'mundoletras';
+        }
+
+        function showError(message) {
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.innerHTML = `<div class="error">❌ ${message}</div>`;
+        }
+
+        function showAppInfo(app, file) {
+            const appInfo = document.getElementById('app-info');
+            const appNames = {
+                'mundoletras': '🔤 Mundo Letras',
+                'recetas': '👨‍🍳 Recetas a Mi Aire', 
+                'memoflip': '🧠 MemoFlip'
+            };
+            
+            appInfo.innerHTML = `
+                <p>Cargando: ${appNames[app] || '🎮 ' + app}</p>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem;">Archivo: ${file}</p>
+            `;
+        }
+
+        function redirectToApp() {
+            const app = getAppFromURL();
+            const baseURL = window.location.origin + window.location.pathname.replace('router.html', '');
+            
+            // Mapeo de aplicaciones
+            const appMapping = {
+                'mundoletras': 'app_mundoletras.html',
+                'recetas': 'app_recetas.html',
+                'memoflip': 'app_memoflip.html'
+            };
+
+            const appFile = appMapping[app];
+            
+            if (!appFile) {
+                showError(`Aplicación "${app}" no encontrada. Apps disponibles: ${Object.keys(appMapping).join(', ')}`);
+                return;
+            }
+
+            showAppInfo(app, appFile);
+            
+            const redirectURL = baseURL + appFile;
+
+            // Preservar parámetros adicionales
+            const currentParams = new URLSearchParams(window.location.search);
+            currentParams.delete('app'); // Remover el parámetro app
+
+            let finalURL = redirectURL;
+            if (currentParams.toString()) {
+                const separator = redirectURL.includes('?') ? '&' : '?';
+                finalURL = redirectURL + separator + currentParams.toString();
+            }
+
+            // Log para debug
+            console.log('🎯 Router Info:', {
+                app: app,
+                file: appFile,
+                baseURL: baseURL,
+                finalURL: finalURL,
+                availableApps: Object.keys(appMapping)
+            });
+
+            // Redirigir después de un breve delay
+            setTimeout(() => {
+                window.location.href = finalURL;
+            }, 1000);
+        }
+
+        // Manejar errores de redirección
+        window.addEventListener('error', function(e) {
+            showError('Error cargando la aplicación. Verifica que el archivo existe.');
+            console.error('Router Error:', e);
+        });
+
+        // Iniciar redirección
+        try {
+            redirectToApp();
+        } catch (error) {
+            showError('Error en el router: ' + error.message);
+            console.error('Router Exception:', error);
+        }
+    </script>
+</body>
+</html>

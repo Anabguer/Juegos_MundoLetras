@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Aplicaciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+        }
+
+        .app-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .app-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        .app-desc {
+            color: #718096;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            color: white;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .apps-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .app-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Mis Aplicaciones</h1>
+            <p>Selecciona una aplicación para comenzar</p>
+        </div>
+
+        <div class="apps-grid">
+            <!-- Aplicación MemoFlip -->
+            <a href="router.html?app=memoflip" class="app-card">
+                <span class="app-icon">🧠</span>
+                <div class="app-name">MemoFlip</div>
+                <div class="app-desc">Juego de memoria y concentración con múltiples mundos y niveles</div>
+            </a>
+
+            <!-- Aplicación Recetas -->
+            <a href="router.html?app=recetas" class="app-card">
+                <span class="app-icon">🍃</span>
+                <div class="app-name">Mis Recetas</div>
+                <div class="app-desc">Gestiona tus recetas favoritas de forma organizada</div>
+            </a>
+
+            <!-- Aplicación MundoLetras (Sopa de Letras) -->
+	    <a href="router.html?app=mundoletras" class="app-card">
+    		<div class="app-icon">🔤</div>
+    	        <div class="app-name">Mundo Letras</div>
+    	        <div class="app-description">
+        	    Juego de sopa de letras con más de 1000 niveles. 
+        	    Desafía tu mente con diferentes mecánicas y temas.
+    	        </div>
+	   </a>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 Sistema Multi-Aplicación</p>
+        </div>
+    </div>
+
+    <script>
+        // Guardar en localStorage la última app visitada
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const href = this.getAttribute('href');
+                const appMatch = href.match(/app=(\w+)/);
+                if (appMatch) {
+                    localStorage.setItem('last_app', appMatch[1]);
+                }
+            });
+        });
+
+        // Mostrar información de debug en desarrollo
+        if (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1')) {
+            console.log('🔧 Modo DEBUG activado');
+            console.log('Última app usada:', localStorage.getItem('last_app'));
+        }
+    </script>
+</body>
+</html>

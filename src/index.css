@@ -1,0 +1,533 @@
+:root {
+  /* Colores principales */
+  --primary-blue: #1e40af;
+  --primary-blue-dark: #1e3a8a;
+  --primary-blue-light: #3b82f6;
+  
+  --secondary-green: #16a34a;
+  --secondary-red: #dc2626;
+  --secondary-orange: #ea580c;
+  --secondary-purple: #7c3aed;
+  
+  /* Colores de UI */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #e2e8f0;
+  --bg-card: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-light: #94a3b8;
+  --text-white: #ffffff;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #3b82f6;
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  /* Espaciado */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  
+  /* Bordes redondeados */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  
+  /* Fuentes */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Utilidades generales */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+}
+
+.card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  min-height: 44px; /* Tamaño mínimo táctil */
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--primary-blue);
+  color: var(--text-white);
+  border-left: 4px solid var(--primary-blue-dark);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-blue-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-left: 4px solid var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--border-color);
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  background-color: var(--secondary-green);
+  color: var(--text-white);
+  border-left: 4px solid #15803d;
+}
+
+.btn-danger {
+  background-color: var(--secondary-red);
+  color: var(--text-white);
+  border-left: 4px solid #b91c1c;
+}
+
+.btn-sm {
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: 0.875rem;
+  min-height: 36px;
+}
+
+.btn-lg {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 1.125rem;
+  min-height: 52px;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  min-height: 44px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  background-color: var(--bg-card);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--primary-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto var(--spacing-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  padding: var(--spacing-md);
+}
+
+.modal {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: var(--spacing-lg);
+}
+
+.modal-footer {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+  justify-content: flex-end;
+}
+
+/* Grid de juego */
+.game-grid {
+  display: grid;
+  gap: 2px;
+  background-color: var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.grid-cell {
+  aspect-ratio: 1;
+  background-color: var(--bg-card);
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  min-height: 40px;
+}
+
+.grid-cell:hover {
+  background-color: var(--bg-secondary);
+}
+
+.grid-cell.selected {
+  background-color: var(--primary-blue);
+  color: var(--text-white);
+  border-color: var(--primary-blue-dark);
+}
+
+.grid-cell.found {
+  background-color: var(--secondary-green);
+  color: var(--text-white);
+  border-color: #15803d;
+}
+
+.grid-cell.foggy {
+  background-color: var(--text-secondary);
+  color: var(--text-secondary);
+}
+
+.grid-cell.ghost {
+  animation: ghost-flicker 0.8s infinite;
+}
+
+@keyframes ghost-flicker {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+/* HUD del juego */
+.game-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.hud-value {
+  font-size: 1rem;
+  color: var(--primary-blue);
+}
+
+/* Lista de palabras */
+.words-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-top: var(--spacing-md);
+}
+
+.word-item {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.word-item.found {
+  background-color: var(--secondary-green);
+  color: var(--text-white);
+  text-decoration: line-through;
+}
+
+.word-item.meta {
+  background-color: var(--secondary-orange);
+  color: var(--text-white);
+  position: relative;
+}
+
+.word-item.meta::after {
+  content: '×3';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: var(--secondary-red);
+  color: var(--text-white);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mapa horizontal */
+.level-map {
+  padding: var(--spacing-lg) 0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.level-nodes {
+  display: inline-flex;
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-lg);
+  min-width: max-content;
+}
+
+.level-node {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-xl);
+  border: 3px solid var(--border-color);
+  background-color: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.level-node:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.level-node.completed {
+  border-color: var(--secondary-green);
+  background-color: #f0fdf4;
+}
+
+.level-node.current {
+  border-color: var(--primary-blue);
+  background-color: #eff6ff;
+}
+
+.level-node.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.level-number {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.level-stars {
+  display: flex;
+  gap: 2px;
+  margin-top: var(--spacing-xs);
+}
+
+.star {
+  width: 12px;
+  height: 12px;
+  color: #fbbf24;
+}
+
+.star.empty {
+  color: var(--border-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .modal {
+    margin: var(--spacing-sm);
+  }
+  
+  .game-hud {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .hud-item {
+    justify-content: space-between;
+  }
+  
+  .grid-cell {
+    font-size: 1rem;
+    min-height: 36px;
+  }
+  
+  .level-node {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+  }
+  
+  .grid-cell {
+    font-size: 0.875rem;
+    min-height: 32px;
+  }
+  
+  .level-node {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .level-nodes {
+    gap: var(--spacing-sm);
+  }
+}

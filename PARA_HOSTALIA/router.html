@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargando...</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: #f8f9fa; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+        }
+        .loading-container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 300px;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #507019;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: #374151;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .loading-app {
+            color: #507019;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        .error-container {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 400px;
+        }
+        .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .error-text {
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+        .selector-btn {
+            background: #507019;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .selector-btn:hover {
+            background: #3f5a14;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-container">
+        <div class="spinner"></div>
+        <div class="loading-text">Cargando</div>
+        <div id="appName" class="loading-app"></div>
+    </div>
+
+    <!-- Error Screen -->
+    <div id="errorScreen" class="error-container">
+        <div class="error-icon">⚠️</div>
+        <div class="error-text">No se pudo cargar la aplicación</div>
+        <a href="index.html" class="selector-btn">Ver Aplicaciones</a>
+    </div>
+
+    <script>
+        // =====================================================
+        // ROUTER MULTI-APLICACIÓN
+        // Detecta qué aplicación debe cargar automáticamente
+        // =====================================================
+
+        // Configuración de aplicaciones disponibles
+        const APLICACIONES = {
+            'recetas': {
+                nombre: 'Mis Recetas',
+                emoji: '🍃',
+                archivo: 'app_recetas.html', // Archivo específico de recetas
+                descripcion: 'Gestiona tus recetas favoritas'
+            },
+            'memoflip': {
+                nombre: 'Memory Game',
+                emoji: '🧠',
+                archivo: 'app_memoflip.html',
+                descripcion: 'Juego de memoria'
+            }
+            'mybdiketras': {
+                nombre: 'Mundo Letras',
+                emoji: '🧠',
+                archivo: 'app_mundoletras.html',
+                descripcion: 'Juego de Sopa de Letras'
+            }
+
+        };
+
+        // =====================================================
+        // FUNCIONES DEL ROUTER
+        // =====================================================
+
+        function obtenerParametroURL(nombre) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(nombre);
+        }
+
+        function mostrarError(mensaje = 'Aplicación no encontrada') {
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('errorScreen').style.display = 'block';
+            document.querySelector('.error-text').textContent = mensaje;
+        }
+
+        function cargarAplicacion(appCode) {
+            const app = APLICACIONES[appCode];
+            
+            if (!app) {
+                console.error(`Aplicación '${appCode}' no encontrada`);
+                mostrarError(`Aplicación '${appCode}' no disponible`);
+                return;
+            }
+
+            // Mostrar nombre de la app
+            document.getElementById('appName').textContent = app.nombre;
+            
+            // Simular tiempo de carga mínimo para UX
+            setTimeout(() => {
+                // Verificar si el archivo existe antes de redirigir
+                fetch(app.archivo, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            // Redirigir a la aplicación
+                            window.location.replace(app.archivo);
+                        } else {
+                            mostrarError(`${app.nombre} no está disponible`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al verificar aplicación:', error);
+                        mostrarError(`Error al cargar ${app.nombre}`);
+                    });
+            }, 800); // 800ms de loading mínimo
+        }
+
+        function detectarAplicacion() {
+            // 1. Parámetro URL directo (?app=recetas)
+            const appParam = obtenerParametroURL('app');
+            if (appParam) {
+                console.log(`Aplicación detectada por parámetro: ${appParam}`);
+                return appParam;
+            }
+
+            // 2. Hash URL (#recetas)
+            const hash = window.location.hash.substring(1);
+            if (hash && APLICACIONES[hash]) {
+                console.log(`Aplicación detectada por hash: ${hash}`);
+                return hash;
+            }
+
+            // 3. User Agent (para APKs específicas)
+            const userAgent = navigator.userAgent.toLowerCase();
+            if (userAgent.includes('recetas_app')) {
+                console.log('APK de Recetas detectada');
+                return 'recetas';
+            }
+            if (userAgent.includes('puzzle_app')) {
+                console.log('APK de Puzzle detectada');
+                return 'puzzle';
+            }
+
+            // 4. LocalStorage (última app usada)
+            const lastApp = localStorage.getItem('last_app');
+            if (lastApp && APLICACIONES[lastApp]) {
+                console.log(`Última aplicación usada: ${lastApp}`);
+                return lastApp;
+            }
+
+            // 5. Por defecto, mostrar selector
+            console.log('No se detectó aplicación específica, mostrando selector');
+            return null;
+        }
+
+        // =====================================================
+        // INICIALIZACIÓN
+        // =====================================================
+
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Router Multi-Aplicación iniciado');
+            
+            const appDetectada = detectarAplicacion();
+            
+            if (appDetectada) {
+                // Guardar en localStorage para próxima vez
+                localStorage.setItem('last_app', appDetectada);
+                
+                // Cargar aplicación específica
+                cargarAplicacion(appDetectada);
+            } else {
+                // Redirigir al selector de aplicaciones
+                setTimeout(() => {
+                    window.location.replace('index.html');
+                }, 500);
+            }
+        });
+
+        // =====================================================
+        // DEBUG INFO (solo en desarrollo)
+        // =====================================================
+
+        if (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1')) {
+            console.log('🔧 Modo DEBUG activado');
+            console.log('Aplicaciones disponibles:', Object.keys(APLICACIONES));
+            console.log('URL actual:', window.location.href);
+            console.log('Parámetros:', new URLSearchParams(window.location.search).toString());
+        }
+    </script>
+</body>
+</html>

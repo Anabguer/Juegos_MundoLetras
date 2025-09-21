@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="description" content="Mundo Letras - Juego de sopa de letras con más de 1000 niveles">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mundo Letras">
+    
+    <title>Mundo Letras - Sopa de Letras</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        input, textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: none !important;
+            flex-direction: column;
+        }
+        
+        .screen.active {
+            display: flex !important;
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            min-height: 44px;
+            margin: 0.5rem;
+            width: calc(100% - 1rem);
+        }
+        
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+            border-left: 4px solid #1e40af;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1e40af;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-left: 4px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Game Screen */
+        .game-screen {
+            padding: 1rem;
+        }
+        
+        .game-hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .hud-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .hud-value {
+            font-weight: bold;
+            color: #fbbf24;
+        }
+        
+        .game-grid {
+            display: grid;
+            gap: 2px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            max-width: 100%;
+            margin: 0 auto 1rem;
+            grid-template-columns: repeat(6, 1fr);
+        }
+        
+        .grid-cell {
+            aspect-ratio: 1;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #1e40af;
+            border: 2px solid transparent;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 40px;
+        }
+        
+        .grid-cell:hover {
+            background-color: #e0e7ff;
+        }
+        
+        .grid-cell.selected {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #1e40af;
+        }
+        
+        .grid-cell.found {
+            background-color: #10b981;
+            color: white;
+            border-color: #059669;
+        }
+        
+        .words-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .word-item {
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+        
+        .word-item.found {
+            background-color: #10b981;
+            text-decoration: line-through;
+        }
+        
+        .game-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            min-height: 36px;
+            width: auto;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .game-hud {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .hud-item {
+                font-size: 0.8rem;
+            }
+            
+            .grid-cell {
+                font-size: 1rem;
+                min-height: 36px;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+            }
+        }
+        
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Success/Error messages */
+        .message {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .message.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+        
+        .message.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen login-screen active">
+        <div class="login-card">
+            <div class="logo">🔤</div>
+            <h1 class="title">Mundo Letras</h1>
+            <p class="subtitle">Juego de sopa de letras con 1000+ niveles</p>
+            
+            <div id="login-content">
+                <button class="btn btn-primary" onclick="startAsGuest()">
+                    👤 Jugar como Invitado
+                </button>
+                
+                <button class="btn btn-secondary" onclick="showLogin()">
+                    🔑 Iniciar Sesión
+                </button>
+                
+                <button class="btn btn-secondary" onclick="showRegister()">
+                    📝 Crear Cuenta
+                </button>
+                
+                <!-- Botón de debug temporal -->
+                <button class="btn btn-secondary" onclick="debugStartGame()" style="margin-top: 1rem; font-size: 0.8rem;">
+                    🔧 Debug: Ir al Juego
+                </button>
+                
+                <button class="btn btn-secondary" onclick="forceShowGame()" style="margin-top: 0.5rem; font-size: 0.8rem;">
+                    🚀 FORZAR Juego
+                </button>
+            </div>
+            
+            <div id="message-container"></div>
+        </div>
+    </div>
+    
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen game-screen">
+        <!-- HUD -->
+        <div class="game-hud">
+            <div class="hud-item">
+                <span>⚡</span>
+                <span id="score" class="hud-value">0</span>
+            </div>
+            <div class="hud-item">
+                <span>🔥</span>
+                <span id="streak" class="hud-value">0</span>
+            </div>
+            <div class="hud-item">
+                <span>❌</span>
+                <span id="errors" class="hud-value">0/10</span>
+            </div>
+            <div class="hud-item">
+                <span>💰</span>
+                <span id="coins" class="hud-value">50</span>
+            </div>
+            <div class="hud-item">
+                <span>📊</span>
+                <span>Nivel <span id="level" class="hud-value">1</span></span>
+            </div>
+        </div>
+        
+        <!-- Game Grid -->
+        <div id="game-grid" class="game-grid">
+            <!-- Cells will be generated by JavaScript -->
+        </div>
+        
+        <!-- Words List -->
+        <div id="words-list" class="words-list">
+            <!-- Words will be generated by JavaScript -->
+        </div>
+        
+        <!-- Game Controls -->
+        <div class="game-controls">
+            <button class="btn btn-secondary btn-sm" onclick="clearSelection()">
+                🚫 Limpiar Selección
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="backToMenu()">
+                🏠 Volver al Menú
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Configuración del juego
+        const CONFIG = {
+            API_BASE_URL: 'https://colisan.com/sistema_apps_upload/sistema_apps_api/mundoletras/',
+            GRID_SIZE: 6,
+            MAX_ERRORS: 10
+        };
+        
+        // Estado del juego
+        let gameState = {
+            currentUser: null,
+            currentLevel: 1,
+            score: 0,
+            streak: 0,
+            errors: 0,
+            coins: 50,
+            selectedCells: [],
+            foundWords: [],
+            currentGrid: [],
+            currentWords: ['MAR', 'ALGA', 'CORAL', 'PECES']
+        };
+        
+        // Funciones de navegación
+        function showScreen(screenId) {
+            console.log('🖥️ Cambiando a pantalla:', screenId);
+            
+            // Remover clase active de todas las pantallas
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+                console.log('Ocultando pantalla:', s.id);
+            });
+            
+            // Mostrar pantalla solicitada
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+                console.log('✅ Mostrando pantalla:', screenId);
+            } else {
+                console.error('❌ Pantalla no encontrada:', screenId);
+            }
+        }
+        
+        function startAsGuest() {
+            gameState.currentUser = {
+                isGuest: true,
+                name: 'Invitado',
+                key: 'guest_' + Date.now()
+            };
+            
+            // Resetear estado del juego
+            gameState.currentLevel = 1;
+            gameState.score = 0;
+            gameState.streak = 0;
+            gameState.errors = 0;
+            gameState.coins = 50;
+            gameState.selectedCells = [];
+            gameState.foundWords = [];
+            
+            showMessage('¡Bienvenido! Iniciando juego...', 'success');
+            setTimeout(() => {
+                try {
+                    initGame();
+                    showScreen('game-screen');
+                    console.log('🎮 Juego iniciado correctamente');
+                } catch (error) {
+                    console.error('Error iniciando juego:', error);
+                    showMessage('Error iniciando el juego. Intenta de nuevo.', 'error');
+                }
+            }, 1500);
+        }
+        
+        function showLogin() {
+            const loginContent = document.getElementById('login-content');
+            loginContent.innerHTML = `
+                <div style="text-align: left;">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
+                        <input type="email" id="login-email" placeholder="tu@email.com" 
+                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
+                        <input type="password" id="login-password" placeholder="••••••••"
+                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="doLogin()">
+                    🔑 Iniciar Sesión
+                </button>
+                
+                <button class="btn btn-secondary" onclick="backToMainMenu()">
+                    ← Volver
+                </button>
+            `;
+        }
+        
+        function showRegister() {
+            const loginContent = document.getElementById('login-content');
+            loginContent.innerHTML = `
+                <div style="text-align: left;">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre:</label>
+                        <input type="text" id="register-name" placeholder="Tu nombre" 
+                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
+                        <input type="email" id="register-email" placeholder="tu@email.com" 
+                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
+                        <input type="password" id="register-password" placeholder="••••••••"
+                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="doRegister()">
+                    📝 Crear Cuenta
+                </button>
+                
+                <button class="btn btn-secondary" onclick="backToMainMenu()">
+                    ← Volver
+                </button>
+            `;
+        }
+        
+        function backToMainMenu() {
+            const loginContent = document.getElementById('login-content');
+            loginContent.innerHTML = `
+                <button class="btn btn-primary" onclick="startAsGuest()">
+                    👤 Jugar como Invitado
+                </button>
+                
+                <button class="btn btn-secondary" onclick="showLogin()">
+                    🔑 Iniciar Sesión
+                </button>
+                
+                <button class="btn btn-secondary" onclick="showRegister()">
+                    📝 Crear Cuenta
+                </button>
+            `;
+        }
+        
+        async function doLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                showMessage('Por favor completa todos los campos', 'error');
+                return;
+            }
+            
+            showMessage('Iniciando sesión...', 'success');
+            
+            try {
+                const response = await fetch(CONFIG.API_BASE_URL + 'auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'login',
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    gameState.currentUser = {
+                        isGuest: false,
+                        ...data.data.user
+                    };
+                    
+                    showMessage('¡Bienvenido de vuelta! Iniciando juego...', 'success');
+                    setTimeout(() => {
+                        initGame();
+                        showScreen('game-screen');
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Error en el login', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error de conexión. Intenta de nuevo.', 'error');
+            }
+        }
+        
+        async function doRegister() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            
+            if (!name || !email || !password) {
+                showMessage('Por favor completa todos los campos', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('La contraseña debe tener al menos 6 caracteres', 'error');
+                return;
+            }
+            
+            showMessage('Creando cuenta...', 'success');
+            
+            try {
+                const response = await fetch(CONFIG.API_BASE_URL + 'auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'register',
+                        email: email,
+                        password: password,
+                        nombre: name
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('¡Cuenta creada! Revisa tu email para el código de verificación.', 'success');
+                    setTimeout(() => {
+                        showVerification(email, password);
+                    }, 2000);
+                } else {
+                    showMessage(data.message || 'Error en el registro', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error de conexión. Intenta de nuevo.', 'error');
+            }
+        }
+        
+        function showVerification(email, password) {
+            const loginContent = document.getElementById('login-content');
+            loginContent.innerHTML = `
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📧</div>
+                    <p style="margin-bottom: 0.5rem;">Código enviado a:</p>
+                    <p style="font-weight: bold; color: #fbbf24;">${email}</p>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; text-align: center;">Código de Verificación:</label>
+                    <input type="text" id="verify-code" placeholder="123456" maxlength="6"
+                           style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 18px; text-align: center; letter-spacing: 0.2em;">
+                </div>
+                
+                <button class="btn btn-primary" onclick="doVerify('${email}', '${password}')">
+                    ✅ Verificar Código
+                </button>
+                
+                <button class="btn btn-secondary" onclick="backToMainMenu()">
+                    ← Volver
+                </button>
+            `;
+        }
+        
+        async function doVerify(email, password) {
+            const code = document.getElementById('verify-code').value;
+            
+            if (!code || code.length !== 6) {
+                showMessage('Por favor introduce el código de 6 dígitos', 'error');
+                return;
+            }
+            
+            showMessage('Verificando código...', 'success');
+            
+            try {
+                const response = await fetch(CONFIG.API_BASE_URL + 'auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'verify',
+                        code: code
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('¡Cuenta verificada! Iniciando sesión...', 'success');
+                    
+                    // Auto-login después de verificar
+                    setTimeout(async () => {
+                        const loginResponse = await fetch(CONFIG.API_BASE_URL + 'auth.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                action: 'login',
+                                email: email,
+                                password: password
+                            })
+                        });
+                        
+                        const loginData = await loginResponse.json();
+                        
+                        if (loginData.success) {
+                            gameState.currentUser = {
+                                isGuest: false,
+                                ...loginData.data.user
+                            };
+                            
+                            initGame();
+                            showScreen('game-screen');
+                        }
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Código incorrecto', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error de conexión. Intenta de nuevo.', 'error');
+            }
+        }
+        
+        function backToMenu() {
+            showScreen('login-screen');
+        }
+        
+        // Función de debug para probar directamente
+        function debugStartGame() {
+            console.log('🔧 DEBUG: Iniciando juego directamente');
+            
+            gameState.currentUser = {
+                isGuest: true,
+                name: 'Debug User',
+                key: 'debug_' + Date.now()
+            };
+            
+            // Resetear estado
+            gameState.currentLevel = 1;
+            gameState.score = 0;
+            gameState.streak = 0;
+            gameState.errors = 0;
+            gameState.coins = 50;
+            gameState.selectedCells = [];
+            gameState.foundWords = [];
+            
+            try {
+                console.log('🔧 DEBUG: Inicializando juego...');
+                initGame();
+                console.log('🔧 DEBUG: Cambiando a pantalla de juego...');
+                showScreen('game-screen');
+            } catch (error) {
+                console.error('🔧 DEBUG: Error:', error);
+                alert('Error en debug: ' + error.message);
+            }
+        }
+        
+        // Función para forzar el cambio de pantalla
+        function forceShowGame() {
+            console.log('🚀 FORZANDO cambio a pantalla de juego');
+            
+            // Ocultar login screen completamente
+            const loginScreen = document.getElementById('login-screen');
+            const gameScreen = document.getElementById('game-screen');
+            
+            console.log('Login screen element:', loginScreen);
+            console.log('Game screen element:', gameScreen);
+            
+            if (loginScreen && gameScreen) {
+                // Método 1: CSS directo
+                loginScreen.style.display = 'none';
+                gameScreen.style.display = 'flex';
+                
+                // Método 2: Clases
+                loginScreen.classList.remove('active');
+                gameScreen.classList.add('active');
+                
+                console.log('✅ Pantallas cambiadas por fuerza bruta');
+                
+                // Inicializar juego básico
+                gameState.currentLevel = 1;
+                gameState.currentWords = ['MAR', 'SOL', 'LUNA', 'CASA'];
+                CONFIG.GRID_SIZE = 6;
+                
+                try {
+                    generateGrid();
+                    updateHUD();
+                    updateWordsList();
+                    console.log('✅ Juego inicializado');
+                } catch (error) {
+                    console.error('Error inicializando:', error);
+                }
+            } else {
+                console.error('❌ No se encontraron las pantallas');
+                alert('Error: No se encontraron las pantallas HTML');
+            }
+        }
+        
+        // Funciones de mensajes
+        function showMessage(text, type = 'success') {
+            const container = document.getElementById('message-container');
+            container.innerHTML = `<div class="message ${type}">${text}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+        
+        // Inicializar juego
+        function initGame() {
+            // Configurar palabras del nivel actual
+            gameState.currentWords = getLevelWords(gameState.currentLevel);
+            
+            // Resetear configuración de grid para el nivel
+            if (gameState.currentLevel <= 5) {
+                CONFIG.GRID_SIZE = 6;
+            } else if (gameState.currentLevel <= 10) {
+                CONFIG.GRID_SIZE = 7;
+            } else {
+                CONFIG.GRID_SIZE = 8;
+            }
+            
+            generateGrid();
+            updateHUD();
+            updateWordsList();
+        }
+        
+        // Generar siguiente nivel
+        function generateNextLevel() {
+            // Cambiar palabras según el nivel
+            const levelWords = getLevelWords(gameState.currentLevel);
+            gameState.currentWords = levelWords;
+            
+            // Aumentar dificultad gradualmente
+            if (gameState.currentLevel > 5) {
+                CONFIG.GRID_SIZE = 7; // Grid más grande
+            }
+            if (gameState.currentLevel > 10) {
+                CONFIG.GRID_SIZE = 8;
+            }
+            
+            generateGrid();
+            updateHUD();
+            updateWordsList();
+        }
+        
+        // Obtener palabras según el nivel
+        function getLevelWords(level) {
+            const wordSets = [
+                // Niveles 1-3: Palabras cortas
+                ['MAR', 'SOL', 'LUNA', 'CASA'],
+                ['AGUA', 'FUEGO', 'AIRE', 'TIERRA'],
+                ['GATO', 'PERRO', 'PATO', 'OSO'],
+                
+                // Niveles 4-6: Océano
+                ['MAR', 'ALGA', 'CORAL', 'PECES'],
+                ['DELFIN', 'BALLENA', 'ANCLA', 'FARO'],
+                ['OCEANO', 'BRISA', 'PERLA', 'BAHIA'],
+                
+                // Niveles 7-9: Bosque
+                ['ARBOL', 'HOJA', 'RAMA', 'PIÑA'],
+                ['BOSQUE', 'MUSGO', 'SETAS', 'ROBLE'],
+                ['CIERVO', 'ZORRO', 'NIDO', 'TREBOL'],
+                
+                // Niveles 10+: Mixto más difícil
+                ['MONTAÑA', 'CASCADA', 'SENDERO', 'CUMBRE'],
+                ['ESTRELLA', 'GALAXIA', 'PLANETA', 'COMETA'],
+                ['AVENTURA', 'MISTERIO', 'TESORO', 'LEYENDA']
+            ];
+            
+            // Ciclar entre los sets de palabras
+            const setIndex = Math.min(level - 1, wordSets.length - 1);
+            return wordSets[setIndex];
+        }
+        
+        // Generar grid de juego
+        function generateGrid() {
+            const gridContainer = document.getElementById('game-grid');
+            gridContainer.innerHTML = '';
+            gameState.currentGrid = [];
+            
+            const gridSize = CONFIG.GRID_SIZE;
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const words = gameState.currentWords;
+            
+            // Actualizar CSS del grid
+            gridContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+            
+            // Crear grid vacío (sin letras inicialmente)
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                gameState.currentGrid.push('');
+            }
+            
+            // Colocar palabras dinámicamente
+            placeWordsInGrid(words, gridSize);
+            
+            // Rellenar celdas vacías con letras aleatorias
+            fillEmptyCells();
+            
+            // Crear celdas en el DOM
+            gameState.currentGrid.forEach((letter, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                cell.textContent = letter;
+                cell.dataset.index = index;
+                cell.onclick = () => selectCell(index);
+                gridContainer.appendChild(cell);
+            });
+        }
+        
+        // Colocar palabras en el grid
+        function placeWordsInGrid(words, gridSize) {
+            words.forEach((word, wordIndex) => {
+                let placed = false;
+                let attempts = 0;
+                
+                while (!placed && attempts < 50) {
+                    // Elegir dirección aleatoria: 0=horizontal, 1=vertical
+                    const direction = Math.floor(Math.random() * 2);
+                    
+                    let startRow, startCol;
+                    
+                    if (direction === 0) { // Horizontal
+                        startRow = Math.floor(Math.random() * gridSize);
+                        startCol = Math.floor(Math.random() * (gridSize - word.length + 1));
+                    } else { // Vertical
+                        startRow = Math.floor(Math.random() * (gridSize - word.length + 1));
+                        startCol = Math.floor(Math.random() * gridSize);
+                    }
+                    
+                    // Verificar si se puede colocar la palabra
+                    let canPlace = true;
+                    const positions = [];
+                    
+                    for (let i = 0; i < word.length; i++) {
+                        const row = direction === 0 ? startRow : startRow + i;
+                        const col = direction === 0 ? startCol + i : startCol;
+                        const index = row * gridSize + col;
+                        
+                        positions.push(index);
+                        
+                        // Verificar conflictos (solo si ya hay una letra diferente)
+                        const currentLetter = gameState.currentGrid[index];
+                        // Si la celda ya tiene una letra de una palabra anterior, verificar compatibilidad
+                        if (currentLetter && currentLetter !== word[i]) {
+                            canPlace = false;
+                            break;
+                        }
+                    }
+                    
+                    if (canPlace) {
+                        // Colocar la palabra
+                        positions.forEach((index, i) => {
+                            gameState.currentGrid[index] = word[i];
+                        });
+                        placed = true;
+                    }
+                    
+                    attempts++;
+                }
+                
+                // Si no se pudo colocar, usar posición fija como fallback
+                if (!placed) {
+                    placeWordFixed(word, wordIndex, gridSize);
+                }
+            });
+        }
+        
+        // Colocar palabra en posición fija como fallback
+        function placeWordFixed(word, wordIndex, gridSize) {
+            const positions = [
+                // Posiciones fijas para las primeras 4 palabras
+                { row: 0, col: 0, dir: 0 }, // Horizontal primera fila
+                { row: 1, col: 0, dir: 1 }, // Vertical primera columna
+                { row: 2, col: 0, dir: 0 }, // Horizontal tercera fila
+                { row: 0, col: 2, dir: 1 }  // Vertical tercera columna
+            ];
+            
+            if (wordIndex < positions.length) {
+                const pos = positions[wordIndex];
+                
+                for (let i = 0; i < word.length; i++) {
+                    const row = pos.dir === 0 ? pos.row : pos.row + i;
+                    const col = pos.dir === 0 ? pos.col + i : pos.col;
+                    
+                    if (row < gridSize && col < gridSize) {
+                        const index = row * gridSize + col;
+                        gameState.currentGrid[index] = word[i];
+                    }
+                }
+            }
+        }
+        
+        // Rellenar celdas vacías con letras aleatorias
+        function fillEmptyCells() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            
+            for (let i = 0; i < gameState.currentGrid.length; i++) {
+                if (!gameState.currentGrid[i] || gameState.currentGrid[i] === '') {
+                    gameState.currentGrid[i] = letters[Math.floor(Math.random() * letters.length)];
+                }
+            }
+        }
+        
+        // Seleccionar celda
+        function selectCell(index) {
+            const cell = document.querySelector(`[data-index="${index}"]`);
+            
+            if (gameState.selectedCells.includes(index)) {
+                // Deseleccionar
+                const cellIndex = gameState.selectedCells.indexOf(index);
+                gameState.selectedCells = gameState.selectedCells.slice(0, cellIndex + 1);
+            } else {
+                // Verificar si es una selección válida (línea recta)
+                if (gameState.selectedCells.length > 0 && !isValidSelection([...gameState.selectedCells, index])) {
+                    // Si no es válida, empezar nueva selección
+                    gameState.selectedCells = [index];
+                } else {
+                    // Seleccionar
+                    gameState.selectedCells.push(index);
+                }
+            }
+            
+            updateCellSelection();
+            
+            // Verificar automáticamente si se formó una palabra
+            checkForWord();
+        }
+        
+        // Verificar si la selección forma una línea recta
+        function isValidSelection(cells) {
+            if (cells.length <= 1) return true;
+            
+            const gridSize = CONFIG.GRID_SIZE;
+            const positions = cells.map(index => ({
+                row: Math.floor(index / gridSize),
+                col: index % gridSize
+            }));
+            
+            const first = positions[0];
+            const second = positions[1];
+            
+            const deltaRow = second.row - first.row;
+            const deltaCol = second.col - first.col;
+            
+            // Determinar dirección
+            const stepRow = deltaRow === 0 ? 0 : (deltaRow > 0 ? 1 : -1);
+            const stepCol = deltaCol === 0 ? 0 : (deltaCol > 0 ? 1 : -1);
+            
+            // Verificar que todas las posiciones siguen la misma línea
+            for (let i = 0; i < positions.length; i++) {
+                const expectedRow = first.row + stepRow * i;
+                const expectedCol = first.col + stepCol * i;
+                
+                if (positions[i].row !== expectedRow || positions[i].col !== expectedCol) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // Verificar automáticamente si se formó una palabra
+        function checkForWord() {
+            if (gameState.selectedCells.length < 2) return;
+            
+            const selectedWord = gameState.selectedCells
+                .map(index => gameState.currentGrid[index])
+                .join('');
+            
+            const reverseWord = selectedWord.split('').reverse().join('');
+            
+            // Verificar si la palabra está en la lista
+            const foundWord = gameState.currentWords.find(word => 
+                word === selectedWord || word === reverseWord
+            );
+            
+            if (foundWord && !gameState.foundWords.includes(foundWord)) {
+                // Palabra encontrada - marcar inmediatamente
+                gameState.foundWords.push(foundWord);
+                gameState.score += foundWord.length * 100 * (gameState.streak + 1);
+                gameState.streak++;
+                
+                // Marcar celdas como encontradas
+                gameState.selectedCells.forEach(index => {
+                    document.querySelector(`[data-index="${index}"]`).classList.add('found');
+                });
+                
+                showMessage(`¡Encontraste "${foundWord}"! +${foundWord.length * 100} puntos`, 'success');
+                
+                // Limpiar selección
+                gameState.selectedCells = [];
+                updateCellSelection();
+                updateHUD();
+                updateWordsList();
+                
+                // Verificar si se completó el nivel
+                if (gameState.foundWords.length === gameState.currentWords.length) {
+                    setTimeout(() => {
+                        showMessage('¡Nivel completado! 🎉', 'success');
+                        gameState.currentLevel++;
+                        gameState.coins += 10;
+                        gameState.errors = 0; // Resetear errores
+                        gameState.foundWords = []; // Limpiar palabras encontradas
+                        setTimeout(() => {
+                            generateNextLevel();
+                        }, 2000);
+                    }, 1000);
+                }
+            }
+        }
+        
+        // Actualizar selección visual
+        function updateCellSelection() {
+            document.querySelectorAll('.grid-cell').forEach((cell, index) => {
+                cell.classList.remove('selected');
+                if (gameState.selectedCells.includes(index)) {
+                    cell.classList.add('selected');
+                }
+            });
+        }
+        
+        // Limpiar selección
+        function clearSelection() {
+            gameState.selectedCells = [];
+            updateCellSelection();
+        }
+        
+        // Confirmar selección
+        function submitSelection() {
+            if (gameState.selectedCells.length < 2) {
+                showMessage('Selecciona al menos 2 letras', 'error');
+                return;
+            }
+            
+            const selectedWord = gameState.selectedCells
+                .map(index => gameState.currentGrid[index])
+                .join('');
+            
+            const reverseWord = selectedWord.split('').reverse().join('');
+            
+            // Verificar si la palabra está en la lista
+            const foundWord = gameState.currentWords.find(word => 
+                word === selectedWord || word === reverseWord
+            );
+            
+            if (foundWord && !gameState.foundWords.includes(foundWord)) {
+                // Palabra encontrada
+                gameState.foundWords.push(foundWord);
+                gameState.score += foundWord.length * 100 * (gameState.streak + 1);
+                gameState.streak++;
+                
+                // Marcar celdas como encontradas
+                gameState.selectedCells.forEach(index => {
+                    document.querySelector(`[data-index="${index}"]`).classList.add('found');
+                });
+                
+                showMessage(`¡Encontraste "${foundWord}"! +${foundWord.length * 100} puntos`, 'success');
+                
+                // Verificar si se completó el nivel
+                if (gameState.foundWords.length === gameState.currentWords.length) {
+                    setTimeout(() => {
+                        showMessage('¡Nivel completado! 🎉', 'success');
+                        gameState.currentLevel++;
+                        gameState.coins += 10;
+                        setTimeout(() => {
+                            initGame();
+                        }, 2000);
+                    }, 1000);
+                }
+            } else {
+                // Palabra incorrecta
+                gameState.errors++;
+                gameState.streak = 0;
+                showMessage(`"${selectedWord}" no es válida. Errores: ${gameState.errors}/${CONFIG.MAX_ERRORS}`, 'error');
+                
+                // Verificar game over
+                if (gameState.errors >= CONFIG.MAX_ERRORS) {
+                    showMessage('¡Game Over! Reiniciando nivel...', 'error');
+                    setTimeout(() => {
+                        gameState.errors = 0;
+                        gameState.foundWords = [];
+                        gameState.selectedCells = [];
+                        updateCellSelection();
+                        initGame();
+                    }, 2000);
+                }
+            }
+            
+            clearSelection();
+            updateHUD();
+            updateWordsList();
+        }
+        
+        // Actualizar HUD
+        function updateHUD() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('streak').textContent = gameState.streak;
+            document.getElementById('errors').textContent = `${gameState.errors}/${CONFIG.MAX_ERRORS}`;
+            document.getElementById('coins').textContent = gameState.coins;
+            document.getElementById('level').textContent = gameState.currentLevel;
+        }
+        
+        // Actualizar lista de palabras
+        function updateWordsList() {
+            const container = document.getElementById('words-list');
+            container.innerHTML = '';
+            
+            gameState.currentWords.forEach(word => {
+                const wordElement = document.createElement('div');
+                wordElement.className = 'word-item';
+                if (gameState.foundWords.includes(word)) {
+                    wordElement.classList.add('found');
+                }
+                wordElement.textContent = word;
+                container.appendChild(wordElement);
+            });
+        }
+        
+        // Inicializar aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎮 Mundo Letras - Aplicación iniciada');
+            console.log('📊 APIs disponibles en:', CONFIG.API_BASE_URL);
+            
+            // Prevenir zoom en móviles
+            document.addEventListener('gesturestart', function (e) {
+                e.preventDefault();
+            });
+            
+            // Manejar orientación
+            window.addEventListener('orientationchange', function() {
+                setTimeout(() => {
+                    window.scrollTo(0, 0);
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

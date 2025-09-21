@@ -1,0 +1,27 @@
+{
+  "name": "Mundo Letras",
+  "short_name": "MundoLetras",
+  "description": "Juego de sopa de letras con más de 1000 niveles",
+  "theme_color": "#1e3a8a",
+  "background_color": "#1e40af",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "education"],
+  "lang": "es"
+}
