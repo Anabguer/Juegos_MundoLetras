@@ -7,6 +7,7 @@
     <meta name="description" content="Mundo Letras - Juego de sopa de letras con más de 1000 niveles">
     
     <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mundo Letras">
@@ -135,14 +136,28 @@
         
         .game-hud {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 0.75rem;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 0.75rem;
             padding: 1rem;
             margin-bottom: 1rem;
             font-size: 0.9rem;
+        }
+        
+        .hud-user-line {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .hud-stats-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         
         .hud-item {
@@ -154,6 +169,40 @@
         .hud-value {
             font-weight: bold;
             color: #fbbf24;
+        }
+        
+        .user-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.1rem;
+            min-width: 80px;
+        }
+        
+        .user-info #user-icon {
+            font-size: 1.2rem;
+        }
+        
+        .user-info #user-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: white;
+        }
+        
+        .user-info #user-status {
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.3rem;
+            font-weight: 600;
+        }
+        
+        .user-status-guest {
+            background-color: rgba(156, 163, 175, 0.3);
+            color: #d1d5db;
+        }
+        
+        .user-status-logged {
+            background-color: rgba(34, 197, 94, 0.3);
+            color: #86efac;
         }
         
         .game-grid {
@@ -240,12 +289,29 @@
         /* Responsive */
         @media (max-width: 480px) {
             .game-hud {
-                flex-wrap: wrap;
                 gap: 0.5rem;
+                padding: 0.75rem;
+            }
+            
+            .hud-stats-line {
+                gap: 0.25rem;
             }
             
             .hud-item {
                 font-size: 0.8rem;
+            }
+            
+            .user-info {
+                min-width: 70px;
+            }
+            
+            .user-info #user-name {
+                font-size: 0.8rem;
+            }
+            
+            .user-info #user-status {
+                font-size: 0.6rem;
+                padding: 0.05rem 0.3rem;
             }
             
             .grid-cell {
@@ -299,6 +365,55 @@
             border: 1px solid #ef4444;
             color: #ef4444;
         }
+        
+        /* Estilos para pestañas */
+        .tabs-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 0.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .tab-content {
+            position: relative;
+        }
+        
+        .tab-panel {
+            display: none;
+        }
+        
+        .tab-panel.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -315,21 +430,9 @@
                 </button>
                 
                 <button class="btn btn-secondary" onclick="showLogin()">
-                    🔑 Iniciar Sesión
+                    🔐 Identificarse
                 </button>
                 
-                <button class="btn btn-secondary" onclick="showRegister()">
-                    📝 Crear Cuenta
-                </button>
-                
-                <!-- Botón de debug temporal -->
-                <button class="btn btn-secondary" onclick="debugStartGame()" style="margin-top: 1rem; font-size: 0.8rem;">
-                    🔧 Debug: Ir al Juego
-                </button>
-                
-                <button class="btn btn-secondary" onclick="forceShowGame()" style="margin-top: 0.5rem; font-size: 0.8rem;">
-                    🚀 FORZAR Juego
-                </button>
             </div>
             
             <div id="message-container"></div>
@@ -340,25 +443,37 @@
     <div id="game-screen" class="screen game-screen">
         <!-- HUD -->
         <div class="game-hud">
-            <div class="hud-item">
-                <span>⚡</span>
-                <span id="score" class="hud-value">0</span>
+            <!-- Primera línea: Información del usuario -->
+            <div class="hud-user-line">
+                <div class="hud-item user-info">
+                    <span id="user-icon">👤</span>
+                    <span id="user-name">Invitado</span>
+                    <span id="user-status" class="user-status-guest">Invitado</span>
+                </div>
             </div>
-            <div class="hud-item">
-                <span>🔥</span>
-                <span id="streak" class="hud-value">0</span>
-            </div>
-            <div class="hud-item">
-                <span>❌</span>
-                <span id="errors" class="hud-value">0/10</span>
-            </div>
-            <div class="hud-item">
-                <span>💰</span>
-                <span id="coins" class="hud-value">50</span>
-            </div>
-            <div class="hud-item">
-                <span>📊</span>
-                <span>Nivel <span id="level" class="hud-value">1</span></span>
+            
+            <!-- Segunda línea: Estadísticas del juego -->
+            <div class="hud-stats-line">
+                <div class="hud-item">
+                    <span>⚡</span>
+                    <span id="score" class="hud-value">0</span>
+                </div>
+                <div class="hud-item">
+                    <span>🔥</span>
+                    <span id="streak" class="hud-value">0</span>
+                </div>
+                <div class="hud-item">
+                    <span>❌</span>
+                    <span id="errors" class="hud-value">0/10</span>
+                </div>
+                <div class="hud-item">
+                    <span>💰</span>
+                    <span id="coins" class="hud-value">50</span>
+                </div>
+                <div class="hud-item">
+                    <span>📊</span>
+                    <span>Nivel <span id="level" class="hud-value">1</span></span>
+                </div>
             </div>
         </div>
         
@@ -377,8 +492,14 @@
             <button class="btn btn-secondary btn-sm" onclick="clearSelection()">
                 🚫 Limpiar Selección
             </button>
-            <button class="btn btn-secondary btn-sm" onclick="backToMenu()">
+            <button class="btn btn-secondary btn-sm" onclick="backToMenu()" id="back-menu-btn">
                 🏠 Volver al Menú
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="clearGuestProgress()" id="clear-progress-btn" style="display: none;">
+                🗑️ Reiniciar Progreso
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="logout()" id="logout-btn" style="display: none;">
+                🚪 Cerrar Sesión
             </button>
         </div>
     </div>
@@ -407,19 +528,18 @@
         
         // Funciones de navegación
         function showScreen(screenId) {
-            console.log('🖥️ Cambiando a pantalla:', screenId);
-            
+
             // Remover clase active de todas las pantallas
             document.querySelectorAll('.screen').forEach(s => {
                 s.classList.remove('active');
-                console.log('Ocultando pantalla:', s.id);
+
             });
             
             // Mostrar pantalla solicitada
             const targetScreen = document.getElementById(screenId);
             if (targetScreen) {
                 targetScreen.classList.add('active');
-                console.log('✅ Mostrando pantalla:', screenId);
+
             } else {
                 console.error('❌ Pantalla no encontrada:', screenId);
             }
@@ -432,21 +552,12 @@
                 key: 'guest_' + Date.now()
             };
             
-            // Resetear estado del juego
-            gameState.currentLevel = 1;
-            gameState.score = 0;
-            gameState.streak = 0;
-            gameState.errors = 0;
-            gameState.coins = 50;
-            gameState.selectedCells = [];
-            gameState.foundWords = [];
-            
             showMessage('¡Bienvenido! Iniciando juego...', 'success');
-            setTimeout(() => {
+            setTimeout(async () => {
                 try {
-                    initGame();
+                    await initGame();
                     showScreen('game-screen');
-                    console.log('🎮 Juego iniciado correctamente');
+
                 } catch (error) {
                     console.error('Error iniciando juego:', error);
                     showMessage('Error iniciando el juego. Intenta de nuevo.', 'error');
@@ -457,22 +568,65 @@
         function showLogin() {
             const loginContent = document.getElementById('login-content');
             loginContent.innerHTML = `
-                <div style="text-align: left;">
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
-                        <input type="email" id="login-email" placeholder="tu@email.com" 
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
-                    </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
-                        <input type="password" id="login-password" placeholder="••••••••"
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                <!-- Pestañas -->
+                <div class="tabs-container">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('login')" id="tab-login">
+                            🔑 Iniciar Sesión
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('register')" id="tab-register">
+                            📝 Registro
+                        </button>
                     </div>
                 </div>
                 
-                <button class="btn btn-primary" onclick="doLogin()">
-                    🔑 Iniciar Sesión
-                </button>
+                <!-- Contenido de pestañas -->
+                <div class="tab-content">
+                    <!-- Pestaña de Login -->
+                    <div id="login-tab" class="tab-panel active">
+                        <div style="text-align: left;">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
+                                <input type="email" id="login-email" placeholder="tu@email.com" 
+                                       style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
+                                <input type="password" id="login-password" placeholder="••••••••"
+                                       style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="doLogin()">
+                            🔑 Iniciar Sesión
+                        </button>
+                    </div>
+                    
+                    <!-- Pestaña de Registro -->
+                    <div id="register-tab" class="tab-panel">
+                        <div style="text-align: left;">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre:</label>
+                                <input type="text" id="register-name" placeholder="Tu nombre" 
+                                       style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
+                                <input type="email" id="register-email" placeholder="tu@email.com" 
+                                       style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
+                                <input type="password" id="register-password" placeholder="••••••••"
+                                       style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="doRegister()">
+                            📝 Crear Cuenta
+                        </button>
+                    </div>
+                </div>
                 
                 <button class="btn btn-secondary" onclick="backToMainMenu()">
                     ← Volver
@@ -480,35 +634,21 @@
             `;
         }
         
-        function showRegister() {
-            const loginContent = document.getElementById('login-content');
-            loginContent.innerHTML = `
-                <div style="text-align: left;">
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre:</label>
-                        <input type="text" id="register-name" placeholder="Tu nombre" 
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
-                        <input type="email" id="register-email" placeholder="tu@email.com" 
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
-                    </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
-                        <input type="password" id="register-password" placeholder="••••••••"
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
-                    </div>
-                </div>
-                
-                <button class="btn btn-primary" onclick="doRegister()">
-                    📝 Crear Cuenta
-                </button>
-                
-                <button class="btn btn-secondary" onclick="backToMainMenu()">
-                    ← Volver
-                </button>
-            `;
+        // Función para cambiar entre pestañas
+        function switchTab(tabName) {
+            // Ocultar todas las pestañas
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // Desactivar todos los botones de pestaña
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Mostrar la pestaña seleccionada
+            document.getElementById(tabName + '-tab').classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
         }
         
         function backToMainMenu() {
@@ -519,11 +659,7 @@
                 </button>
                 
                 <button class="btn btn-secondary" onclick="showLogin()">
-                    🔑 Iniciar Sesión
-                </button>
-                
-                <button class="btn btn-secondary" onclick="showRegister()">
-                    📝 Crear Cuenta
+                    🔐 Identificarse
                 </button>
             `;
         }
@@ -557,10 +693,10 @@
                         isGuest: false,
                         ...data.data.user
                     };
-                    
+
                     showMessage('¡Bienvenido de vuelta! Iniciando juego...', 'success');
-                    setTimeout(() => {
-                        initGame();
+                    setTimeout(async () => {
+                        await initGame();
                         showScreen('game-screen');
                     }, 1500);
                 } else {
@@ -587,12 +723,21 @@
                 return;
             }
             
+            if (!email.includes('@') || !email.includes('.')) {
+                showMessage('Por favor introduce un email válido', 'error');
+                return;
+            }
+            
             showMessage('Creando cuenta...', 'success');
             
             try {
+
                 const response = await fetch(CONFIG.API_BASE_URL + 'auth.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
                     body: JSON.stringify({
                         action: 'register',
                         email: email,
@@ -600,20 +745,45 @@
                         nombre: name
                     })
                 });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
                 
-                const data = await response.json();
-                
+                const responseText = await response.text();
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('❌ Error parseando JSON:', parseError);
+                    showMessage('Error en la respuesta del servidor. Intenta de nuevo.', 'error');
+                    return;
+                }
+
                 if (data.success) {
                     showMessage('¡Cuenta creada! Revisa tu email para el código de verificación.', 'success');
                     setTimeout(() => {
                         showVerification(email, password);
                     }, 2000);
                 } else {
-                    showMessage(data.message || 'Error en el registro', 'error');
+                    const errorMsg = data.message || 'Error desconocido en el registro';
+                    console.error('❌ Error del servidor:', errorMsg);
+                    showMessage(errorMsg, 'error');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showMessage('Error de conexión. Intenta de nuevo.', 'error');
+                console.error('❌ Error en registro:', error);
+                let errorMessage = 'Error de conexión. Intenta de nuevo.';
+                
+                if (error.message.includes('HTTP 500')) {
+                    errorMessage = 'Error del servidor. Intenta más tarde.';
+                } else if (error.message.includes('HTTP 400')) {
+                    errorMessage = 'Datos inválidos. Revisa los campos.';
+                } else if (error.message.includes('HTTP 409')) {
+                    errorMessage = 'El email ya está registrado.';
+                }
+                
+                showMessage(errorMessage, 'error');
             }
         }
         
@@ -686,8 +856,8 @@
                                 isGuest: false,
                                 ...loginData.data.user
                             };
-                            
-                            initGame();
+
+                            await initGame();
                             showScreen('game-screen');
                         }
                     }, 1500);
@@ -704,17 +874,9 @@
             showScreen('login-screen');
         }
         
-        // Función de debug para probar directamente
-        function debugStartGame() {
-            console.log('🔧 DEBUG: Iniciando juego directamente');
-            
-            gameState.currentUser = {
-                isGuest: true,
-                name: 'Debug User',
-                key: 'debug_' + Date.now()
-            };
-            
-            // Resetear estado
+        function logout() {
+            // Limpiar estado del usuario
+            gameState.currentUser = null;
             gameState.currentLevel = 1;
             gameState.score = 0;
             gameState.streak = 0;
@@ -723,57 +885,13 @@
             gameState.selectedCells = [];
             gameState.foundWords = [];
             
-            try {
-                console.log('🔧 DEBUG: Inicializando juego...');
-                initGame();
-                console.log('🔧 DEBUG: Cambiando a pantalla de juego...');
-                showScreen('game-screen');
-            } catch (error) {
-                console.error('🔧 DEBUG: Error:', error);
-                alert('Error en debug: ' + error.message);
-            }
+            showMessage('Sesión cerrada. Volviendo al menú...', 'success');
+            setTimeout(() => {
+                showScreen('login-screen');
+            }, 1500);
         }
         
-        // Función para forzar el cambio de pantalla
-        function forceShowGame() {
-            console.log('🚀 FORZANDO cambio a pantalla de juego');
-            
-            // Ocultar login screen completamente
-            const loginScreen = document.getElementById('login-screen');
-            const gameScreen = document.getElementById('game-screen');
-            
-            console.log('Login screen element:', loginScreen);
-            console.log('Game screen element:', gameScreen);
-            
-            if (loginScreen && gameScreen) {
-                // Método 1: CSS directo
-                loginScreen.style.display = 'none';
-                gameScreen.style.display = 'flex';
-                
-                // Método 2: Clases
-                loginScreen.classList.remove('active');
-                gameScreen.classList.add('active');
-                
-                console.log('✅ Pantallas cambiadas por fuerza bruta');
-                
-                // Inicializar juego básico
-                gameState.currentLevel = 1;
-                gameState.currentWords = ['MAR', 'SOL', 'LUNA', 'CASA'];
-                CONFIG.GRID_SIZE = 6;
-                
-                try {
-                    generateGrid();
-                    updateHUD();
-                    updateWordsList();
-                    console.log('✅ Juego inicializado');
-                } catch (error) {
-                    console.error('Error inicializando:', error);
-                }
-            } else {
-                console.error('❌ No se encontraron las pantallas');
-                alert('Error: No se encontraron las pantallas HTML');
-            }
-        }
+        // Función de debug para probar directamente
         
         // Funciones de mensajes
         function showMessage(text, type = 'success') {
@@ -784,8 +902,168 @@
             }, 3000);
         }
         
+        // Funciones de localStorage para invitados
+        function saveGuestProgress() {
+            if (gameState.currentUser && gameState.currentUser.isGuest) {
+                const progressData = {
+                    currentLevel: gameState.currentLevel,
+                    score: gameState.score,
+                    streak: gameState.streak,
+                    errors: gameState.errors,
+                    coins: gameState.coins,
+                    foundWords: gameState.foundWords,
+                    timestamp: Date.now()
+                };
+                
+                try {
+                    localStorage.setItem('mundoletras_guest_progress', JSON.stringify(progressData));
+
+                } catch (error) {
+                    console.error('❌ Error guardando progreso:', error);
+                }
+            } else {
+
+            }
+        }
+        
+        // Funciones de BBDD para usuarios registrados
+        async function loadUserProgress() {
+            if (!gameState.currentUser || gameState.currentUser.isGuest) {
+
+                return;
+            }
+            
+            try {
+
+                const response = await fetch(CONFIG.API_BASE_URL + 'progress.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'get',
+                        usuario_aplicacion_key: gameState.currentUser.usuario_aplicacion_key
+                    })
+                });
+                
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    gameState.currentLevel = data.data.nivel_max || 1;
+                    gameState.coins = data.data.monedas || 50;
+                    gameState.score = data.data.puntuacion_total || 0;
+
+                    showMessage(`¡Bienvenido de vuelta! Nivel ${gameState.currentLevel}`, 'success');
+                } else {
+
+                    gameState.currentLevel = 1;
+                    gameState.coins = 50;
+                    gameState.score = 0;
+                }
+            } catch (error) {
+                console.error('❌ Error cargando progreso de usuario:', error);
+                gameState.currentLevel = 1;
+                gameState.coins = 50;
+                gameState.score = 0;
+            }
+        }
+        
+        async function saveUserProgress() {
+            if (!gameState.currentUser || gameState.currentUser.isGuest) {
+
+                return;
+            }
+            
+            try {
+
+                const response = await fetch(CONFIG.API_BASE_URL + 'progress.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'save',
+                        usuario_aplicacion_key: gameState.currentUser.usuario_aplicacion_key,
+                        nivel_max: gameState.currentLevel,
+                        monedas: gameState.coins,
+                        puntuacion_total: gameState.score
+                    })
+                });
+                
+                const data = await response.json();
+
+                if (data.success) {
+
+                } else {
+                    console.error('❌ Error guardando progreso:', data.message);
+                }
+            } catch (error) {
+                console.error('❌ Error guardando progreso de usuario:', error);
+            }
+        }
+        
+        function loadGuestProgress() {
+            try {
+                const savedProgress = localStorage.getItem('mundoletras_guest_progress');
+
+                if (savedProgress) {
+                    const progressData = JSON.parse(savedProgress);
+
+                    // Verificar que no sea muy antiguo (máximo 30 días)
+                    const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 días en ms
+                    const age = Date.now() - progressData.timestamp;
+
+                    if (age < maxAge) {
+                        gameState.currentLevel = progressData.currentLevel || 1;
+                        gameState.score = progressData.score || 0;
+                        gameState.streak = progressData.streak || 0;
+                        gameState.errors = progressData.errors || 0;
+                        gameState.coins = progressData.coins || 50;
+                        gameState.foundWords = progressData.foundWords || [];
+
+                        showMessage(`¡Bienvenido de vuelta! Nivel ${gameState.currentLevel}`, 'success');
+                    } else {
+
+                        resetGuestProgress();
+                    }
+                } else {
+
+                    resetGuestProgress();
+                }
+            } catch (error) {
+                console.error('❌ Error cargando progreso:', error);
+                resetGuestProgress();
+            }
+        }
+        
+        function resetGuestProgress() {
+            gameState.currentLevel = 1;
+            gameState.score = 0;
+            gameState.streak = 0;
+            gameState.errors = 0;
+            gameState.coins = 50;
+            gameState.selectedCells = [];
+            gameState.foundWords = [];
+        }
+        
+        function clearGuestProgress() {
+            try {
+                localStorage.removeItem('mundoletras_guest_progress');
+
+                showMessage('Progreso eliminado. Reiniciando desde el nivel 1.', 'success');
+                resetGuestProgress();
+            } catch (error) {
+                console.error('Error eliminando progreso:', error);
+            }
+        }
+        
         // Inicializar juego
-        function initGame() {
+        async function initGame() {
+            // Cargar progreso según tipo de usuario
+            if (gameState.currentUser && gameState.currentUser.isGuest) {
+                // Invitado: cargar de localStorage
+                loadGuestProgress();
+            } else if (gameState.currentUser && !gameState.currentUser.isGuest) {
+                // Usuario registrado: cargar de BBDD
+                await loadUserProgress();
+            }
+            
             // Configurar palabras del nivel actual
             gameState.currentWords = getLevelWords(gameState.currentLevel);
             
@@ -797,6 +1075,15 @@
             } else {
                 CONFIG.GRID_SIZE = 8;
             }
+            
+            // Mostrar/ocultar botón de reiniciar progreso para invitados
+            const clearProgressBtn = document.getElementById('clear-progress-btn');
+            if (clearProgressBtn) {
+                clearProgressBtn.style.display = (gameState.currentUser && gameState.currentUser.isGuest) ? 'inline-flex' : 'none';
+            }
+            
+            // Actualizar información del usuario
+            updateUserInfo();
             
             generateGrid();
             updateHUD();
@@ -1074,12 +1361,20 @@
                 
                 // Verificar si se completó el nivel
                 if (gameState.foundWords.length === gameState.currentWords.length) {
-                    setTimeout(() => {
+                    setTimeout(async () => {
                         showMessage('¡Nivel completado! 🎉', 'success');
                         gameState.currentLevel++;
                         gameState.coins += 10;
                         gameState.errors = 0; // Resetear errores
                         gameState.foundWords = []; // Limpiar palabras encontradas
+                        
+                        // Guardar progreso según tipo de usuario
+                        if (gameState.currentUser && gameState.currentUser.isGuest) {
+                            saveGuestProgress();
+                        } else if (gameState.currentUser && !gameState.currentUser.isGuest) {
+                            await saveUserProgress();
+                        }
+                        
                         setTimeout(() => {
                             generateNextLevel();
                         }, 2000);
@@ -1170,6 +1465,53 @@
             updateWordsList();
         }
         
+        // Actualizar información del usuario
+        function updateUserInfo() {
+            const userIcon = document.getElementById('user-icon');
+            const userName = document.getElementById('user-name');
+            const userStatus = document.getElementById('user-status');
+            const clearProgressBtn = document.getElementById('clear-progress-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const backMenuBtn = document.getElementById('back-menu-btn');
+            
+            if (gameState.currentUser) {
+                if (gameState.currentUser.isGuest) {
+                    // Usuario invitado
+                    userIcon.textContent = '👤';
+                    userName.textContent = 'Invitado';
+                    userStatus.textContent = 'Invitado';
+                    userStatus.className = 'user-status-guest';
+                    
+                    // Mostrar botón de reiniciar progreso y volver al menú, ocultar logout
+                    if (clearProgressBtn) clearProgressBtn.style.display = 'inline-flex';
+                    if (logoutBtn) logoutBtn.style.display = 'none';
+                    if (backMenuBtn) backMenuBtn.style.display = 'inline-flex';
+                } else {
+                    // Usuario registrado
+                    userIcon.textContent = '👑';
+                    userName.textContent = gameState.currentUser.nombre || 'Usuario';
+                    userStatus.textContent = 'Registrado';
+                    userStatus.className = 'user-status-logged';
+                    
+                    // Ocultar botón de reiniciar progreso y volver al menú, mostrar logout
+                    if (clearProgressBtn) clearProgressBtn.style.display = 'none';
+                    if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+                    if (backMenuBtn) backMenuBtn.style.display = 'none';
+                }
+            } else {
+                // Sin usuario (fallback)
+                userIcon.textContent = '❓';
+                userName.textContent = 'Desconocido';
+                userStatus.textContent = 'Sin sesión';
+                userStatus.className = 'user-status-guest';
+                
+                // Ocultar botones de progreso y logout, mostrar volver al menú
+                if (clearProgressBtn) clearProgressBtn.style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'none';
+                if (backMenuBtn) backMenuBtn.style.display = 'inline-flex';
+            }
+        }
+        
         // Actualizar HUD
         function updateHUD() {
             document.getElementById('score').textContent = gameState.score;
@@ -1197,9 +1539,7 @@
         
         // Inicializar aplicación
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🎮 Mundo Letras - Aplicación iniciada');
-            console.log('📊 APIs disponibles en:', CONFIG.API_BASE_URL);
-            
+
             // Prevenir zoom en móviles
             document.addEventListener('gesturestart', function (e) {
                 e.preventDefault();

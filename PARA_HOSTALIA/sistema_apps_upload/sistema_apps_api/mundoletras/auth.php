@@ -4,27 +4,71 @@
  * Maneja login, registro y verificación de usuarios
  */
 
-require_once 'config.php';
+// Headers CORS
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Content-Type: application/json; charset=utf-8');
+
+// Manejar preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Cargar configuración
+try {
+    require_once 'config.php';
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'data' => null,
+        'message' => 'Error de configuración: ' . $e->getMessage(),
+        'timestamp' => date('Y-m-d H:i:s')
+    ]);
+    exit();
+}
 
 // Obtener datos de entrada
-$input = Utils::getJsonInput();
-$action = $input['action'] ?? '';
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+
+if (json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'data' => null,
+        'message' => 'JSON inválido: ' . json_last_error_msg(),
+        'timestamp' => date('Y-m-d H:i:s')
+    ]);
+    exit();
+}
+
+$action = $data['action'] ?? '';
 
 switch ($action) {
     case 'register':
-        handleRegister($input);
+        handleRegister($data);
         break;
     case 'verify':
-        handleVerify($input);
+        handleVerify($data);
         break;
     case 'login':
-        handleLogin($input);
+        handleLogin($data);
         break;
     case 'refresh':
-        handleRefresh($input);
+        handleRefresh($data);
         break;
     default:
-        Utils::jsonResponse(false, null, 'Acción no válida', 400);
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Acción no válida: ' . $action,
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        exit();
 }
 
 /**
@@ -33,74 +77,122 @@ switch ($action) {
 function handleRegister($input) {
     global $db;
     
-    // Validar campos requeridos
-    $email = Utils::sanitizeInput($input['email'] ?? '');
+    // Validar campos
+    $email = $input['email'] ?? '';
     $password = $input['password'] ?? '';
-    $nombre = Utils::sanitizeInput($input['nombre'] ?? '');
-    $appCodigo = $input['app_codigo'] ?? APP_CODIGO;
+    $nombre = $input['nombre'] ?? '';
     
     if (empty($email) || empty($password) || empty($nombre)) {
-        Utils::jsonResponse(false, null, 'Todos los campos son obligatorios', 400);
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Todos los campos son obligatorios',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
     }
     
-    if (!Utils::validateEmail($email)) {
-        Utils::jsonResponse(false, null, 'Email no válido', 400);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Email no válido',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
     }
     
     if (strlen($password) < 6) {
-        Utils::jsonResponse(false, null, 'La contraseña debe tener al menos 6 caracteres', 400);
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'La contraseña debe tener al menos 6 caracteres',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
     }
     
     try {
-        $userKey = Utils::generateUserKey($email, $appCodigo);
+        $userKey = $email . '_mundoletras';
         
-        // Verificar si el usuario ya existe
-        $existingUser = $db->fetchOne(
+        // Verificar si existe
+        $existing = $db->fetchOne(
             "SELECT usuario_aplicacion_id FROM usuarios_aplicaciones WHERE usuario_aplicacion_key = ?",
             [$userKey]
         );
         
-        if ($existingUser) {
-            Utils::jsonResponse(false, null, 'El usuario ya existe', 409);
+        if ($existing) {
+            http_response_code(409);
+            echo json_encode([
+                'success' => false,
+                'data' => null,
+                'message' => 'El usuario ya existe',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+            return;
         }
         
-        // Generar código de verificación
-        $verificationCode = Utils::generateVerificationCode();
-        $verificationExpiry = date('Y-m-d H:i:s', time() + VERIFICATION_CODE_EXPIRY);
-        $passwordHash = Utils::hashPassword($password);
-        
         // Insertar usuario
-        $db->query(
+        $verificationCode = sprintf('%06d', mt_rand(100000, 999999));
+        $verificationExpiry = date('Y-m-d H:i:s', time() + 3600);
+        $passwordHash = password_hash($password . 'MundoLetras_Salt_2024', PASSWORD_DEFAULT);
+        
+        $result = $db->query(
             "INSERT INTO usuarios_aplicaciones (
                 usuario_aplicacion_key, email, nombre, password_hash, app_codigo,
                 verification_code, verification_expiry, fecha_registro, activo
             ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), 0)",
-            [$userKey, $email, $nombre, $passwordHash, $appCodigo, $verificationCode, $verificationExpiry]
+            [$userKey, $email, $nombre, $passwordHash, 'mundoletras', $verificationCode, $verificationExpiry]
         );
         
-        $userId = $db->lastInsertId();
-        
-        // Crear progreso inicial
-        $db->query(
-            "INSERT INTO mundoletras_progreso (usuario_aplicacion_key, nivel_max, monedas) VALUES (?, 1, ?)",
-            [$userKey, DEFAULT_COINS]
-        );
-        
-        // Enviar email de verificación
-        $emailSent = Utils::sendVerificationEmail($email, $nombre, $verificationCode);
-        
-        if (!$emailSent) {
-            Utils::logError("Error enviando email de verificación", ['email' => $email, 'user_id' => $userId]);
+        if ($result) {
+            $userId = $db->lastInsertId();
+            
+            // Crear progreso
+            $progressResult = $db->query(
+                "INSERT INTO mundoletras_progreso (usuario_aplicacion_key, nivel_max, monedas) VALUES (?, 1, ?)",
+                [$userKey, 50]
+            );
+            
+            // Enviar email (opcional)
+            $emailSent = false;
+            try {
+                $emailSent = Utils::sendVerificationEmail($email, $nombre, $verificationCode);
+            } catch (Exception $e) {
+                // Email no es crítico
+            }
+            
+            http_response_code(200);
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'user_id' => $userId,
+                    'email_sent' => $emailSent
+                ],
+                'message' => 'Usuario registrado correctamente',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'data' => null,
+                'message' => 'Error insertando usuario',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
         }
         
-        Utils::jsonResponse(true, [
-            'user_id' => $userId,
-            'email_sent' => $emailSent
-        ], 'Usuario registrado. Revisa tu email para el código de verificación.');
-        
     } catch (Exception $e) {
-        Utils::logError("Error en registro", ['email' => $email, 'error' => $e->getMessage()]);
-        Utils::jsonResponse(false, null, 'Error en el registro', 500);
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Error en el registro: ' . $e->getMessage(),
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
     }
 }
 
@@ -110,10 +202,17 @@ function handleRegister($input) {
 function handleVerify($input) {
     global $db;
     
-    $code = Utils::sanitizeInput($input['code'] ?? '');
+    $code = $input['code'] ?? '';
     
     if (empty($code)) {
-        Utils::jsonResponse(false, null, 'Código de verificación requerido', 400);
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Código de verificación requerido',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
     }
     
     try {
@@ -126,12 +225,26 @@ function handleVerify($input) {
         );
         
         if (!$user) {
-            Utils::jsonResponse(false, null, 'Código de verificación inválido', 400);
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'data' => null,
+                'message' => 'Código de verificación inválido',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+            return;
         }
         
         // Verificar si no ha expirado
         if (strtotime($user['verification_expiry']) < time()) {
-            Utils::jsonResponse(false, null, 'Código de verificación expirado', 400);
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'data' => null,
+                'message' => 'Código de verificación expirado',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+            return;
         }
         
         // Activar usuario
@@ -142,15 +255,26 @@ function handleVerify($input) {
             [$user['usuario_aplicacion_id']]
         );
         
-        Utils::jsonResponse(true, [
-            'user_id' => $user['usuario_aplicacion_id'],
-            'email' => $user['email'],
-            'nombre' => $user['nombre']
-        ], 'Cuenta verificada correctamente');
+        http_response_code(200);
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'user_id' => $user['usuario_aplicacion_id'],
+                'email' => $user['email'],
+                'nombre' => $user['nombre']
+            ],
+            'message' => 'Cuenta verificada correctamente',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
         
     } catch (Exception $e) {
-        Utils::logError("Error en verificación", ['code' => $code, 'error' => $e->getMessage()]);
-        Utils::jsonResponse(false, null, 'Error en la verificación', 500);
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Error en la verificación: ' . $e->getMessage(),
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
     }
 }
 
@@ -160,15 +284,22 @@ function handleVerify($input) {
 function handleLogin($input) {
     global $db;
     
-    $email = Utils::sanitizeInput($input['email'] ?? '');
+    $email = $input['email'] ?? '';
     $password = $input['password'] ?? '';
     
     if (empty($email) || empty($password)) {
-        Utils::jsonResponse(false, null, 'Email y contraseña requeridos', 400);
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Email y contraseña requeridos',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
     }
     
     try {
-        $userKey = Utils::generateUserKey($email, APP_CODIGO);
+        $userKey = $email . '_mundoletras';
         
         // Buscar usuario
         $user = $db->fetchOne(
@@ -179,15 +310,36 @@ function handleLogin($input) {
         );
         
         if (!$user) {
-            Utils::jsonResponse(false, null, 'Credenciales incorrectas', 401);
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'data' => null,
+                'message' => 'Credenciales incorrectas',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+            return;
         }
         
         if (!$user['activo']) {
-            Utils::jsonResponse(false, null, 'Cuenta no verificada. Revisa tu email.', 401);
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'data' => null,
+                'message' => 'Cuenta no verificada. Revisa tu email.',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+            return;
         }
         
-        if (!Utils::verifyPassword($password, $user['password_hash'])) {
-            Utils::jsonResponse(false, null, 'Credenciales incorrectas', 401);
+        if (!password_verify($password . 'MundoLetras_Salt_2024', $user['password_hash'])) {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'data' => null,
+                'message' => 'Credenciales incorrectas',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+            return;
         }
         
         // Actualizar último acceso
@@ -206,12 +358,12 @@ function handleLogin($input) {
             // Crear progreso inicial si no existe
             $db->query(
                 "INSERT INTO mundoletras_progreso (usuario_aplicacion_key, nivel_max, monedas) VALUES (?, 1, ?)",
-                [$user['usuario_aplicacion_key'], DEFAULT_COINS]
+                [$user['usuario_aplicacion_key'], 50]
             );
             
             $progress = [
                 'nivel_max' => 1,
-                'monedas' => DEFAULT_COINS,
+                'monedas' => 50,
                 'actualizado_at' => date('Y-m-d H:i:s')
             ];
         }
@@ -222,7 +374,7 @@ function handleLogin($input) {
             'usuario_aplicacion_key' => $user['usuario_aplicacion_key'],
             'email' => $user['email'],
             'nombre' => $user['nombre'],
-            'app_codigo' => APP_CODIGO,
+            'app_codigo' => 'mundoletras',
             'verified_at' => date('Y-m-d H:i:s'),
             'last_login' => date('Y-m-d H:i:s')
         ];
@@ -234,14 +386,25 @@ function handleLogin($input) {
             'actualizado_at' => $progress['actualizado_at']
         ];
         
-        Utils::jsonResponse(true, [
-            'user' => $userData,
-            'progress' => $progressData
-        ], 'Login exitoso');
+        http_response_code(200);
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'user' => $userData,
+                'progress' => $progressData
+            ],
+            'message' => 'Login exitoso',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
         
     } catch (Exception $e) {
-        Utils::logError("Error en login", ['email' => $email, 'error' => $e->getMessage()]);
-        Utils::jsonResponse(false, null, 'Error en el login', 500);
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Error en el login: ' . $e->getMessage(),
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
     }
 }
 
@@ -249,6 +412,12 @@ function handleLogin($input) {
  * Refrescar sesión (placeholder para futuras implementaciones JWT)
  */
 function handleRefresh($input) {
-    Utils::jsonResponse(false, null, 'Funcionalidad no implementada aún', 501);
+    http_response_code(501);
+    echo json_encode([
+        'success' => false,
+        'data' => null,
+        'message' => 'Funcionalidad no implementada aún',
+        'timestamp' => date('Y-m-d H:i:s')
+    ]);
 }
 ?>
