@@ -1144,9 +1144,14 @@
             gridContainer.innerHTML = '';
             gameState.currentGrid = [];
             
-            const gridSize = CONFIG.GRID_SIZE;
-            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             const words = gameState.currentWords;
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            
+            // Calcular el tamaño del grid basado en la palabra más larga
+            const maxWordLength = Math.max(...words.map(word => word.length));
+            const minGridSize = Math.max(CONFIG.GRID_SIZE, maxWordLength);
+            const gridSize = minGridSize;
+            
             
             // Actualizar CSS del grid
             gridContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
@@ -1179,9 +1184,13 @@
                 let placed = false;
                 let attempts = 0;
                 
+                // Intentar todas las direcciones posibles para cada palabra
+                // Ahora el grid es del tamaño correcto, todas las direcciones son válidas
+                const directions = [0, 1, 2, 3]; // horizontal, vertical, diagonal-izq, diagonal-der
+                
                 while (!placed && attempts < 50) {
                     // Elegir dirección aleatoria: 0=horizontal, 1=vertical, 2=diagonal-izq, 3=diagonal-der
-                    const direction = Math.floor(Math.random() * 4);
+                    const direction = directions[attempts % 4];
                     
                     let startRow, startCol;
                     
@@ -1197,6 +1206,23 @@
                     } else { // Diagonal derecha (arriba-der a abajo-izq)
                         startRow = Math.floor(Math.random() * (gridSize - word.length + 1));
                         startCol = Math.floor(Math.random() * (gridSize - word.length + 1)) + word.length - 1;
+                    }
+                    
+                    // Verificar que la palabra quepa en la dirección seleccionada
+                    let fitsInDirection = true;
+                    if (direction === 0) { // Horizontal
+                        fitsInDirection = (startCol + word.length - 1) < gridSize;
+                    } else if (direction === 1) { // Vertical
+                        fitsInDirection = (startRow + word.length - 1) < gridSize;
+                    } else if (direction === 2) { // Diagonal izquierda
+                        fitsInDirection = (startRow + word.length - 1) < gridSize && (startCol + word.length - 1) < gridSize;
+                    } else { // Diagonal derecha
+                        fitsInDirection = (startRow + word.length - 1) < gridSize && (startCol - word.length + 1) >= 0;
+                    }
+                    
+                    if (!fitsInDirection) {
+                        attempts++;
+                        continue;
                     }
                     
                     // Verificar si se puede colocar la palabra
@@ -1252,27 +1278,58 @@
         
         // Colocar palabra en posición fija como fallback
         function placeWordFixed(word, wordIndex, gridSize) {
-            const positions = [
-                // Posiciones fijas para las primeras 4 palabras
+            // Solo usar posiciones fijas si la palabra no se pudo colocar
+            
+            // Intentar colocar en diferentes posiciones fijas
+            // Ahora el grid es del tamaño correcto, todas las posiciones son válidas
+            const fixedPositions = [
                 { row: 0, col: 0, dir: 0 }, // Horizontal primera fila
                 { row: 1, col: 0, dir: 1 }, // Vertical primera columna
                 { row: 2, col: 0, dir: 0 }, // Horizontal tercera fila
-                { row: 0, col: 2, dir: 1 }  // Vertical tercera columna
+                { row: 0, col: 2, dir: 1 }, // Vertical tercera columna
+                { row: 3, col: 0, dir: 0 }, // Horizontal cuarta fila
+                { row: 0, col: 4, dir: 1 }, // Vertical quinta columna
+                { row: 4, col: 0, dir: 0 }, // Horizontal quinta fila
+                { row: 0, col: 6, dir: 1 }, // Vertical séptima columna
+                { row: 0, col: 0, dir: 2 }, // Diagonal izquierda
+                { row: 0, col: gridSize-1, dir: 3 } // Diagonal derecha
             ];
             
-            if (wordIndex < positions.length) {
-                const pos = positions[wordIndex];
+            let placed = false;
+            for (let posIndex = 0; posIndex < fixedPositions.length && !placed; posIndex++) {
+                const pos = fixedPositions[posIndex];
+                let canPlace = true;
                 
+                // Verificar si se puede colocar en esta posición
                 for (let i = 0; i < word.length; i++) {
                     const row = pos.dir === 0 ? pos.row : pos.row + i;
                     const col = pos.dir === 0 ? pos.col + i : pos.col;
                     
-                    if (row < gridSize && col < gridSize) {
+                    if (row >= gridSize || col >= gridSize) {
+                        canPlace = false;
+                        break;
+                    }
+                    
+                    const index = row * gridSize + col;
+                    const currentLetter = gameState.currentGrid[index];
+                    if (currentLetter && currentLetter !== word[i]) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                
+                if (canPlace) {
+                    // Colocar la palabra
+                    for (let i = 0; i < word.length; i++) {
+                        const row = pos.dir === 0 ? pos.row : pos.row + i;
+                        const col = pos.dir === 0 ? pos.col + i : pos.col;
                         const index = row * gridSize + col;
                         gameState.currentGrid[index] = word[i];
                     }
+                    placed = true;
                 }
             }
+            
         }
         
         // Rellenar celdas vacías con letras aleatorias
@@ -1295,13 +1352,19 @@
                 const cellIndex = gameState.selectedCells.indexOf(index);
                 gameState.selectedCells = gameState.selectedCells.slice(0, cellIndex + 1);
             } else {
-                // Verificar si es una selección válida (línea recta)
-                if (gameState.selectedCells.length > 0 && !isValidSelection([...gameState.selectedCells, index])) {
-                    // Si no es válida, empezar nueva selección
-                    gameState.selectedCells = [index];
-                } else {
-                    // Seleccionar
+                // Si es la primera celda, seleccionar directamente
+                if (gameState.selectedCells.length === 0) {
                     gameState.selectedCells.push(index);
+                } else {
+                    // Verificar si es una selección válida (línea recta)
+                    const newSelection = [...gameState.selectedCells, index];
+                    if (isValidSelection(newSelection)) {
+                        // Seleccionar
+                        gameState.selectedCells.push(index);
+                    } else {
+                        // Si no es válida, empezar nueva selección
+                        gameState.selectedCells = [index];
+                    }
                 }
             }
             
@@ -1311,38 +1374,60 @@
             checkForWord();
         }
         
-        // Verificar si la selección forma una línea recta
+        // Verificar si la selección temporal forma una línea recta
         function isValidSelection(cells) {
-            if (cells.length <= 1) return true;
+            if (cells.length < 2) return true;
             
-            const gridSize = CONFIG.GRID_SIZE;
-            const positions = cells.map(index => ({
+            const gridSize = Math.sqrt(gameState.currentGrid.length);
+            const cellPositions = cells.map(index => ({
+                index,
                 row: Math.floor(index / gridSize),
                 col: index % gridSize
             }));
             
-            const first = positions[0];
-            const second = positions[1];
+            // Ordenar por posición
+            cellPositions.sort((a, b) => {
+                if (a.row !== b.row) return a.row - b.row;
+                return a.col - b.col;
+            });
             
-            const deltaRow = second.row - first.row;
-            const deltaCol = second.col - first.col;
+            const first = cellPositions[0];
+            const last = cellPositions[cellPositions.length - 1];
             
-            // Determinar dirección
-            const stepRow = deltaRow === 0 ? 0 : (deltaRow > 0 ? 1 : -1);
-            const stepCol = deltaCol === 0 ? 0 : (deltaCol > 0 ? 1 : -1);
+            // Calcular diferencias
+            const deltaRow = last.row - first.row;
+            const deltaCol = last.col - first.col;
             
-            // Verificar que todas las posiciones siguen la misma línea
-            for (let i = 0; i < positions.length; i++) {
-                const expectedRow = first.row + stepRow * i;
-                const expectedCol = first.col + stepCol * i;
-                
-                if (positions[i].row !== expectedRow || positions[i].col !== expectedCol) {
-                    return false;
-                }
+            // Verificar si es horizontal (deltaRow = 0)
+            if (deltaRow === 0) {
+                return cellPositions.every((cell, i) => 
+                    cell.row === first.row && 
+                    cell.col === first.col + i
+                );
             }
             
-            return true;
+            // Verificar si es vertical (deltaCol = 0)
+            if (deltaCol === 0) {
+                return cellPositions.every((cell, i) => 
+                    cell.col === first.col && 
+                    cell.row === first.row + i
+                );
+            }
+            
+            // Verificar si es diagonal
+            if (Math.abs(deltaRow) === Math.abs(deltaCol)) {
+                const stepRow = deltaRow > 0 ? 1 : -1;
+                const stepCol = deltaCol > 0 ? 1 : -1;
+                
+                return cellPositions.every((cell, i) => 
+                    cell.row === first.row + (i * stepRow) && 
+                    cell.col === first.col + (i * stepCol)
+                );
+            }
+            
+            return false;
         }
+        
         
         // Validar que las celdas seleccionadas estén en línea recta
         function isValidWordSelection() {
