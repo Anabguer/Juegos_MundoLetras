@@ -1,331 +1,389 @@
 <?php
-/**
- * API de Ranking - Mundo Letras
- * Maneja rankings globales, semanales y de amigos
- */
-
+// Incluir configuración
 require_once 'config.php';
 
-// Obtener datos de entrada
-$input = Utils::getJsonInput();
-$action = $input['action'] ?? '';
-
-switch ($action) {
-    case 'global':
-        handleGlobalRanking($input);
-        break;
-    case 'weekly':
-        handleWeeklyRanking($input);
-        break;
-    case 'level':
-        handleLevelRanking($input);
-        break;
-    case 'user_stats':
-        handleUserStats($input);
-        break;
-    default:
-        Utils::jsonResponse(false, null, 'Acción no válida', 400);
-}
-
-/**
- * Obtener ranking global
- */
-function handleGlobalRanking($input) {
-    global $db;
-    
-    $limit = min(100, max(10, (int)($input['limit'] ?? 50)));
-    $offset = max(0, (int)($input['offset'] ?? 0));
-    
+// Función para crear conexión PDO directa
+function createPDOConnection() {
     try {
-        // Calcular ranking basado en nivel máximo y puntuación total
-        $ranking = $db->fetchAll(
-            "SELECT 
-                u.nombre,
-                p.nivel_max,
-                p.monedas,
-                COALESCE(SUM(s.score), 0) as total_score,
-                COUNT(DISTINCT s.nivel_id) as niveles_completados,
-                MAX(s.fecha) as ultima_actividad,
-                ROW_NUMBER() OVER (ORDER BY p.nivel_max DESC, COALESCE(SUM(s.score), 0) DESC) as posicion
-             FROM usuarios_aplicaciones u
-             JOIN mundoletras_progreso p ON u.usuario_aplicacion_key = p.usuario_aplicacion_key
-             LEFT JOIN mundoletras_scores s ON u.usuario_aplicacion_key = s.usuario_aplicacion_key
-             WHERE u.app_codigo = ? AND u.activo = 1
-             GROUP BY u.usuario_aplicacion_id, u.nombre, p.nivel_max, p.monedas
-             ORDER BY p.nivel_max DESC, total_score DESC
-             LIMIT ? OFFSET ?",
-            [APP_CODIGO, $limit, $offset]
-        );
-        
-        // Obtener total de usuarios para paginación
-        $totalUsers = $db->fetchOne(
-            "SELECT COUNT(*) as total FROM usuarios_aplicaciones u
-             JOIN mundoletras_progreso p ON u.usuario_aplicacion_key = p.usuario_aplicacion_key
-             WHERE u.app_codigo = ? AND u.activo = 1",
-            [APP_CODIGO]
-        );
-        
-        Utils::jsonResponse(true, [
-            'ranking' => array_map(function($user) {
-                return [
-                    'posicion' => (int)$user['posicion'],
-                    'nombre' => $user['nombre'],
-                    'nivel_max' => (int)$user['nivel_max'],
-                    'total_score' => (int)$user['total_score'],
-                    'niveles_completados' => (int)$user['niveles_completados'],
-                    'monedas' => (int)$user['monedas'],
-                    'ultima_actividad' => $user['ultima_actividad']
-                ];
-            }, $ranking),
-            'pagination' => [
-                'limit' => $limit,
-                'offset' => $offset,
-                'total' => (int)$totalUsers['total'],
-                'has_more' => ($offset + $limit) < (int)$totalUsers['total']
+        $pdo = new PDO(
+            "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NOMBRE . ";charset=" . DB_CHARSET,
+            DB_USUARIO,
+            DB_CONTRA,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false
             ]
-        ]);
-        
+        );
+        return $pdo;
     } catch (Exception $e) {
-        Utils::logError("Error obteniendo ranking global", ['error' => $e->getMessage()]);
-        Utils::jsonResponse(false, null, 'Error obteniendo ranking', 500);
+        error_log("Error de conexión PDO: " . $e->getMessage());
+        throw $e;
     }
 }
 
-/**
- * Obtener ranking semanal
- */
-function handleWeeklyRanking($input) {
-    global $db;
-    
-    $limit = min(100, max(10, (int)($input['limit'] ?? 50)));
-    $week = Utils::sanitizeInput($input['week'] ?? date('Y-W'));
-    
-    try {
-        // Calcular fechas de la semana
-        $year = (int)substr($week, 0, 4);
-        $weekNum = (int)substr($week, 5, 2);
-        
-        $startDate = new DateTime();
-        $startDate->setISODate($year, $weekNum, 1); // Lunes
-        $endDate = clone $startDate;
-        $endDate->modify('+6 days'); // Domingo
-        
-        $startDateStr = $startDate->format('Y-m-d 00:00:00');
-        $endDateStr = $endDate->format('Y-m-d 23:59:59');
-        
-        // Obtener ranking de la semana
-        $ranking = $db->fetchAll(
-            "SELECT 
-                u.nombre,
-                SUM(s.score) as weekly_score,
-                COUNT(s.scores_id) as games_played,
-                AVG(s.score) as avg_score,
-                ROW_NUMBER() OVER (ORDER BY SUM(s.score) DESC) as posicion
-             FROM usuarios_aplicaciones u
-             JOIN mundoletras_scores s ON u.usuario_aplicacion_key = s.usuario_aplicacion_key
-             WHERE u.app_codigo = ? AND u.activo = 1 
-             AND s.fecha BETWEEN ? AND ?
-             GROUP BY u.usuario_aplicacion_id, u.nombre
-             HAVING SUM(s.score) > 0
-             ORDER BY weekly_score DESC
-             LIMIT ?",
-            [APP_CODIGO, $startDateStr, $endDateStr, $limit]
-        );
-        
-        Utils::jsonResponse(true, [
-            'ranking' => array_map(function($user) {
-                return [
-                    'posicion' => (int)$user['posicion'],
-                    'nombre' => $user['nombre'],
-                    'weekly_score' => (int)$user['weekly_score'],
-                    'games_played' => (int)$user['games_played'],
-                    'avg_score' => round((float)$user['avg_score'], 1)
-                ];
-            }, $ranking),
-            'week_info' => [
-                'week' => $week,
-                'start_date' => $startDate->format('Y-m-d'),
-                'end_date' => $endDate->format('Y-m-d'),
-                'is_current_week' => $week === date('Y-W')
-            ]
-        ]);
-        
-    } catch (Exception $e) {
-        Utils::logError("Error obteniendo ranking semanal", ['week' => $week, 'error' => $e->getMessage()]);
-        Utils::jsonResponse(false, null, 'Error obteniendo ranking semanal', 500);
-    }
-}
+// Crear conexión PDO directa
+$pdo = createPDOConnection();
 
-/**
- * Obtener ranking de un nivel específico
- */
-function handleLevelRanking($input) {
-    global $db;
-    
-    $nivelId = (int)($input['nivel_id'] ?? 0);
-    $limit = min(50, max(10, (int)($input['limit'] ?? 20)));
-    
-    if ($nivelId < 1) {
-        Utils::jsonResponse(false, null, 'ID de nivel requerido', 400);
-    }
-    
+// Función para verificar si las tablas existen
+function checkTables($pdo) {
     try {
-        // Obtener mejores puntuaciones del nivel
-        $ranking = $db->fetchAll(
-            "SELECT 
-                u.nombre,
-                s.score,
-                s.tiempo_ms,
-                s.fecha,
-                ROW_NUMBER() OVER (ORDER BY s.score DESC, s.tiempo_ms ASC) as posicion
-             FROM mundoletras_scores s
-             JOIN usuarios_aplicaciones u ON s.usuario_aplicacion_key = u.usuario_aplicacion_key
-             WHERE s.nivel_id = ? AND u.app_codigo = ? AND u.activo = 1
-             AND s.scores_id IN (
-                 SELECT MAX(s2.scores_id) 
-                 FROM mundoletras_scores s2 
-                 WHERE s2.usuario_aplicacion_key = s.usuario_aplicacion_key 
-                 AND s2.nivel_id = s.nivel_id
-                 GROUP BY s2.usuario_aplicacion_key
-             )
-             ORDER BY s.score DESC, s.tiempo_ms ASC
-             LIMIT ?",
-            [$nivelId, APP_CODIGO, $limit]
-        );
+        $tables = ['usuarios_aplicaciones', 'mundoletras_progreso'];
+        $existingTables = [];
         
-        // Estadísticas del nivel
-        $levelStats = $db->fetchOne(
-            "SELECT 
-                COUNT(DISTINCT s.usuario_aplicacion_key) as total_players,
-                MAX(s.score) as best_score,
-                AVG(s.score) as avg_score,
-                MIN(s.tiempo_ms) as best_time,
-                AVG(s.tiempo_ms) as avg_time
-             FROM mundoletras_scores s
-             JOIN usuarios_aplicaciones u ON s.usuario_aplicacion_key = u.usuario_aplicacion_key
-             WHERE s.nivel_id = ? AND u.app_codigo = ? AND u.activo = 1",
-            [$nivelId, APP_CODIGO]
-        );
-        
-        Utils::jsonResponse(true, [
-            'nivel_id' => $nivelId,
-            'ranking' => array_map(function($score) {
-                return [
-                    'posicion' => (int)$score['posicion'],
-                    'nombre' => $score['nombre'],
-                    'score' => (int)$score['score'],
-                    'tiempo_ms' => (int)$score['tiempo_ms'],
-                    'fecha' => $score['fecha']
-                ];
-            }, $ranking),
-            'stats' => [
-                'total_players' => (int)($levelStats['total_players'] ?? 0),
-                'best_score' => (int)($levelStats['best_score'] ?? 0),
-                'avg_score' => round((float)($levelStats['avg_score'] ?? 0), 1),
-                'best_time_ms' => (int)($levelStats['best_time'] ?? 0),
-                'avg_time_ms' => (int)($levelStats['avg_time'] ?? 0)
-            ]
-        ]);
-        
-    } catch (Exception $e) {
-        Utils::logError("Error obteniendo ranking del nivel", ['nivel_id' => $nivelId, 'error' => $e->getMessage()]);
-        Utils::jsonResponse(false, null, 'Error obteniendo ranking del nivel', 500);
-    }
-}
-
-/**
- * Obtener estadísticas de un usuario
- */
-function handleUserStats($input) {
-    global $db;
-    
-    $userKey = Utils::sanitizeInput($input['user_key'] ?? '');
-    
-    if (empty($userKey)) {
-        Utils::jsonResponse(false, null, 'Clave de usuario requerida', 400);
-    }
-    
-    try {
-        // Estadísticas generales del usuario
-        $userStats = $db->fetchOne(
-            "SELECT 
-                u.nombre,
-                p.nivel_max,
-                p.monedas,
-                COUNT(s.scores_id) as total_games,
-                COALESCE(SUM(s.score), 0) as total_score,
-                COALESCE(AVG(s.score), 0) as avg_score,
-                COALESCE(MAX(s.score), 0) as best_score,
-                COUNT(DISTINCT s.nivel_id) as unique_levels_played,
-                MIN(s.fecha) as first_game,
-                MAX(s.fecha) as last_game
-             FROM usuarios_aplicaciones u
-             JOIN mundoletras_progreso p ON u.usuario_aplicacion_key = p.usuario_aplicacion_key
-             LEFT JOIN mundoletras_scores s ON u.usuario_aplicacion_key = s.usuario_aplicacion_key
-             WHERE u.usuario_aplicacion_key = ? AND u.app_codigo = ? AND u.activo = 1
-             GROUP BY u.usuario_aplicacion_id, u.nombre, p.nivel_max, p.monedas",
-            [$userKey, APP_CODIGO]
-        );
-        
-        if (!$userStats) {
-            Utils::jsonResponse(false, null, 'Usuario no encontrado', 404);
+        foreach ($tables as $table) {
+            $stmt = $pdo->prepare("SHOW TABLES LIKE ?");
+            $stmt->execute([$table]);
+            $result = $stmt->fetch();
+            if ($result) {
+                $existingTables[] = $table;
+            }
         }
         
-        // Posición en ranking global
-        $globalPosition = $db->fetchOne(
-            "SELECT posicion FROM (
-                SELECT 
-                    u.usuario_aplicacion_key,
-                    ROW_NUMBER() OVER (ORDER BY p.nivel_max DESC, COALESCE(SUM(s.score), 0) DESC) as posicion
-                FROM usuarios_aplicaciones u
-                JOIN mundoletras_progreso p ON u.usuario_aplicacion_key = p.usuario_aplicacion_key
-                LEFT JOIN mundoletras_scores s ON u.usuario_aplicacion_key = s.usuario_aplicacion_key
-                WHERE u.app_codigo = ? AND u.activo = 1
-                GROUP BY u.usuario_aplicacion_key, p.nivel_max
-            ) rankings
-            WHERE usuario_aplicacion_key = ?",
-            [APP_CODIGO, $userKey]
-        );
-        
-        // Últimas puntuaciones
-        $recentScores = $db->fetchAll(
-            "SELECT nivel_id, score, tiempo_ms, fecha 
-             FROM mundoletras_scores 
-             WHERE usuario_aplicacion_key = ? 
-             ORDER BY fecha DESC 
-             LIMIT 10",
-            [$userKey]
-        );
-        
-        Utils::jsonResponse(true, [
-            'user' => [
-                'nombre' => $userStats['nombre'],
-                'nivel_max' => (int)$userStats['nivel_max'],
-                'monedas' => (int)$userStats['monedas'],
-                'global_position' => (int)($globalPosition['posicion'] ?? 0)
-            ],
-            'stats' => [
-                'total_games' => (int)$userStats['total_games'],
-                'total_score' => (int)$userStats['total_score'],
-                'avg_score' => round((float)$userStats['avg_score'], 1),
-                'best_score' => (int)$userStats['best_score'],
-                'unique_levels_played' => (int)$userStats['unique_levels_played'],
-                'first_game' => $userStats['first_game'],
-                'last_game' => $userStats['last_game']
-            ],
-            'recent_scores' => array_map(function($score) {
-                return [
-                    'nivel_id' => (int)$score['nivel_id'],
-                    'score' => (int)$score['score'],
-                    'tiempo_ms' => (int)$score['tiempo_ms'],
-                    'fecha' => $score['fecha']
-                ];
-            }, $recentScores)
-        ]);
-        
+        return $existingTables;
     } catch (Exception $e) {
-        Utils::logError("Error obteniendo estadísticas de usuario", ['user_key' => $userKey, 'error' => $e->getMessage()]);
-        Utils::jsonResponse(false, null, 'Error obteniendo estadísticas', 500);
+        error_log("Error en checkTables: " . $e->getMessage());
+        return [];
     }
+}
+
+// Función para obtener estructura de tablas
+function getTableStructure($pdo) {
+    try {
+        $structure = [];
+        
+        // Verificar usuarios_aplicaciones
+        try {
+            $stmt = $pdo->prepare("DESCRIBE usuarios_aplicaciones");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            $structure['usuarios_aplicaciones'] = $result;
+        } catch (Exception $e) {
+            $structure['usuarios_aplicaciones'] = ['error' => $e->getMessage()];
+        }
+        
+        // Verificar mundoletras_progreso
+        try {
+            $stmt = $pdo->prepare("DESCRIBE mundoletras_progreso");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            $structure['mundoletras_progreso'] = $result;
+        } catch (Exception $e) {
+            $structure['mundoletras_progreso'] = ['error' => $e->getMessage()];
+        }
+        
+        return $structure;
+    } catch (Exception $e) {
+        error_log("Error en getTableStructure: " . $e->getMessage());
+        return ['error' => $e->getMessage()];
+    }
+}
+
+// Función para obtener ranking completo
+function getRanking($pdo, $appCodigo = 'mundoletras', $limit = 50) {
+    try {
+        // Primero intentar con INNER JOIN (solo usuarios con progreso)
+        $sql = "
+            SELECT 
+                ua.usuario_aplicacion_key,
+                ua.nombre,
+                p.nivel_max,
+                p.puntuacion_total,
+                p.actualizado_at
+            FROM usuarios_aplicaciones ua
+            INNER JOIN mundoletras_progreso p ON ua.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci = p.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci
+            WHERE ua.app_codigo COLLATE utf8mb4_unicode_ci = ? 
+            AND ua.activo = 1
+            AND p.nivel_max > 0
+            ORDER BY p.nivel_max DESC, p.puntuacion_total DESC
+            LIMIT ?
+        ";
+        
+        error_log("🔍 getRanking SQL: " . $sql);
+        error_log("🔍 getRanking params: " . json_encode([$appCodigo, $limit]));
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$appCodigo, $limit]);
+        $result = $stmt->fetchAll();
+        error_log("🔍 getRanking result count: " . count($result));
+        
+        // Añadir posición manualmente
+        foreach ($result as $index => &$player) {
+            $player['posicion'] = $index + 1;
+        }
+        
+        return $result;
+    } catch (Exception $e) {
+        error_log("❌ Error en getRanking: " . $e->getMessage());
+        
+        // Si falla, intentar con LEFT JOIN (incluir usuarios sin progreso)
+        try {
+            error_log("🔧 Intentando con LEFT JOIN...");
+            $sql = "
+                SELECT 
+                    ua.usuario_aplicacion_key,
+                    ua.nombre,
+                    COALESCE(p.nivel_max, 0) as nivel_max,
+                    COALESCE(p.puntuacion_total, 0) as puntuacion_total,
+                    COALESCE(p.actualizado_at, ua.created_at) as actualizado_at
+                FROM usuarios_aplicaciones ua
+                LEFT JOIN mundoletras_progreso p ON ua.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci = p.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci
+                WHERE ua.app_codigo COLLATE utf8mb4_unicode_ci = ? 
+                AND ua.activo = 1
+                ORDER BY nivel_max DESC, puntuacion_total DESC
+                LIMIT ?
+            ";
+            
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$appCodigo, $limit]);
+            $result = $stmt->fetchAll();
+            
+            // Añadir posición manualmente
+            foreach ($result as $index => &$player) {
+                $player['posicion'] = $index + 1;
+            }
+            
+            error_log("🔧 LEFT JOIN result count: " . count($result));
+            return $result;
+        } catch (Exception $e2) {
+            error_log("❌ Error en LEFT JOIN: " . $e2->getMessage());
+            throw $e2;
+        }
+    }
+}
+
+// Función para obtener contexto del usuario
+function getUserContext($pdo, $userKey, $appCodigo = 'mundoletras') {
+    try {
+        // Obtener ranking completo y encontrar posición del usuario
+        $ranking = getRanking($pdo, $appCodigo, 1000); // Obtener más registros para encontrar posición
+        
+        $userPosition = null;
+        foreach ($ranking as $index => $player) {
+            if ($player['usuario_aplicacion_key'] === $userKey) {
+                $userPosition = $index + 1;
+                break;
+            }
+        }
+        
+        if (!$userPosition) {
+            return ['error' => 'Usuario no encontrado'];
+        }
+        
+        $startPos = max(1, $userPosition - 10);
+        $endPos = min(count($ranking), $userPosition + 10);
+        $contextRanking = array_slice($ranking, $startPos - 1, $endPos - $startPos + 1);
+        
+                return [
+            'ranking' => $contextRanking,
+            'user_position' => $userPosition,
+            'start_position' => $startPos
+        ];
+    } catch (Exception $e) {
+        error_log("Error en getUserContext: " . $e->getMessage());
+        return ['error' => $e->getMessage()];
+    }
+}
+
+// Procesar petición
+$method = $_SERVER['REQUEST_METHOD'];
+
+try {
+    if ($method === 'GET') {
+        $action = $_GET['action'] ?? 'full';
+        $userKey = $_GET['user_key'] ?? null;
+        
+        switch ($action) {
+            case 'test':
+                // Función de test para debugging
+                $existingTables = checkTables($pdo);
+                echo json_encode([
+                    'success' => true,
+                    'data' => [
+                        'tables_exist' => $existingTables,
+                        'all_tables' => $existingTables === ['usuarios_aplicaciones', 'mundoletras_progreso'],
+                        'db_connection' => 'OK'
+                    ],
+                    'message' => 'Test completado',
+                    'timestamp' => date('Y-m-d H:i:s')
+                ]);
+                break;
+                
+            case 'structure':
+                // Función para ver estructura de tablas
+                $structure = getTableStructure($pdo);
+                echo json_encode([
+                    'success' => true,
+                    'data' => $structure,
+                    'message' => 'Estructura de tablas',
+                    'timestamp' => date('Y-m-d H:i:s')
+                ]);
+                break;
+                
+            case 'test_sql':
+                // Función para probar consulta SQL específica
+                try {
+                    error_log("🔧 Test SQL iniciado");
+                    
+                    // Test 1: Verificar si hay datos en usuarios_aplicaciones
+                    $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM usuarios_aplicaciones WHERE app_codigo COLLATE utf8mb4_unicode_ci = ?");
+                    $stmt->execute(['mundoletras']);
+                    $usersCount = $stmt->fetch();
+                    error_log("🔧 Usuarios encontrados: " . $usersCount['count']);
+                    
+                    // Test 2: Verificar si hay datos en mundoletras_progreso
+                    $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM mundoletras_progreso");
+                    $stmt->execute();
+                    $progressCount = $stmt->fetch();
+                    error_log("🔧 Progresos encontrados: " . $progressCount['count']);
+                    
+                    // Test 3: Verificar JOIN básico
+                    $stmt = $pdo->prepare("
+                        SELECT 
+                            ua.usuario_aplicacion_key,
+                            ua.nombre,
+                            ua.app_codigo,
+                            ua.activo,
+                            p.nivel_max,
+                            p.puntuacion_total
+                        FROM usuarios_aplicaciones ua
+                        LEFT JOIN mundoletras_progreso p ON ua.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci = p.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci
+                        WHERE ua.app_codigo COLLATE utf8mb4_unicode_ci = 'mundoletras'
+                        LIMIT 5
+                    ");
+                    $stmt->execute();
+                    $joinTest = $stmt->fetchAll();
+                    error_log("🔧 JOIN test: " . count($joinTest) . " registros");
+                    
+                    // Test 4: Intentar ranking completo
+                    $ranking = getRanking($pdo);
+                    
+                    // Test 5: Verificar datos específicos
+                    $allProgress = $pdo->prepare("SELECT * FROM mundoletras_progreso ORDER BY nivel_max DESC, puntuacion_total DESC");
+                    $allProgress->execute();
+                    $allProgressData = $allProgress->fetchAll();
+                    
+                    echo json_encode([
+                        'success' => true,
+                        'data' => [
+                            'sql_test' => 'OK',
+                            'users_count' => $usersCount['count'],
+                            'progress_count' => $progressCount['count'],
+                            'join_test_count' => count($joinTest),
+                            'ranking_count' => count($ranking),
+                            'all_progress_count' => count($allProgressData),
+                            'join_sample' => array_slice($joinTest, 0, 3),
+                            'ranking_sample' => array_slice($ranking, 0, 3),
+                            'all_progress_sample' => array_slice($allProgressData, 0, 3)
+                        ],
+                        'message' => 'Test SQL completado',
+                        'timestamp' => date('Y-m-d H:i:s')
+                    ]);
+                } catch (Exception $e) {
+                    error_log("❌ Error en test SQL: " . $e->getMessage());
+                    echo json_encode([
+                        'success' => false,
+                        'data' => [
+                            'sql_test' => 'ERROR',
+                            'error' => $e->getMessage(),
+                            'trace' => $e->getTraceAsString()
+                        ],
+                        'message' => 'Error en test SQL',
+                        'timestamp' => date('Y-m-d H:i:s')
+                    ]);
+                    http_response_code(500);
+                }
+                break;
+                
+            case 'full':
+                $ranking = getRanking($pdo);
+                echo json_encode([
+                    'success' => true,
+                    'data' => $ranking,
+                    'message' => '',
+                    'timestamp' => date('Y-m-d H:i:s')
+                ]);
+                break;
+                
+            case 'user_context':
+                if (!$userKey) {
+                    echo json_encode([
+                        'success' => false,
+                        'data' => null,
+                        'message' => 'user_key requerido',
+                        'timestamp' => date('Y-m-d H:i:s')
+                    ]);
+                    http_response_code(400);
+                    break;
+                }
+                
+                // Si es usuario guest, devolver ranking general
+                if (strpos($userKey, 'guest_') === 0) {
+                    error_log("🔍 Usuario guest detectado: " . $userKey);
+                    $ranking = getRanking($pdo);
+                    error_log("🔍 Ranking obtenido para guest: " . count($ranking) . " registros");
+                    echo json_encode([
+                        'success' => true,
+                        'data' => [
+                            'ranking' => $ranking,
+                            'user_position' => null,
+                            'start_position' => 1,
+                            'is_guest' => true
+                        ],
+                        'message' => 'Ranking general para usuario guest',
+                        'timestamp' => date('Y-m-d H:i:s')
+                    ]);
+                    break;
+                }
+                
+                $context = getUserContext($pdo, $userKey);
+                if (isset($context['error'])) {
+                    echo json_encode([
+                        'success' => false,
+                        'data' => null,
+                        'message' => $context['error'],
+                        'timestamp' => date('Y-m-d H:i:s')
+                    ]);
+                    http_response_code(404);
+                    break;
+                }
+                
+                echo json_encode([
+                    'success' => true,
+                    'data' => $context,
+                    'message' => '',
+                    'timestamp' => date('Y-m-d H:i:s')
+                ]);
+                break;
+                
+            default:
+                echo json_encode([
+                    'success' => false,
+                    'data' => null,
+                    'message' => 'Acción no válida',
+                    'timestamp' => date('Y-m-d H:i:s')
+                ]);
+                http_response_code(400);
+        }
+        
+    } else {
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Método no permitido',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        http_response_code(405);
+    }
+    
+} catch (Exception $e) {
+    error_log("Error en ranking.php: " . $e->getMessage());
+    echo json_encode([
+        'success' => false,
+        'data' => null,
+        'message' => 'Error del servidor: ' . $e->getMessage(),
+        'timestamp' => date('Y-m-d H:i:s')
+    ]);
+    http_response_code(500);
 }
 ?>
