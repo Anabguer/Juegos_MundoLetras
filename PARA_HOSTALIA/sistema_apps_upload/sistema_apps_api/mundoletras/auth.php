@@ -81,8 +81,9 @@ function handleRegister($input) {
     $email = $input['email'] ?? '';
     $password = $input['password'] ?? '';
     $nombre = $input['nombre'] ?? '';
+    $nick = $input['nick'] ?? '';
     
-    if (empty($email) || empty($password) || empty($nombre)) {
+    if (empty($email) || empty($password) || empty($nombre) || empty($nick)) {
         http_response_code(400);
         echo json_encode([
             'success' => false,
@@ -104,6 +105,18 @@ function handleRegister($input) {
         return;
     }
     
+    // Validar que el nick no contenga espacios
+    if (strpos($nick, ' ') !== false) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'El nick no puede contener espacios',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
+    }
+    
     if (strlen($password) < 6) {
         http_response_code(400);
         echo json_encode([
@@ -118,18 +131,35 @@ function handleRegister($input) {
     try {
         $userKey = $email . '_mundoletras';
         
-        // Verificar si existe
-        $existing = $db->fetchOne(
+        // Verificar si existe el email
+        $existingEmail = $db->fetchOne(
             "SELECT usuario_aplicacion_id FROM usuarios_aplicaciones WHERE usuario_aplicacion_key = ?",
             [$userKey]
         );
         
-        if ($existing) {
+        if ($existingEmail) {
             http_response_code(409);
             echo json_encode([
                 'success' => false,
                 'data' => null,
-                'message' => 'El usuario ya existe',
+                'message' => 'Ya existe un usuario con este correo electrónico',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+            return;
+        }
+        
+        // Verificar si existe el nick
+        $existingNick = $db->fetchOne(
+            "SELECT usuario_aplicacion_id FROM usuarios_aplicaciones WHERE nick = ? AND app_codigo = 'mundoletras'",
+            [$nick]
+        );
+        
+        if ($existingNick) {
+            http_response_code(409);
+            echo json_encode([
+                'success' => false,
+                'data' => null,
+                'message' => 'El nick ya existe. Elija otro.',
                 'timestamp' => date('Y-m-d H:i:s')
             ]);
             return;
@@ -142,10 +172,10 @@ function handleRegister($input) {
         
         $result = $db->query(
             "INSERT INTO usuarios_aplicaciones (
-                usuario_aplicacion_key, email, nombre, password_hash, app_codigo,
+                usuario_aplicacion_key, email, nombre, nick, password_hash, app_codigo,
                 verification_code, verification_expiry, fecha_registro, activo
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), 0)",
-            [$userKey, $email, $nombre, $passwordHash, 'mundoletras', $verificationCode, $verificationExpiry]
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), 0)",
+            [$userKey, $email, $nombre, $nick, $passwordHash, 'mundoletras', $verificationCode, $verificationExpiry]
         );
         
         if ($result) {
