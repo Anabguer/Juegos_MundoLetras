@@ -1,19 +1,19 @@
-﻿// Generar mecÃ¡nicas aleatorias para todos los niveles
+﻿// Generar mecánicas aleatorias para todos los niveles
 function generateRandomMechanics(level) {
-    // Las mecÃ¡nicas siguen siendo aleatorias en todos los niveles
+    // Las mecánicas siguen siendo aleatorias en todos los niveles
     
     const availableMechanics = [
         'fog',        // Niebla - revelar letras al completar palabras
-        'ghost',      // Fantasma - letras translÃºcidas
+        'ghost',      // Fantasma - letras translúcidas
         'hiddenWords', // Palabras ocultas
         'wordTimer',   // Timer por palabra
-        'dynamicTimer' // Timer dinÃ¡mico general
+        'dynamicTimer' // Timer dinámico general
     ];
     
-    // UNA MECÃNICA POR NIVEL - No mezclar mecÃ¡nicas
-    const numMechanics = 1; // Siempre 1 mecÃ¡nica por nivel
+    // UNA MECÁNICA POR NIVEL - No mezclar mecánicas
+    const numMechanics = 1; // Siempre 1 mecánica por nivel
     
-    // Seleccionar mecÃ¡nicas aleatorias sin repetir
+    // Seleccionar mecánicas aleatorias sin repetir
     const selectedMechanics = [];
     const shuffledMechanics = [...availableMechanics].sort(() => Math.random() - 0.5);
     
@@ -24,11 +24,11 @@ function generateRandomMechanics(level) {
     return selectedMechanics;
 }
 
-// Aplicar mecÃ¡nicas al juego
+// Aplicar mecánicas al juego
 function applyMechanics(mechanics) {
     gameState.activeMechanics = mechanics;
     
-    // Limpiar estado previo de mecÃ¡nicas
+    // Limpiar estado previo de mecánicas
     gameState.originalGrid = [];
     gameState.revealedCells = [];
     gameState.hiddenWords = [];
@@ -46,7 +46,7 @@ function applyMechanics(mechanics) {
         gameState.wordTimerInterval = null;
     }
     
-    // Aplicar cada mecÃ¡nica
+    // Aplicar cada mecánica
     mechanics.forEach(mechanic => {
         switch (mechanic) {
             case 'fog':
@@ -67,19 +67,19 @@ function applyMechanics(mechanics) {
         }
     });
     
-    // Actualizar interfaz para mostrar mecÃ¡nicas activas
+    // Actualizar interfaz para mostrar mecánicas activas
     updateMechanicsDisplay();
     
-    // Actualizar lista de palabras despuÃ©s de aplicar mecÃ¡nicas
+    // Actualizar lista de palabras después de aplicar mecánicas
     updateWordsList();
     
-    // Aplicar mecÃ¡nicas visuales despuÃ©s de que se hayan aplicado las lÃ³gicas
+    // Aplicar mecánicas visuales después de que se hayan aplicado las lógicas
     setTimeout(() => {
         applyVisualMechanics();
     }, 200);
 }
 
-// Actualizar display de mecÃ¡nicas activas
+// Actualizar display de mecánicas activas
 function updateMechanicsDisplay() {
     const mechanicsDisplay = document.getElementById('mechanics-display');
     
@@ -91,41 +91,41 @@ function updateMechanicsDisplay() {
         // Limpiar contenido previo
         mechanicsDisplay.innerHTML = '';
         
-        // Crear badges para cada mecÃ¡nica
+        // Crear badges para cada mecánica
         gameState.activeMechanics.forEach(mechanic => {
             const badge = document.createElement('div');
             badge.className = `mechanic-badge ${mechanic}`;
             
-            // Configurar texto y emoji segÃºn la mecÃ¡nica
+            // Configurar texto y emoji según la mecánica
             switch (mechanic) {
                 case 'fog':
-                    badge.textContent = 'ðŸŒ«ï¸ Niebla';
+                    badge.textContent = '🌫️ Niebla';
                     break;
                 case 'ghost':
-                    badge.textContent = 'ðŸ‘» Fantasma';
+                    badge.textContent = '👻 Fantasma';
                     break;
                 case 'hiddenWords':
-                    badge.textContent = 'ðŸ“ Palabras Ocultas';
+                    badge.textContent = '👁️ Palabras Ocultas';
                     break;
                 case 'wordTimer':
-                    badge.textContent = 'â° Timer por Palabra';
+                    badge.textContent = '⏰ Timer por Palabra';
                     break;
                 case 'dynamicTimer':
-                    badge.textContent = 'â±ï¸ Timer DinÃ¡mico';
+                    badge.textContent = '⏱️Timer Dinámico';
                     break;
                 default:
-                    badge.textContent = `ðŸŽ® ${mechanic}`;
+                    badge.textContent = `🔄 ${mechanic}`;
             }
             
             mechanicsDisplay.appendChild(badge);
         });
     } else {
-        // Ocultar el contenedor si no hay mecÃ¡nicas
+        // Ocultar el contenedor si no hay mecánicas
         mechanicsDisplay.style.display = 'none';
     }
 }
 
-// Aplicar mecÃ¡nicas visuales al grid
+// Aplicar mecánicas visuales al grid
 function applyVisualMechanics() {
     
     // Aplicar niebla
@@ -163,7 +163,7 @@ function applyGhostVisual() {
     });
 }
 
-// MecÃ¡nica de Niebla (Fog)
+// Mecánica de Niebla (Fog)
 function applyFogMechanic() {
     
     // Guardar grid original antes de aplicar niebla
@@ -180,7 +180,7 @@ function applyFogMechanic() {
     }
 }
 
-// MecÃ¡nica de Fantasma (Ghost)
+// Mecánica de Fantasma (Ghost)
 function applyGhostMechanic() {
     
     // Aplicar clase ghost a algunas celdas (25% de probabilidad)
@@ -193,7 +193,7 @@ function applyGhostMechanic() {
     }, 100);
 }
 
-// MecÃ¡nica de Palabras Ocultas
+// Mecánica de Palabras Ocultas
 function applyHiddenWordsMechanic() {
     
     // Limpiar palabras ocultas previas
@@ -214,16 +214,16 @@ function applyHiddenWordsMechanic() {
     
 }
 
-// MecÃ¡nica de Timer por Palabra
+// Mecánica de Timer por Palabra
 function applyWordTimerMechanic() {
     
-    // Ordenar palabras por longitud (mÃ¡s difÃ­cil = mÃ¡s larga)
+    // Ordenar palabras por longitud (más difí­cil = más larga)
     const sortedWords = [...gameState.currentWords].sort((a, b) => b.length - a.length);
     
-    // Asignar tiempos diferenciados: palabra mÃ¡s difÃ­cil 40s, las demÃ¡s -5s cada una
+    // Asignar tiempos diferenciados: palabra más difí­cil 40s, las demás -5s cada una
     sortedWords.forEach((word, index) => {
         const timeForWord = 40 - (index * 5); // 40s, 35s, 30s, 25s...
-        gameState.wordTimers[word] = Math.max(timeForWord, 15); // MÃ­nimo 15 segundos
+        gameState.wordTimers[word] = Math.max(timeForWord, 15); // Mínimo 15 segundos
     });
     
     // Iniciar timer
@@ -242,15 +242,15 @@ function applyWordTimerMechanic() {
             clearInterval(gameState.wordTimerInterval);
             gameState.wordTimerInterval = null;
             gameState.levelExpired = true;
-            showMessage('â° Â¡Tiempo agotado! Nivel no completado. Usa "Limpiar SelecciÃ³n" para repetir.', 'error');
+            showMessage('Tiempo agotado! Nivel no completado. Usa "Limpiar Selección" para repetir.', 'error');
         }
     }, 1000);
 }
 
-// MecÃ¡nica de Timer DinÃ¡mico
+// Mecánica de Timer Dinámico
 function applyDynamicTimerMechanic() {
     
-    // Inicializar timer dinÃ¡mico (2 minutos)
+    // Inicializar timer dinámico (2 minutos)
     gameState.dynamicTimer = 120;
     
     gameState.dynamicTimerInterval = setInterval(() => {
@@ -261,7 +261,7 @@ function applyDynamicTimerMechanic() {
             clearInterval(gameState.dynamicTimerInterval);
             gameState.dynamicTimerInterval = null;
             gameState.levelExpired = true;
-            showMessage('â±ï¸ Â¡Tiempo agotado! Nivel no completado. Usa "Limpiar SelecciÃ³n" para repetir.', 'error');
+            showMessage('¡Tiempo agotado! Nivel no completado. Usa "Limpiar Selección" para repetir.', 'error');
         }
     }, 1000);
 }

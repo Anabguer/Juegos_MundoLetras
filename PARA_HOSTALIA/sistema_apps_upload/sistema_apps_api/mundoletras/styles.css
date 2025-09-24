@@ -365,7 +365,7 @@
         
         /* Responsive */
         
-        /* Animaciones de PuntuaciÃ³n */
+        /* Animaciones de Puntuación */
         @keyframes scoreIncrease {
             0% { transform: scale(1); }
             50% { transform: scale(1.2); color: #fbbf24; }
@@ -471,7 +471,7 @@
             100% { opacity: 0; }
         }
         
-        /* Clases de animaciÃ³n */
+        /* Clases de animación */
         .score-animation {
             animation: scoreIncrease 0.6s ease-in-out;
         }
@@ -952,7 +952,7 @@
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
         
-        /* Estilos para pestaÃ±as */
+        /* Estilos para pestañas */
         .tabs-container {
             margin-bottom: 1.5rem;
         }
@@ -1003,7 +1003,7 @@
         
         /* ===== ESTILOS PARA MECÃNICAS ===== */
         
-        /* MecÃ¡nica de Niebla */
+        /* Mecánica de Niebla */
         .grid-cell.fog {
             background-color: rgba(100, 100, 100, 0.8) !important;
             color: #666 !important;
@@ -1022,7 +1022,7 @@
             z-index: 1;
         }
         
-        /* MecÃ¡nica de Fantasma */
+        /* Mecánica de Fantasma */
         .grid-cell.ghost {
             opacity: 0.4 !important;
             animation: ghostPulse 0.8s ease-in-out infinite alternate;
@@ -1041,7 +1041,7 @@
             }
         }
         
-        /* MecÃ¡nica de Timer por Palabra */
+        /* Mecánica de Timer por Palabra */
         .word-timer {
             font-size: 0.7rem;
             color: #ff6b6b;
@@ -1054,7 +1054,7 @@
             color: white !important;
         }
         
-        /* Display de mecÃ¡nicas activas */
+        /* Display de mecánicas activas */
         .mechanics-display {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);

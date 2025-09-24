@@ -1,4 +1,4 @@
-﻿// ConfiguraciÃ³n del juego
+﻿// Configuración del juego
 const CONFIG = {
     API_BASE_URL: 'https://colisan.com/sistema_apps_upload/sistema_apps_api/mundoletras/',
     GRID_SIZE: 6,
@@ -29,7 +29,7 @@ let gameState = {
     failedAttempts: 0
 };
 
-// Funciones de navegaciÃ³n bÃ¡sicas
+// Funciones de navegación básicas
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
@@ -49,7 +49,7 @@ function startAsGuest() {
         key: 'guest_' + Date.now()
     };
     
-    showMessage('Â¡Bienvenido! Iniciando juego...', 'success');
+    showMessage('Bienvenido! Iniciando juego...', 'success');
     setTimeout(async () => {
         try {
             await initGame();
@@ -64,20 +64,20 @@ function backToMainMenu() {
     const loginContent = document.getElementById('login-content');
     loginContent.innerHTML = `
         <button class="btn btn-primary" onclick="startAsGuest()">
-            ðŸ‘¤ Jugar como Invitado
+            👤 Jugar como Invitado
         </button>
         <button class="btn btn-secondary" onclick="showLogin()">
-            ðŸ” Identificarse
+            👤 Identificarse
         </button>
     `;
 }
 
 function backToMenu() {
     if (gameState.currentUser && !gameState.currentUser.isGuest) {
-        // Si estÃ¡ logueado, hacer logout
+        // Si está logueado, hacer logout
         logout();
     } else {
-        // Si es invitado, volver al menÃº
+        // Si es invitado, volver al menú
         showScreen('login-screen');
     }
 }
@@ -91,7 +91,7 @@ function logout() {
     gameState.selectedCells = [];
     gameState.foundWords = [];
     
-    showMessage('SesiÃ³n cerrada. Volviendo al menÃº...', 'success');
+    showMessage('Sesión cerrada. Volviendo al menú...', 'success');
     setTimeout(() => {
         showScreen('login-screen');
     }, 1500);
@@ -106,16 +106,16 @@ function showMessage(text, type = 'success') {
     }, 3000);
 }
 
-// Funciones de sonido bÃ¡sicas
+// Funciones de sonido básicas
 function toggleSound() {
     gameState.soundEnabled = !gameState.soundEnabled;
     const soundControl = document.getElementById('sound-control');
     if (gameState.soundEnabled) {
-        soundControl.textContent = 'ðŸ”Š';
+        soundControl.textContent = '🔊';
         soundControl.classList.remove('muted');
         playSound('toggle');
     } else {
-        soundControl.textContent = 'ðŸ”‡';
+        soundControl.textContent = '🔇';
         soundControl.classList.add('muted');
     }
 }

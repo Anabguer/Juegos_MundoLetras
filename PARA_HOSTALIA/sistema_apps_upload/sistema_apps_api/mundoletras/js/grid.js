@@ -1,6 +1,6 @@
 ﻿// Inicializar juego
 async function initGame() {
-    // Cargar progreso segÃºn tipo de usuario
+    // Cargar progreso según tipo de usuario
     if (gameState.currentUser && gameState.currentUser.isGuest) {
         // Invitado: cargar de localStorage
         loadGuestProgress();
@@ -12,29 +12,29 @@ async function initGame() {
     // Configurar palabras del nivel actual
     gameState.currentWords = getLevelWords(gameState.currentLevel);
     
-    // El grid ahora es dinÃ¡mico basado en las palabras, no fijo por nivel
-    // CONFIG.GRID_SIZE ya no se usa - se calcula dinÃ¡micamente
+    // El grid ahora es dinámico basado en las palabras, no fijo por nivel
+    // CONFIG.GRID_SIZE ya no se usa - se calcula dinámicamente
     
-    // Ocultar botÃ³n de reiniciar progreso (no disponible para invitados)
+    // Ocultar botón de reiniciar progreso (no disponible para invitados)
     const clearProgressBtn = document.getElementById('clear-progress-btn');
     if (clearProgressBtn) {
         clearProgressBtn.style.display = 'none';
     }
     
-    // Actualizar informaciÃ³n del usuario
+    // Actualizar información del usuario
     updateUserInfo();
     
     generateGrid();
     updateHUD();
     
-    // Generar y aplicar mecÃ¡nicas aleatorias DESPUÃ‰S de generar el grid
+    // Generar y aplicar mecánicas aleatorias DESPUÉS de generar el grid
     const randomMechanics = generateRandomMechanics(gameState.currentLevel);
     applyMechanics(randomMechanics);
     
     // Actualizar lista de palabras DESPUÉS de aplicar mecánicas
     updateWordsList();
     
-    // Aplicar mecÃ¡nicas visuales despuÃ©s de inicializar el juego
+    // Aplicar mecánicas visuales después de inicializar el juego
     setTimeout(() => {
         applyVisualMechanics();
     }, 200);
@@ -43,7 +43,7 @@ async function initGame() {
 // Generar siguiente nivel
 function generateNextLevel() {
     
-    // LIMPIAR mecÃ¡nicas del nivel anterior
+    // LIMPIAR mecánicas del nivel anterior
     gameState.activeMechanics = [];
     gameState.originalGrid = [];
     gameState.revealedCells = [];
@@ -219,7 +219,7 @@ function generateGrid() {
         gameState.currentGrid.push('');
     }
     
-    // Colocar palabras dinÃ¡micamente
+    // Colocar palabras dinámicamente
     placeWordsInGrid(words, gridSize);
     
     // Rellenar celdas vacías con letras aleatorias
@@ -550,7 +550,7 @@ function selectCell(index) {
     
     // NO permitir seleccionar si el nivel ha expirado
     if (gameState.levelExpired) {
-        showMessage('â° Nivel expirado. Usa "Limpiar SelecciÃ³n" para repetir.', 'error');
+        showMessage('⏰ Nivel expirado. Usa "Limpiar Selección" para repetir.', 'error');
         return;
     }
     
@@ -577,7 +577,7 @@ function selectCell(index) {
     updateCellSelection();
     
     // Solo verificar palabras si tenemos al menos 2 celdas seleccionadas
-    // Y solo si la selección forma una lÃ­nea recta válida
+    // Y solo si la selección forma una lí­nea recta válida
     if (gameState.selectedCells.length >= 2 && isValidWordSelection()) {
         checkForWord();
     }
@@ -746,7 +746,7 @@ function checkForWord() {
     
     // NO permitir encontrar palabras si el nivel ha expirado
     if (gameState.levelExpired) {
-        showMessage('â° Nivel expirado. No se pueden encontrar mÃ¡s palabras.', 'error');
+        showMessage('⏰ Nivel expirado. No se pueden encontrar más palabras.', 'error');
         return;
     }
     
@@ -777,7 +777,7 @@ function checkForWord() {
     const reverseWord = selectedWord.split('').reverse().join('');
     
     
-    // Verificar si la palabra estÃ¡ en la lista
+    // Verificar si la palabra está en la lista
     const foundWord = gameState.currentWords.find(word => 
         word === selectedWord || word === reverseWord
     );
@@ -785,7 +785,7 @@ function checkForWord() {
     if (foundWord && !gameState.foundWords.includes(foundWord)) {
         // Verificar si la palabra expiró - BLOQUEAR si expiró
         if (gameState.activeMechanics.includes('wordTimer') && gameState.wordTimers[foundWord] === 0) {
-            showMessage(`â° La palabra "${foundWord}" ha expirado. No se puede completar.`, 'error');
+            showMessage(`⏰ La palabra "${foundWord}" ha expirado. No se puede completar.`, 'error');
             // Limpiar selección inmediatamente si la palabra expiró
             clearSelection();
             return;
@@ -819,7 +819,7 @@ function checkForWord() {
                     gameState.currentGrid[index] = gameState.originalGrid[index];
                     gameState.revealedCells.push(index);
                     
-                    // Actualizar visualizaciÃ³n
+                    // Actualizar visualización
                     const cell = document.querySelector(`[data-index="${index}"]`);
                     if (cell) {
                         cell.textContent = gameState.originalGrid[index];

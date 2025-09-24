@@ -1,16 +1,16 @@
-﻿// FunciÃ³n para cambiar entre pestaÃ±as
+﻿// Función para cambiar entre pestañas
 function switchTab(tabName) {
-    // Ocultar todas las pestaÃ±as
+    // Ocultar todas las pestañas
     document.querySelectorAll('.tab-panel').forEach(panel => {
         panel.classList.remove('active');
     });
     
-    // Desactivar todos los botones de pestaÃ±a
+    // Desactivar todos los botones de pestaña
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     
-    // Mostrar la pestaÃ±a seleccionada
+    // Mostrar la pestaña seleccionada
     document.getElementById(tabName + '-tab').classList.add('active');
     document.getElementById('tab-' + tabName).classList.add('active');
 }
@@ -18,7 +18,7 @@ function switchTab(tabName) {
 function showLogin() {
     const loginContent = document.getElementById('login-content');
     loginContent.innerHTML = `
-        <!-- PestaÃ±as -->
+        <!-- Pestañas -->
         <div class="tabs-container">
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('login')" id="tab-login">
@@ -41,8 +41,8 @@ function showLogin() {
                                style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
                     </div>
                     <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">ContraseÃ±a:</label>
-                        <input type="password" id="login-password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
+                        <input type="password" id="login-password" placeholder="********************"
                                style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
                     </div>
                 </div>
@@ -62,7 +62,7 @@ function showLogin() {
                     </div>
                     <div style="margin-bottom: 1rem;">
                         <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nick:</label>
-                        <input type="text" id="register-nick" placeholder="Tu nick Ãºnico" 
+                        <input type="text" id="register-nick" placeholder="Tu nick único" 
                                style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
                     </div>
                     <div style="margin-bottom: 1rem;">
@@ -71,7 +71,7 @@ function showLogin() {
                                style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
                     </div>
                     <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">ContraseÃ±a:</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
                         <input type="password" id="register-password" placeholder="************************"
                                style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
                     </div>
@@ -93,13 +93,13 @@ function showVerification(email, password) {
     const loginContent = document.getElementById('login-content');
     loginContent.innerHTML = `
         <div style="text-align: center; margin-bottom: 1.5rem;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">ðŸ“§</div>
-            <p style="margin-bottom: 0.5rem;">CÃ³digo enviado a:</p>
+            <div style="font-size: 3rem; margin-bottom: 1rem;">📧</div>
+            <p style="margin-bottom: 0.5rem;">Código enviado a:</p>
             <p style="font-weight: bold; color: #fbbf24;">${email}</p>
         </div>
         
         <div style="margin-bottom: 1.5rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; text-align: center;">CÃ³digo de VerificaciÃ³n:</label>
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; text-align: center;">Código de Verificación:</label>
             <input type="text" id="verify-code" placeholder="123456" maxlength="6"
                    style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 18px; text-align: center; letter-spacing: 0.2em;">
         </div>
@@ -319,7 +319,7 @@ function showRanking() {
     overlay.innerHTML = `
         <div class="ranking-content">
             <div class="ranking-header">
-                <h2 class="ranking-title">Ã°Å¸Ââ€  Ranking Global</h2>
+                <h2 class="ranking-title">🥇 Ranking Global</h2>
                 <button class="ranking-close" onclick="closeRanking()">&times;</button>
             </div>
             <div class="ranking-list" id="ranking-list">
@@ -327,7 +327,7 @@ function showRanking() {
             </div>
             <div class="ranking-controls">
                 <button class="ranking-btn" onclick="loadFullRanking()">Ver Top 50</button>
-                <button class="ranking-btn" onclick="scrollToUserPosition()">Mi PosiciÃ³n</button>
+                <button class="ranking-btn" onclick="scrollToUserPosition()">Mi Posición</button>
             </div>
         </div>
     `;
@@ -366,7 +366,7 @@ async function loadRanking() {
             throw new Error(userContext.message);
         }
         
-        // Usar datos del contexto del usuario (incluye ranking con posiciÃ³n)
+        // Usar datos del contexto del usuario (incluye ranking con posición)
         const rankingResponse = await fetch(CONFIG.API_BASE_URL + 'ranking.php?action=full', {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
@@ -379,7 +379,7 @@ async function loadRanking() {
         const rankingData = await rankingResponse.json();
         
         if (rankingData.success) {
-            // Pasar el usuario actual como contexto para la comparaciÃ³n
+            // Pasar el usuario actual como contexto para la comparación
             const userContextForDisplay = {
                 usuario_aplicacion_key: gameState.currentUser.usuario_aplicacion_key
             };
@@ -537,7 +537,7 @@ async function testRankingConnection() {
     }
 }
 
-// Scroll a la posiciÃ³n del usuario
+// Scroll a la posición del usuario
 function scrollToUserPosition() {
     const currentUser = document.querySelector('.ranking-item.current-user');
     if (currentUser) {
