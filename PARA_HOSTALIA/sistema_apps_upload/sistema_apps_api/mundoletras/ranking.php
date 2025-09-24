@@ -86,7 +86,7 @@ function getRanking($pdo, $appCodigo = 'mundoletras', $limit = 50) {
         $sql = "
             SELECT 
                 ua.usuario_aplicacion_key,
-                ua.nick,
+                COALESCE(ua.nick, ua.nombre) as nick,
                 p.nivel_max,
                 p.puntuacion_total,
                 p.actualizado_at
@@ -122,7 +122,7 @@ function getRanking($pdo, $appCodigo = 'mundoletras', $limit = 50) {
             $sql = "
                 SELECT 
                     ua.usuario_aplicacion_key,
-                    ua.nick,
+                    COALESCE(ua.nick, ua.nombre) as nick,
                     COALESCE(p.nivel_max, 0) as nivel_max,
                     COALESCE(p.puntuacion_total, 0) as puntuacion_total,
                     COALESCE(p.actualizado_at, ua.created_at) as actualizado_at
@@ -241,7 +241,7 @@ try {
                     $stmt = $pdo->prepare("
                         SELECT 
                             ua.usuario_aplicacion_key,
-                            ua.nick,
+                            COALESCE(ua.nick, ua.nombre) as nick,
                             ua.app_codigo,
                             ua.activo,
                             p.nivel_max,
@@ -375,8 +375,8 @@ try {
         ]);
         http_response_code(405);
     }
-    
-} catch (Exception $e) {
+        
+    } catch (Exception $e) {
     error_log("Error en ranking.php: " . $e->getMessage());
     echo json_encode([
         'success' => false,

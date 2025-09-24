@@ -333,7 +333,7 @@ function handleLogin($input) {
         
         // Buscar usuario
         $user = $db->fetchOne(
-            "SELECT usuario_aplicacion_id, usuario_aplicacion_key, email, nombre, password_hash, activo
+            "SELECT usuario_aplicacion_id, usuario_aplicacion_key, email, nombre, nick, password_hash, activo
              FROM usuarios_aplicaciones 
              WHERE usuario_aplicacion_key = ?",
             [$userKey]
@@ -404,6 +404,7 @@ function handleLogin($input) {
             'usuario_aplicacion_key' => $user['usuario_aplicacion_key'],
             'email' => $user['email'],
             'nombre' => $user['nombre'],
+            'nick' => $user['nick'],
             'app_codigo' => 'mundoletras',
             'verified_at' => date('Y-m-d H:i:s'),
             'last_login' => date('Y-m-d H:i:s')

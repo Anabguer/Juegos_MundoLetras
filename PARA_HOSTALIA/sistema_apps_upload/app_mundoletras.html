@@ -660,7 +660,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
             display: flex;
-            flex-direction: column;
+                flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -953,22 +953,47 @@
         
         /* Success/Error messages */
         .message {
-            padding: 1rem;
+            padding: 1rem 2rem;
             border-radius: 0.5rem;
             margin: 1rem 0;
             text-align: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            min-width: 300px;
+            max-width: 90vw;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            animation: messageSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
         
         .message.success {
-            background: rgba(16, 185, 129, 0.2);
-            border: 1px solid #10b981;
-            color: #10b981;
+            background: rgba(16, 185, 129, 0.9);
+            border: 2px solid #10b981;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .message.error {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid #ef4444;
-            color: #ef4444;
+            background: rgba(239, 68, 68, 0.9);
+            border: 2px solid #ef4444;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         /* Estilos para pestañas */
@@ -1490,7 +1515,7 @@
                         nick: nick
                     })
                 });
-
+                
                 const responseText = await response.text();
 
                 let data;
@@ -1949,7 +1974,7 @@
                         #${position}
                     </div>
                     <div class="ranking-player">
-                        <div class="ranking-name">${player.nombre}</div>
+                        <div class="ranking-name">${player.nick}</div>
                         <div class="ranking-level">Nivel ${player.nivel_max}</div>
                     </div>
                     <div class="ranking-stats">
@@ -2372,8 +2397,9 @@
                             }
                             
                             if (valid && (currentWord === word || currentWord === word.split('').reverse().join(''))) {
-                                console.log(`✅ "${word}" encontrada en (${row},${col}) dirección ${dir.name}`);
+                                console.log(`✅ "${word}" encontrada en (${row + 1},${col + 1}) dirección ${dir.name}`);
                                 console.log(`   Palabra en grid: "${currentWord}"`);
+                                console.log(`   Posición visual: fila ${row + 1}, columna ${col + 1}`);
                                 found = true;
                             }
                         });
@@ -2536,13 +2562,30 @@
         }
         
         function clearGuestProgress() {
-            try {
-                localStorage.removeItem('mundoletras_guest_progress');
+            // Mostrar confirmación antes de reiniciar
+            const confirmMessage = `⚠️ REINICIAR PROGRESO ⚠️\n\n¿Estás seguro de que quieres reiniciar tu progreso?\n\nEsto eliminará:\n• Tu nivel actual (${gameState.currentLevel})\n• Tu puntuación (${gameState.score})\n• Tus monedas (${gameState.coins})\n• Todas las palabras encontradas\n\nEl juego volverá al nivel 1.\n\n¿Confirmas el reinicio?`;
+            
+            if (confirm(confirmMessage)) {
+                try {
+                    localStorage.removeItem('mundoletras_guest_progress');
 
-                showMessage('Progreso eliminado. Reiniciando desde el nivel 1.', 'success');
-                resetGuestProgress();
-            } catch (error) {
-                console.error('Error eliminando progreso:', error);
+                    showMessage('✅ Progreso eliminado. Reiniciando desde el nivel 1.', 'success');
+                    resetGuestProgress();
+                    
+                    // Actualizar la pantalla con los datos reiniciados
+                    setTimeout(() => {
+                        updateUserInfo();
+                        updateHUD();
+                        generateGrid();
+                        updateWordsList();
+                        showMessage('¡Juego reiniciado! Comienza desde el nivel 1.', 'success');
+                    }, 1000);
+                } catch (error) {
+                    console.error('Error eliminando progreso:', error);
+                    showMessage('❌ Error al reiniciar progreso. Intenta de nuevo.', 'error');
+                }
+            } else {
+                showMessage('Reinicio cancelado. Tu progreso se mantiene.', 'success');
             }
         }
         
@@ -2563,10 +2606,10 @@
             // El grid ahora es dinámico basado en las palabras, no fijo por nivel
             // CONFIG.GRID_SIZE ya no se usa - se calcula dinámicamente
             
-            // Mostrar/ocultar botón de reiniciar progreso para invitados
+            // Ocultar botón de reiniciar progreso (no disponible para invitados)
             const clearProgressBtn = document.getElementById('clear-progress-btn');
             if (clearProgressBtn) {
-                clearProgressBtn.style.display = (gameState.currentUser && gameState.currentUser.isGuest) ? 'inline-flex' : 'none';
+                clearProgressBtn.style.display = 'none';
             }
             
             // Actualizar información del usuario
@@ -3187,8 +3230,9 @@
                         });
                         placed = true;
                         const directionNames = ['horizontal', 'vertical', 'diagonal-izq', 'diagonal-der'];
-                        console.log(`📝 Palabra "${word}" colocada ${useReverse ? '(REVERSA)' : ''} en dirección ${directionNames[actualDirection]} en posición (${startRow},${startCol})`);
+                        console.log(`📝 Palabra "${word}" colocada ${useReverse ? '(REVERSA)' : ''} en dirección ${directionNames[actualDirection]} en posición (${startRow + 1},${startCol + 1})`);
                         console.log(`   Palabra real colocada: "${actualWord}"`);
+                        console.log(`   Posición visual: fila ${startRow + 1}, columna ${startCol + 1}`);
                     }
                     
                     attempts++;
@@ -3218,7 +3262,7 @@
                     // Estrategia 2: Usar posición fija como último recurso
                     if (!specificPlaced) {
                         console.log(`🆘 Usando posición fija para "${word}"`);
-                        placeWordFixed(word, wordIndex, gridSize);
+                    placeWordFixed(word, wordIndex, gridSize);
                     }
                 }
             });
@@ -3414,46 +3458,29 @@
             // NO revelar letras individuales con click - solo al completar palabras
             
             if (gameState.selectedCells.includes(index)) {
-                // Ignorar clicks en celdas ya seleccionadas
-                return;
+                // Deseleccionar celda si ya está seleccionada
+                gameState.selectedCells = gameState.selectedCells.filter(i => i !== index);
+                // Animación sutil al deseleccionar
+                cell.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    cell.style.transform = '';
+                }, 150);
             } else {
-                // Si es la primera celda, seleccionar directamente
-                if (gameState.selectedCells.length === 0) {
-                    gameState.selectedCells.push(index);
-                    // Animación sutil al seleccionar
-                    cell.style.transform = 'scale(1.1)';
-                    setTimeout(() => {
-                        cell.style.transform = '';
-                    }, 150);
-                } else {
-                    // Verificar si es una selección válida (línea recta)
-                    const newSelection = [...gameState.selectedCells, index];
-                    if (isValidSelection(newSelection)) {
-                        // Seleccionar
-                        gameState.selectedCells.push(index);
-                        // Animación sutil al añadir a selección
-                        cell.style.transform = 'scale(1.05)';
-                        setTimeout(() => {
-                            cell.style.transform = '';
-                        }, 150);
-                    } else {
-                        // Si no es válida, empezar nueva selección
-                        gameState.selectedCells = [index];
-                        // Animación sutil al empezar nueva selección
-                        cell.style.transform = 'scale(1.1)';
-                        setTimeout(() => {
-                            cell.style.transform = '';
-                        }, 150);
-                    }
-                }
+                // Añadir celda a la selección (en cualquier orden)
+                gameState.selectedCells.push(index);
+                // Animación sutil al seleccionar
+                cell.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    cell.style.transform = '';
+                }, 150);
             }
             
             updateCellSelection();
             
             // Solo verificar palabras si tenemos al menos 2 celdas seleccionadas
-            // Y solo si la selección es válida (línea recta)
-            if (gameState.selectedCells.length >= 2 && isValidSelection(gameState.selectedCells)) {
-            checkForWord();
+            // Y solo si la selección forma una línea recta válida
+            if (gameState.selectedCells.length >= 2 && isValidWordSelection()) {
+                checkForWord();
             }
         }
         
@@ -3567,6 +3594,54 @@
             return false;
         }
         
+        // Ordenar celdas según la dirección de la línea recta
+        function sortCellsByDirection(cells) {
+            if (cells.length < 2) return cells;
+            
+            // Ordenar primero por posición general
+            cells.sort((a, b) => {
+                if (a.row !== b.row) return a.row - b.row;
+                return a.col - b.col;
+            });
+            
+            const first = cells[0];
+            const last = cells[cells.length - 1];
+            
+            // Calcular diferencias
+            const deltaRow = last.row - first.row;
+            const deltaCol = last.col - first.col;
+            
+            // Determinar dirección y ordenar apropiadamente
+            if (deltaRow === 0) {
+                // Horizontal: ordenar por columna
+                return cells.sort((a, b) => a.col - b.col);
+            } else if (deltaCol === 0) {
+                // Vertical: ordenar por fila
+                return cells.sort((a, b) => a.row - b.row);
+            } else if (Math.abs(deltaRow) === Math.abs(deltaCol)) {
+                // Diagonal: ordenar según la dirección diagonal
+                if (deltaRow > 0 && deltaCol > 0) {
+                    // Diagonal descendente derecha: ordenar por fila
+                    return cells.sort((a, b) => a.row - b.row);
+                } else if (deltaRow > 0 && deltaCol < 0) {
+                    // Diagonal descendente izquierda: ordenar por fila
+                    return cells.sort((a, b) => a.row - b.row);
+                } else if (deltaRow < 0 && deltaCol > 0) {
+                    // Diagonal ascendente derecha: ordenar por fila (descendente)
+                    return cells.sort((a, b) => b.row - a.row);
+                } else if (deltaRow < 0 && deltaCol < 0) {
+                    // Diagonal ascendente izquierda: ordenar por fila (descendente)
+                    return cells.sort((a, b) => b.row - a.row);
+                }
+            }
+            
+            // Fallback: ordenar por fila y columna
+            return cells.sort((a, b) => {
+                if (a.row !== b.row) return a.row - b.row;
+                return a.col - b.col;
+            });
+        }
+        
         // Verificar automáticamente si se formó una palabra
         function checkForWord() {
             if (gameState.selectedCells.length < 2) return;
@@ -3580,14 +3655,25 @@
             // Ya verificamos que es línea recta antes de llamar esta función
             console.log('🔍 Verificando palabra con celdas:', gameState.selectedCells);
             
+            // Ordenar celdas seleccionadas en el orden correcto de la línea recta
+            const gridSize = Math.sqrt(gameState.currentGrid.length);
+            const cells = gameState.selectedCells.map(index => ({
+                index,
+                row: Math.floor(index / gridSize),
+                col: index % gridSize
+            }));
+            
+            // Determinar la dirección de la línea y ordenar apropiadamente
+            const sortedCells = sortCellsByDirection(cells);
+            
             // Crear palabra temporal para verificación (usando letras reales del grid original)
-            const selectedWord = gameState.selectedCells
-                .map(index => {
+            const selectedWord = sortedCells
+                .map(cell => {
                     // Si la celda tiene niebla, usar la letra original para verificación
-                    if (gameState.currentGrid[index] === '?') {
-                        return gameState.originalGrid[index];
+                    if (gameState.currentGrid[cell.index] === '?') {
+                        return gameState.originalGrid[cell.index];
                     }
-                    return gameState.currentGrid[index];
+                    return gameState.currentGrid[cell.index];
                 })
                 .join('');
             
@@ -3864,8 +3950,8 @@
                     userStatus.textContent = 'Invitado';
                     userStatus.className = 'user-status-guest';
                     
-                    // Mostrar botón de reiniciar progreso y volver al menú, ocultar logout
-                    if (clearProgressBtn) clearProgressBtn.style.display = 'inline-flex';
+                    // Ocultar botón de reiniciar progreso y mostrar volver al menú, ocultar logout
+                    if (clearProgressBtn) clearProgressBtn.style.display = 'none';
                     if (logoutBtn) logoutBtn.style.display = 'none';
                     if (backMenuBtn) backMenuBtn.style.display = 'inline-flex';
                 } else {
