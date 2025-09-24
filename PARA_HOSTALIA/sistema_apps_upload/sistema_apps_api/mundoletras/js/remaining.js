@@ -1,4 +1,4 @@
-// Funciones restantes que no están duplicadas
+﻿// Funciones restantes que no están duplicadas
 
 // Animación de puntuación
 function animateScore(scoreElement, points) {
@@ -36,7 +36,6 @@ function animateCoins(coinsElement, amount = 10) {
     setTimeout(() => {
         const currentCoins = parseInt(coinsElement.textContent);
         coinsElement.textContent = currentCoins + amount;
-        console.log('💰 Monedas actualizadas:', currentCoins + amount);
         
         // Efecto en el contador
         coinsElement.classList.add('coin-count-animation');
@@ -164,77 +163,6 @@ function animateWordFound(word) {
     }, 2000);
 }
 
-// Debug de colocación de palabras
-function debugWordPlacement() {
-    console.log('🔍 === VERIFICACIÓN DE PALABRAS EN GRID ===');
-    console.log('📝 Palabras que deberían estar:', gameState.currentWords);
-    console.log('📏 Grid size:', Math.sqrt(gameState.currentGrid.length));
-    
-    gameState.currentWords.forEach(word => {
-        console.log(`\n🔍 Buscando "${word}" (${word.length} letras):`);
-        
-        const gridSize = Math.sqrt(gameState.currentGrid.length);
-        let found = false;
-        
-        // Buscar en todas las direcciones
-        for (let row = 0; row < gridSize; row++) {
-            for (let col = 0; col < gridSize; col++) {
-                const startIndex = row * gridSize + col;
-                
-                // Direcciones: horizontal, vertical, diagonal-der, diagonal-izq
-                const directions = [
-                    { dr: 0, dc: 1, name: 'horizontal' },
-                    { dr: 1, dc: 0, name: 'vertical' },
-                    { dr: 1, dc: 1, name: 'diagonal-der' },
-                    { dr: 1, dc: -1, name: 'diagonal-izq' }
-                ];
-                
-                directions.forEach(dir => {
-                    let currentWord = '';
-                    let valid = true;
-                    
-                    for (let i = 0; i < word.length; i++) {
-                        const checkRow = row + (dir.dr * i);
-                        const checkCol = col + (dir.dc * i);
-                        
-                        if (checkRow >= 0 && checkRow < gridSize && checkCol >= 0 && checkCol < gridSize) {
-                            const index = checkRow * gridSize + checkCol;
-                            // Usar originalGrid si está disponible (para mecánica de niebla), sino currentGrid
-                            const letter = gameState.originalGrid && gameState.originalGrid[index] ? gameState.originalGrid[index] : gameState.currentGrid[index];
-                            currentWord += letter;
-                        } else {
-                            valid = false;
-                            break;
-                        }
-                    }
-                    
-                    if (valid && (currentWord === word || currentWord === word.split('').reverse().join(''))) {
-                        console.log(`✅ "${word}" encontrada en (${row + 1},${col + 1}) dirección ${dir.name}`);
-                        console.log(`   Palabra en grid: "${currentWord}"`);
-                        console.log(`   Posición visual: fila ${row + 1}, columna ${col + 1}`);
-                        found = true;
-                    }
-                });
-            }
-        }
-        
-        if (!found) {
-            console.log(`❌ "${word}" NO ENCONTRADA en el grid`);
-        }
-    });
-    
-    console.log('\n📊 Grid completo:');
-    const gridSize = Math.sqrt(gameState.currentGrid.length);
-    for (let row = 0; row < gridSize; row++) {
-        let rowStr = '';
-        for (let col = 0; col < gridSize; col++) {
-            const index = row * gridSize + col;
-            rowStr += gameState.currentGrid[index] + ' ';
-        }
-        console.log(`Fila ${row}: ${rowStr}`);
-    }
-    console.log('🔍 === FIN VERIFICACIÓN ===');
-}
 
 // Guardar progreso de invitado
 function saveGuestProgress() {
@@ -250,12 +178,16 @@ function saveGuestProgress() {
     };
     
     localStorage.setItem('mundo_letras_guest_progress', JSON.stringify(progressData));
-    console.log('💾 Progreso de invitado guardado:', progressData);
 }
 
 // Cargar progreso de usuario registrado
 async function loadUserProgress() {
     if (!gameState.currentUser || gameState.currentUser.isGuest) return;
+    
+    // Validar que el user_key esté definido
+    if (!gameState.currentUser.usuario_aplicacion_key) {
+        return;
+    }
     
     try {
         const response = await fetch(CONFIG.API_BASE_URL + 'progress.php', {
@@ -273,19 +205,20 @@ async function loadUserProgress() {
             gameState.currentLevel = data.data.nivel_max || 1;
             gameState.score = data.data.puntuacion_total || 0;
             gameState.coins = data.data.monedas || 50;
-            console.log('📥 Progreso de usuario cargado:', data.data);
         } else {
-            console.log('📥 Usuario nuevo, comenzando desde el nivel 1');
         }
     } catch (error) {
-        console.error('❌ Error cargando progreso:', error);
-        console.log('📥 Usando valores por defecto');
     }
 }
 
 // Guardar progreso de usuario registrado
 async function saveUserProgress() {
     if (!gameState.currentUser || gameState.currentUser.isGuest) return;
+    
+    // Validar que el user_key esté definido
+    if (!gameState.currentUser.usuario_aplicacion_key) {
+        return;
+    }
     
     try {
         const response = await fetch(CONFIG.API_BASE_URL + 'progress.php', {
@@ -303,12 +236,9 @@ async function saveUserProgress() {
         const data = await response.json();
         
         if (data.success) {
-            console.log('💾 Progreso de usuario guardado');
         } else {
-            console.error('❌ Error guardando progreso:', data.message);
         }
     } catch (error) {
-        console.error('❌ Error guardando progreso:', error);
     }
 }
 
@@ -324,7 +254,6 @@ function loadGuestProgress() {
             // Verificar que los datos no sean muy antiguos (máximo 30 días)
             const daysSinceSave = (Date.now() - progressData.timestamp) / (1000 * 60 * 60 * 24);
             if (daysSinceSave > 30) {
-                console.log('📅 Progreso muy antiguo, comenzando de nuevo');
                 clearGuestProgress();
                 return;
             }
@@ -335,13 +264,9 @@ function loadGuestProgress() {
             gameState.coins = progressData.coins || 50;
             gameState.foundWords = progressData.foundWords || [];
             
-            console.log('📥 Progreso de invitado cargado:', progressData);
         } else {
-            console.log('📥 Invitado nuevo, comenzando desde el nivel 1');
         }
     } catch (error) {
-        console.error('❌ Error cargando progreso de invitado:', error);
-        console.log('📥 Usando valores por defecto');
     }
 }
 
@@ -366,7 +291,6 @@ function resetGuestProgress() {
 // Limpiar progreso de invitado
 function clearGuestProgress() {
     localStorage.removeItem('mundo_letras_guest_progress');
-    console.log('🧹 Progreso de invitado limpiado');
 }
 
 // Actualizar información del usuario
@@ -463,6 +387,14 @@ function updateWordsList() {
             wordItem.textContent = word;
         }
         
+        // Verificar si la palabra expiró
+        const isExpired = gameState.activeMechanics.includes('wordTimer') && 
+                         gameState.wordTimers[word] === 0;
+        
+        if (isExpired && !isFound) {
+            wordItem.classList.add('expired');
+        }
+        
         // Añadir timer si está activo
         if (gameState.activeMechanics.includes('wordTimer') && gameState.wordTimers[word] !== undefined) {
             const timer = gameState.wordTimers[word];
@@ -483,3 +415,5 @@ function updateWordsList() {
         wordsList.appendChild(wordItem);
     });
 }
+
+

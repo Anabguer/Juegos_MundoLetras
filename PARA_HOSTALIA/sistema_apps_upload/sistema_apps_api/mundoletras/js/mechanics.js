@@ -1,19 +1,19 @@
-// Generar mecánicas aleatorias para todos los niveles
+﻿// Generar mecÃ¡nicas aleatorias para todos los niveles
 function generateRandomMechanics(level) {
-    // Las mecánicas siguen siendo aleatorias en todos los niveles
+    // Las mecÃ¡nicas siguen siendo aleatorias en todos los niveles
     
     const availableMechanics = [
         'fog',        // Niebla - revelar letras al completar palabras
-        'ghost',      // Fantasma - letras translúcidas
+        'ghost',      // Fantasma - letras translÃºcidas
         'hiddenWords', // Palabras ocultas
         'wordTimer',   // Timer por palabra
-        'dynamicTimer' // Timer dinámico general
+        'dynamicTimer' // Timer dinÃ¡mico general
     ];
     
-    // UNA MECÁNICA POR NIVEL - No mezclar mecánicas
-    const numMechanics = 1; // Siempre 1 mecánica por nivel
+    // UNA MECÃNICA POR NIVEL - No mezclar mecÃ¡nicas
+    const numMechanics = 1; // Siempre 1 mecÃ¡nica por nivel
     
-    // Seleccionar mecánicas aleatorias sin repetir
+    // Seleccionar mecÃ¡nicas aleatorias sin repetir
     const selectedMechanics = [];
     const shuffledMechanics = [...availableMechanics].sort(() => Math.random() - 0.5);
     
@@ -21,15 +21,14 @@ function generateRandomMechanics(level) {
         selectedMechanics.push(shuffledMechanics[i]);
     }
     
-    console.log(`🎮 Nivel ${level}: ${selectedMechanics.length} mecánicas seleccionadas:`, selectedMechanics);
     return selectedMechanics;
 }
 
-// Aplicar mecánicas al juego
+// Aplicar mecÃ¡nicas al juego
 function applyMechanics(mechanics) {
     gameState.activeMechanics = mechanics;
     
-    // Limpiar estado previo de mecánicas
+    // Limpiar estado previo de mecÃ¡nicas
     gameState.originalGrid = [];
     gameState.revealedCells = [];
     gameState.hiddenWords = [];
@@ -47,7 +46,7 @@ function applyMechanics(mechanics) {
         gameState.wordTimerInterval = null;
     }
     
-    // Aplicar cada mecánica
+    // Aplicar cada mecÃ¡nica
     mechanics.forEach(mechanic => {
         switch (mechanic) {
             case 'fog':
@@ -68,24 +67,23 @@ function applyMechanics(mechanics) {
         }
     });
     
-    // Actualizar interfaz para mostrar mecánicas activas
+    // Actualizar interfaz para mostrar mecÃ¡nicas activas
     updateMechanicsDisplay();
     
-    // Actualizar lista de palabras después de aplicar mecánicas
+    // Actualizar lista de palabras despuÃ©s de aplicar mecÃ¡nicas
     updateWordsList();
     
-    // Aplicar mecánicas visuales después de que se hayan aplicado las lógicas
+    // Aplicar mecÃ¡nicas visuales despuÃ©s de que se hayan aplicado las lÃ³gicas
     setTimeout(() => {
         applyVisualMechanics();
     }, 200);
 }
 
-// Actualizar display de mecánicas activas
+// Actualizar display de mecÃ¡nicas activas
 function updateMechanicsDisplay() {
     const mechanicsDisplay = document.getElementById('mechanics-display');
     
     if (gameState.activeMechanics.length > 0) {
-        console.log('🎮 Mecánicas activas:', gameState.activeMechanics);
         
         // Mostrar el contenedor
         mechanicsDisplay.style.display = 'flex';
@@ -93,43 +91,42 @@ function updateMechanicsDisplay() {
         // Limpiar contenido previo
         mechanicsDisplay.innerHTML = '';
         
-        // Crear badges para cada mecánica
+        // Crear badges para cada mecÃ¡nica
         gameState.activeMechanics.forEach(mechanic => {
             const badge = document.createElement('div');
             badge.className = `mechanic-badge ${mechanic}`;
             
-            // Configurar texto y emoji según la mecánica
+            // Configurar texto y emoji segÃºn la mecÃ¡nica
             switch (mechanic) {
                 case 'fog':
-                    badge.textContent = '🌫️ Niebla';
+                    badge.textContent = 'ðŸŒ«ï¸ Niebla';
                     break;
                 case 'ghost':
-                    badge.textContent = '👻 Fantasma';
+                    badge.textContent = 'ðŸ‘» Fantasma';
                     break;
                 case 'hiddenWords':
-                    badge.textContent = '📝 Palabras Ocultas';
+                    badge.textContent = 'ðŸ“ Palabras Ocultas';
                     break;
                 case 'wordTimer':
-                    badge.textContent = '⏰ Timer por Palabra';
+                    badge.textContent = 'â° Timer por Palabra';
                     break;
                 case 'dynamicTimer':
-                    badge.textContent = '⏱️ Timer Dinámico';
+                    badge.textContent = 'â±ï¸ Timer DinÃ¡mico';
                     break;
                 default:
-                    badge.textContent = `🎮 ${mechanic}`;
+                    badge.textContent = `ðŸŽ® ${mechanic}`;
             }
             
             mechanicsDisplay.appendChild(badge);
         });
     } else {
-        // Ocultar el contenedor si no hay mecánicas
+        // Ocultar el contenedor si no hay mecÃ¡nicas
         mechanicsDisplay.style.display = 'none';
     }
 }
 
-// Aplicar mecánicas visuales al grid
+// Aplicar mecÃ¡nicas visuales al grid
 function applyVisualMechanics() {
-    console.log('🎨 Aplicando mecánicas visuales:', gameState.activeMechanics);
     
     // Aplicar niebla
     if (gameState.activeMechanics.includes('fog')) {
@@ -144,13 +141,11 @@ function applyVisualMechanics() {
 
 // Aplicar niebla visualmente
 function applyFogVisual() {
-    console.log('🌫️ Aplicando niebla visual');
     document.querySelectorAll('.grid-cell').forEach((cell) => {
         const cellIndex = parseInt(cell.dataset.index);
         if (gameState.currentGrid[cellIndex] === '?') {
             cell.classList.add('fog');
             cell.textContent = '?';
-            console.log(`🌫️ Celda ${cellIndex} con niebla aplicada: ${gameState.originalGrid[cellIndex]} -> ?`);
         } else {
             // Asegurar que las celdas sin niebla no tengan la clase fog
             cell.classList.remove('fog');
@@ -161,20 +156,15 @@ function applyFogVisual() {
 
 // Aplicar fantasma visualmente
 function applyGhostVisual() {
-    console.log('👻 Aplicando fantasma visual');
     document.querySelectorAll('.grid-cell').forEach((cell) => {
         if (Math.random() < 0.25) {
             cell.classList.add('ghost');
-            console.log(`👻 Celda con fantasma aplicado`);
         }
     });
 }
 
-// Mecánica de Niebla (Fog)
+// MecÃ¡nica de Niebla (Fog)
 function applyFogMechanic() {
-    console.log('🌫️ Aplicando mecánica de niebla');
-    console.log('🌫️ Grid actual:', gameState.currentGrid);
-    console.log('🌫️ Tamaño del grid:', gameState.currentGrid.length);
     
     // Guardar grid original antes de aplicar niebla
     gameState.originalGrid = [...gameState.currentGrid];
@@ -186,15 +176,12 @@ function applyFogMechanic() {
         if (Math.random() < 0.3) {
             gameState.currentGrid[i] = '?';
             foggedCells++;
-            console.log(`🌫️ Celda ${i} oculta con niebla: ${gameState.originalGrid[i]} -> ?`);
         }
     }
-    console.log(`🌫️ Total celdas con niebla: ${foggedCells}`);
 }
 
-// Mecánica de Fantasma (Ghost)
+// MecÃ¡nica de Fantasma (Ghost)
 function applyGhostMechanic() {
-    console.log('👻 Aplicando mecánica de fantasma');
     
     // Aplicar clase ghost a algunas celdas (25% de probabilidad)
     setTimeout(() => {
@@ -206,9 +193,8 @@ function applyGhostMechanic() {
     }, 100);
 }
 
-// Mecánica de Palabras Ocultas
+// MecÃ¡nica de Palabras Ocultas
 function applyHiddenWordsMechanic() {
-    console.log('📝 Aplicando mecánica de palabras ocultas');
     
     // Limpiar palabras ocultas previas
     gameState.hiddenWords = [];
@@ -217,7 +203,6 @@ function applyHiddenWordsMechanic() {
     gameState.currentWords.forEach(word => {
         if (Math.random() < 0.3) {
             gameState.hiddenWords.push(word);
-            console.log(`📝 Palabra oculta: ${word}`);
         }
     });
     
@@ -225,24 +210,20 @@ function applyHiddenWordsMechanic() {
     if (gameState.hiddenWords.length === 0 && gameState.currentWords.length > 0) {
         const randomWord = gameState.currentWords[Math.floor(Math.random() * gameState.currentWords.length)];
         gameState.hiddenWords.push(randomWord);
-        console.log(`📝 Palabra oculta forzada (mínimo): ${randomWord}`);
     }
     
-    console.log(`📝 Total palabras ocultas: ${gameState.hiddenWords.length}`);
 }
 
-// Mecánica de Timer por Palabra
+// MecÃ¡nica de Timer por Palabra
 function applyWordTimerMechanic() {
-    console.log('⏰ Aplicando mecánica de timer por palabra');
     
-    // Ordenar palabras por longitud (más difícil = más larga)
+    // Ordenar palabras por longitud (mÃ¡s difÃ­cil = mÃ¡s larga)
     const sortedWords = [...gameState.currentWords].sort((a, b) => b.length - a.length);
     
-    // Asignar tiempos diferenciados: palabra más difícil 40s, las demás -5s cada una
+    // Asignar tiempos diferenciados: palabra mÃ¡s difÃ­cil 40s, las demÃ¡s -5s cada una
     sortedWords.forEach((word, index) => {
         const timeForWord = 40 - (index * 5); // 40s, 35s, 30s, 25s...
-        gameState.wordTimers[word] = Math.max(timeForWord, 15); // Mínimo 15 segundos
-        console.log(`⏰ ${word} (${word.length} letras): ${gameState.wordTimers[word]}s`);
+        gameState.wordTimers[word] = Math.max(timeForWord, 15); // MÃ­nimo 15 segundos
     });
     
     // Iniciar timer
@@ -260,18 +241,16 @@ function applyWordTimerMechanic() {
         if (allExpired) {
             clearInterval(gameState.wordTimerInterval);
             gameState.wordTimerInterval = null;
-            console.log('⏰ Todos los timers de palabras expirados - NIVEL EXPIRADO');
             gameState.levelExpired = true;
-            showMessage('⏰ ¡Tiempo agotado! Nivel no completado. Usa "Limpiar Selección" para repetir.', 'error');
+            showMessage('â° Â¡Tiempo agotado! Nivel no completado. Usa "Limpiar SelecciÃ³n" para repetir.', 'error');
         }
     }, 1000);
 }
 
-// Mecánica de Timer Dinámico
+// MecÃ¡nica de Timer DinÃ¡mico
 function applyDynamicTimerMechanic() {
-    console.log('⏱️ Aplicando mecánica de timer dinámico');
     
-    // Inicializar timer dinámico (2 minutos)
+    // Inicializar timer dinÃ¡mico (2 minutos)
     gameState.dynamicTimer = 120;
     
     gameState.dynamicTimerInterval = setInterval(() => {
@@ -281,9 +260,9 @@ function applyDynamicTimerMechanic() {
         } else {
             clearInterval(gameState.dynamicTimerInterval);
             gameState.dynamicTimerInterval = null;
-            console.log('⏱️ Timer dinámico expirado - NIVEL EXPIRADO');
             gameState.levelExpired = true;
-            showMessage('⏱️ ¡Tiempo agotado! Nivel no completado. Usa "Limpiar Selección" para repetir.', 'error');
+            showMessage('â±ï¸ Â¡Tiempo agotado! Nivel no completado. Usa "Limpiar SelecciÃ³n" para repetir.', 'error');
         }
     }, 1000);
 }
+

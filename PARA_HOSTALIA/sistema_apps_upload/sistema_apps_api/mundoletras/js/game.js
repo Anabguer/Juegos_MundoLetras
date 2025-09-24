@@ -1,4 +1,4 @@
-// Configuración del juego
+﻿// ConfiguraciÃ³n del juego
 const CONFIG = {
     API_BASE_URL: 'https://colisan.com/sistema_apps_upload/sistema_apps_api/mundoletras/',
     GRID_SIZE: 6,
@@ -29,7 +29,7 @@ let gameState = {
     failedAttempts: 0
 };
 
-// Funciones de navegación básicas
+// Funciones de navegaciÃ³n bÃ¡sicas
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
@@ -39,7 +39,6 @@ function showScreen(screenId) {
     if (targetScreen) {
         targetScreen.classList.add('active');
     } else {
-        console.error('❌ Pantalla no encontrada:', screenId);
     }
 }
 
@@ -50,13 +49,12 @@ function startAsGuest() {
         key: 'guest_' + Date.now()
     };
     
-    showMessage('¡Bienvenido! Iniciando juego...', 'success');
+    showMessage('Â¡Bienvenido! Iniciando juego...', 'success');
     setTimeout(async () => {
         try {
             await initGame();
             showScreen('game-screen');
         } catch (error) {
-            console.error('Error iniciando juego:', error);
             showMessage('Error iniciando el juego. Intenta de nuevo.', 'error');
         }
     }, 1500);
@@ -66,20 +64,20 @@ function backToMainMenu() {
     const loginContent = document.getElementById('login-content');
     loginContent.innerHTML = `
         <button class="btn btn-primary" onclick="startAsGuest()">
-            👤 Jugar como Invitado
+            ðŸ‘¤ Jugar como Invitado
         </button>
         <button class="btn btn-secondary" onclick="showLogin()">
-            🔐 Identificarse
+            ðŸ” Identificarse
         </button>
     `;
 }
 
 function backToMenu() {
     if (gameState.currentUser && !gameState.currentUser.isGuest) {
-        // Si está logueado, hacer logout
+        // Si estÃ¡ logueado, hacer logout
         logout();
     } else {
-        // Si es invitado, volver al menú
+        // Si es invitado, volver al menÃº
         showScreen('login-screen');
     }
 }
@@ -93,7 +91,7 @@ function logout() {
     gameState.selectedCells = [];
     gameState.foundWords = [];
     
-    showMessage('Sesión cerrada. Volviendo al menú...', 'success');
+    showMessage('SesiÃ³n cerrada. Volviendo al menÃº...', 'success');
     setTimeout(() => {
         showScreen('login-screen');
     }, 1500);
@@ -108,16 +106,16 @@ function showMessage(text, type = 'success') {
     }, 3000);
 }
 
-// Funciones de sonido básicas
+// Funciones de sonido bÃ¡sicas
 function toggleSound() {
     gameState.soundEnabled = !gameState.soundEnabled;
     const soundControl = document.getElementById('sound-control');
     if (gameState.soundEnabled) {
-        soundControl.textContent = '🔊';
+        soundControl.textContent = 'ðŸ”Š';
         soundControl.classList.remove('muted');
         playSound('toggle');
     } else {
-        soundControl.textContent = '🔇';
+        soundControl.textContent = 'ðŸ”‡';
         soundControl.classList.add('muted');
     }
 }
@@ -190,6 +188,7 @@ function playSound(type) {
                 break;
         }
     } catch (error) {
-        console.log('🔇 Error reproduciendo sonido:', error);
     }
 }
+
+

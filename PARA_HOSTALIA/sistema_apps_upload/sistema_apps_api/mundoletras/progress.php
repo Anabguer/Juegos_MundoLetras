@@ -64,14 +64,14 @@ switch ($action) {
 function handleGetProgress($input) {
     global $db;
     
-    $usuario_aplicacion_key = $input['usuario_aplicacion_key'] ?? '';
+    $usuario_aplicacion_key = $input['user_key'] ?? '';
     
     if (empty($usuario_aplicacion_key)) {
         http_response_code(400);
         echo json_encode([
             'success' => false,
             'data' => null,
-            'message' => 'usuario_aplicacion_key es requerido',
+            'message' => 'user_key es requerido',
             'timestamp' => date('Y-m-d H:i:s')
         ]);
         return;
@@ -133,7 +133,7 @@ function handleGetProgress($input) {
 function handleSaveProgress($input) {
     global $db;
     
-    $usuario_aplicacion_key = $input['usuario_aplicacion_key'] ?? '';
+    $usuario_aplicacion_key = $input['user_key'] ?? '';
     $nivel_max = (int)($input['nivel_max'] ?? 1);
     $monedas = (int)($input['monedas'] ?? 50);
     $puntuacion_total = (int)($input['puntuacion_total'] ?? 0);
@@ -143,7 +143,7 @@ function handleSaveProgress($input) {
         echo json_encode([
             'success' => false,
             'data' => null,
-            'message' => 'usuario_aplicacion_key es requerido',
+            'message' => 'user_key es requerido',
             'timestamp' => date('Y-m-d H:i:s')
         ]);
         return;

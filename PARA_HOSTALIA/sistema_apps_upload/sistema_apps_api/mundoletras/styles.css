@@ -90,12 +90,22 @@
             min-height: 44px;
             margin: 0.5rem;
             width: calc(100% - 1rem);
+            flex-direction: column; /* Icono arriba, texto abajo */
         }
+        
+        /* Separar emoji del texto en botones */
+        .btn::before {
+            content: attr(data-icon);
+            font-size: 1.5rem;
+            line-height: 1;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        
         
         .btn-primary {
             background-color: #3b82f6;
             color: white;
-            border-left: 4px solid #1e40af;
         }
         
         .btn-primary:hover {
@@ -106,7 +116,6 @@
         .btn-secondary {
             background-color: rgba(255, 255, 255, 0.2);
             color: white;
-            border-left: 4px solid rgba(255, 255, 255, 0.3);
         }
         
         .btn-secondary:hover {
@@ -123,11 +132,6 @@
         }
         
         /* Layout responsivo para el juego */
-        @media (max-width: 480px) {
-            .game-screen {
-                padding: 0.5rem;
-            }
-        }
         
         .game-hud {
             display: flex;
@@ -230,77 +234,6 @@
         }
         
          /* Ajustes responsivos para diferentes tamaños */
-        @media (max-width: 480px) {
-            .game-grid {
-                gap: 1px;
-                padding: 0.15rem;
-                max-width: 95vw;
-                max-height: 60vh;
-            }
-            
-             /* En móvil, reducir drasticamente el espacio de las palabras */
-            .words-list {
-                max-height: 25vh;
-                overflow-y: auto;
-                font-size: 0.8rem;
-                padding: 0.4rem;
-                gap: 0.3rem;
-                margin: 0.5rem 0;
-            }
-            
-            .game-hud {
-                padding: 0.15rem;
-                gap: 0.15rem;
-                margin-bottom: 0.15rem;
-            }
-            
-            .hud-item {
-                font-size: 0.7rem;
-                padding: 0.15rem 0.3rem;
-            }
-            
-            .hud-stats-line {
-                flex-wrap: wrap;
-                gap: 0.15rem;
-            }
-            
-            /* Reducir drasticamente espacio en botones inferiores */
-            .game-controls {
-                padding: 0.15rem;
-                gap: 0.1rem;
-                margin-top: 0.15rem;
-            }
-            
-             /* En móvil, mostrar solo iconos en los botones */
-            .game-controls .btn {
-                font-size: 0;
-                padding: 0.3rem;
-                min-width: 36px;
-                min-height: 36px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex: 1;
-                max-width: 60px;
-            }
-            
-            .game-controls .btn::before {
-                font-size: 1.2rem;
-                content: attr(data-icon);
-            }
-            
-            .btn {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.75rem;
-                margin: 0;
-            }
-            
-            /* Reducir espacio general del layout */
-            .game-screen {
-                padding: 0.25rem;
-                gap: 0.25rem;
-            }
-        }
         
         @media (min-width: 481px) and (max-width: 768px) {
             .game-grid {
@@ -326,10 +259,12 @@
                 padding: 0.4rem 0.6rem;
                 min-width: auto;
                 min-height: auto;
+                flex-direction: column !important; /* Forzar icono arriba, texto abajo */
             }
             
             .game-controls .btn::before {
-                display: none;
+                display: block !important;
+                margin-bottom: 0.25rem;
             }
         }
         
@@ -364,14 +299,6 @@
         }
         
         /* Ajustes responsivos para celdas */
-        @media (max-width: 480px) {
-            .grid-cell {
-                font-size: clamp(0.7rem, 3vw, 1rem);
-                border-radius: 0.2rem;
-                min-height: 25px;
-                min-width: 25px;
-            }
-        }
         
         @media (min-width: 481px) and (max-width: 768px) {
             .grid-cell {
@@ -437,55 +364,6 @@
         }
         
         /* Responsive */
-        @media (max-width: 480px) {
-            .game-hud {
-                gap: 0.5rem;
-                padding: 0.75rem;
-            }
-            
-            .hud-stats-line {
-                gap: 0.25rem;
-            }
-            
-            .hud-item {
-                font-size: 0.8rem;
-            }
-            
-            .user-info {
-                min-width: 70px;
-            }
-            
-            .user-info #user-name {
-                font-size: 0.8rem;
-            }
-            
-            .user-info #user-status {
-                font-size: 0.6rem;
-                padding: 0.05rem 0.3rem;
-            }
-            
-            .grid-cell {
-                font-size: 1rem;
-                min-height: 36px;
-            }
-            
-            .game-controls {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-            
-            /* En pantallas muy grandes, mantener texto normal */
-            .game-controls .btn {
-                font-size: 0.75rem;
-                padding: 0.4rem 0.6rem;
-                min-width: auto;
-                min-height: auto;
-            }
-            
-            .game-controls .btn::before {
-                display: none;
-            }
-        }
         
         /* Animaciones de PuntuaciÃ³n */
         @keyframes scoreIncrease {
@@ -883,8 +761,102 @@
             font-size: 1rem;
         }
         
-        /* Responsive para mÃ³vil */
+        /* Responsive para móvil - MEDIA QUERY CONSOLIDADA */
         @media (max-width: 480px) {
+            /* Game Screen */
+            .game-screen {
+                padding: 0.25rem;
+                gap: 0.25rem;
+            }
+            
+            /* Game Grid */
+            .game-grid {
+                gap: 1px;
+                padding: 0.15rem;
+                max-width: 95vw;
+                max-height: 60vh;
+            }
+            
+            /* Words List */
+            .words-list {
+                max-height: 25vh;
+                overflow-y: auto;
+                font-size: 0.8rem;
+                padding: 0.4rem;
+                gap: 0.3rem;
+                margin: 0.5rem 0;
+            }
+            
+            /* Game HUD */
+            .game-hud {
+                padding: 0.75rem;
+                gap: 0.5rem;
+                margin-bottom: 0.15rem;
+            }
+            
+            .hud-item {
+                font-size: 0.8rem;
+                padding: 0.15rem 0.3rem;
+            }
+            
+            .hud-stats-line {
+                gap: 0.25rem;
+                flex-wrap: wrap;
+            }
+            
+            /* User Info */
+            .user-info {
+                min-width: 70px;
+            }
+            
+            .user-info #user-name {
+                font-size: 0.8rem;
+            }
+            
+            .user-info #user-status {
+                font-size: 0.6rem;
+                padding: 0.05rem 0.3rem;
+            }
+            
+            /* Grid Cells */
+            .grid-cell {
+                font-size: 1rem;
+                border-radius: 0.2rem;
+                min-height: 36px;
+                min-width: 25px;
+            }
+            
+            /* Game Controls */
+            .game-controls {
+                padding: 0.15rem;
+                gap: 0.1rem;
+                margin-top: 0.15rem;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .game-controls .btn {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.6rem;
+                min-width: auto;
+                min-height: auto;
+                flex-direction: column !important; /* Forzar icono arriba, texto abajo */
+            }
+            
+            .game-controls .btn::before {
+                display: block !important;
+                margin-bottom: 0.25rem;
+            }
+            
+            /* General Button */
+            .btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+                margin: 0;
+                flex-direction: column !important; /* Forzar icono arriba, texto abajo */
+            }
+            
+            /* Ranking */
             .ranking-content {
                 width: 95vw;
                 padding: 1rem;

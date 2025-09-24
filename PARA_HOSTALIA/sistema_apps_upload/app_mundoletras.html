@@ -43,7 +43,7 @@
     <div id="game-screen" class="screen game-screen">
         <!-- HUD -->
         <div class="game-hud">
-            <!-- Primera lÃ­nea: InformaciÃ³n del usuario -->
+            <!-- Primera lí­nea: Información del usuario -->
             <div class="hud-user-line">
                 <div class="hud-item user-info">
                      <span id="user-icon">👤</span>
@@ -53,7 +53,7 @@
                 <span id="sound-control" class="sound-control" onclick="toggleSound()" title="Activar/Desactivar sonido">🔊</span>
             </div>
             
-            <!-- Segunda lÃ­nea: EstadÃ­sticas del juego -->
+            <!-- Segunda línea: Estadí­sticas del juego -->
             <div class="hud-stats-line">
                 <div class="hud-item">
                      <span>⚡</span>
@@ -78,9 +78,9 @@
             </div>
         </div>
         
-        <!-- Display de MecÃ¡nicas Activas -->
+        <!-- Display de Mecánicas Activas -->
         <div id="mechanics-display" class="mechanics-display" style="display: none;">
-            <!-- Las mecÃ¡nicas se mostrarÃ¡n aquÃ­ dinÃ¡micamente -->
+            <!-- Las mecánicas se mostrarán aquí­ dinámicamente -->
         </div>
         
         <!-- Game Grid -->
@@ -95,20 +95,20 @@
         
                 <!-- Game Controls -->
         <div class="game-controls">
-            <button class="btn btn-secondary btn-sm" onclick="clearSelection()" data-icon="🚫" title="Limpiar SelecciÃ³n">
-                     🚫 Limpiar Selección
+            <button class="btn btn-secondary btn-sm" onclick="clearSelection()" data-icon="🚫" title="Limpiar Selección">
+                🚫 Limpiar Selección
             </button>
-            <button class="btn btn-secondary btn-sm" onclick="showRanking()" data-icon="†" title="Ver Ranking">
-                † Ranking
+            <button class="btn btn-secondary btn-sm" onclick="showRanking()" data-icon="🏆" title="VerRanking">
+                🏆 Ranking
             </button>
-            <button class="btn btn-secondary btn-sm" onclick="backToMenu()" id="back-menu-btn" data-icon=" " title="Volver al MenÃº">
-                  Volver al MenÃº
+            <button class="btn btn-secondary btn-sm" onclick="backToMenu()" id="back-menu-btn" data-icon="��" title="Volver al Menú">
+                🏠 Volver al Menú
             </button>
-            <button class="btn btn-secondary btn-sm" onclick="clearGuestProgress()" id="clear-progress-btn" style="display: none;" data-icon="—‘ï¸" title="Reiniciar Progreso">
-                —‘ï¸ Reiniciar Progreso
+            <button class="btn btn-secondary btn-sm" onclick="clearGuestProgress()" id="clear-progress-btn" style="display: none;" data-icon="—‘🔄" title="Reiniciar Progreso">
+                🔄Reiniciar Progreso
             </button>
-            <button class="btn btn-secondary btn-sm" onclick="logout()" id="logout-btn" style="display: none;" data-icon="šª" title="Cerrar SesiÃ³n">
-                šª Cerrar SesiÃ³n
+            <button class="btn btn-secondary btn-sm" onclick="logout()" id="logout-btn" style="display: none;" data-icon="🚪" title="Cerrar Sesión">
+                🚪 Cerrar Sesión
             </button>
         </div>
 
@@ -120,13 +120,13 @@
     <script src="sistema_apps_api/mundoletras/js/grid.js"></script>
     <script src="sistema_apps_api/mundoletras/js/remaining.js"></script>
     <script>
-        // CÃ³digo de inicializaciÃ³n y funciones no duplicadas
+        // Código de inicializacin y funciones no duplicadas
         
-        // InicializaciÃ³n cuando se carga la pÃ¡gina
+        // Inicialización cuando se carga la página
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Ž® Mundo Letras cargado');
+            console.log('Mundo Letras cargado');
             
-            // Manejar orientaciÃ³n
+            // Manejar orientación
             window.addEventListener('orientationchange', function() {
                 setTimeout(() => {
                     window.scrollTo(0, 0);
@@ -136,6 +136,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
