@@ -33,9 +33,76 @@
                     🔐 Identificarse
                 </button>
                 
+                <button class="btn btn-secondary" onclick="showScreen('test-screen'); testLevel();" style="background: #fbbf24; color: #000; font-weight: bold;">
+                    🧪 PANTALLA DE TEST
+                </button>
+                
             </div>
             
             <div id="message-container"></div>
+        </div>
+    </div>
+    
+    <!-- Test Screen -->
+    <div id="test-screen" class="screen test-screen">
+        <div class="test-container">
+            <h2>🧪 Pantalla de Test</h2>
+            <p>Verifica niveles, palabras y colores</p>
+            
+            <div class="test-controls">
+                <div class="input-group">
+                    <label for="test-level-input">Nivel a probar:</label>
+                    <div class="level-controls">
+                        <button onclick="testPreviousLevel()" class="btn btn-secondary btn-sm">← Anterior</button>
+                        <input type="number" id="test-level-input" min="1" max="1000" value="1" class="test-input">
+                        <button onclick="testNextLevel()" class="btn btn-secondary btn-sm">Siguiente →</button>
+                    </div>
+                    <button onclick="testLevel()" class="btn btn-primary">Probar Nivel</button>
+                </div>
+            </div>
+            
+            <div id="test-results" class="test-results">
+                <div class="test-info">
+                    <h3>Información del Nivel</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Nivel:</span>
+                            <span id="test-level-display">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Tema:</span>
+                            <span id="test-theme-display">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Ciclo:</span>
+                            <span id="test-cycle-display">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Posición:</span>
+                            <span id="test-position-display">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-words">
+                    <h3>Palabras del Nivel</h3>
+                    <div id="test-words-display" class="words-list">
+                        <p>Selecciona un nivel para ver las palabras</p>
+                    </div>
+                </div>
+                
+                <div class="test-config">
+                    <h3>Configuración del Nivel</h3>
+                    <div id="test-config-display" class="config-list">
+                        <p>Selecciona un nivel para ver la configuración</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-actions">
+                <button onclick="showScreen('login-screen')" class="btn btn-secondary">Volver al Login</button>
+                <button onclick="testRandomLevel()" class="btn btn-primary">Nivel Aleatorio</button>
+            </div>
         </div>
     </div>
     
@@ -56,10 +123,6 @@
             <!-- Segunda línea: Estadí­sticas del juego -->
             <div class="hud-stats-line">
                 <div class="hud-item">
-                     <span>⚡</span>
-                    <span id="score" class="hud-value">0</span>
-                </div>
-                <div class="hud-item">
                     <span>🔥</span>
                     <span id="streak" class="hud-value">0</span>
                 </div>
@@ -70,6 +133,14 @@
                 <div class="hud-item">
                     <span>📊</span>
                     <span>Nivel <span id="level" class="hud-value">1</span></span>
+                </div>
+                <div class="hud-item">
+                    <span>⏰</span>
+                    <span id="level-timer" class="hud-value">0:00</span>
+                </div>
+                <div class="hud-item">
+                    <span>💡</span>
+                    <span id="hints-display" class="hud-value">0/2</span>
                 </div>
                 <div class="hud-item" id="dynamic-timer-display" style="display: none;">
                     <span>⏱️</span>
@@ -97,6 +168,9 @@
         <div class="game-controls">
             <button class="btn btn-secondary btn-sm" onclick="clearSelection()" data-icon="🚫" title="Limpiar Selección">
                 🚫 Limpiar Selección
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="useHint()" id="hint-button" data-icon="💡" title="Usar Pista">
+                💡 Pista
             </button>
             <button class="btn btn-secondary btn-sm" onclick="showRanking()" data-icon="🏆" title="VerRanking">
                 🏆 Ranking

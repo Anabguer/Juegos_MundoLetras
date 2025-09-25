@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+
 // Cargar configuración
 try {
     require_once 'config.php';
@@ -176,7 +177,7 @@ function handleSaveProgress($input) {
         
         if ($result) {
             // Guardar detalles del nivel completado
-            saveLevelDetails($usuario_aplicacion_key, $nivel_max, $puntuacion_total);
+            saveLevelDetails($usuario_aplicacion_key, $nivel_max, $puntuacion_total, $monedas);
             
             // Actualizar ranking cache
             updateRankingCache($usuario_aplicacion_key, $puntuacion_total);
@@ -210,7 +211,7 @@ function handleSaveProgress($input) {
 /**
  * Guardar detalles del nivel completado
  */
-function saveLevelDetails($usuario_aplicacion_key, $nivel, $puntuacion) {
+function saveLevelDetails($usuario_aplicacion_key, $nivel, $puntuacion, $monedas) {
     global $db;
     
     try {
@@ -220,26 +221,28 @@ function saveLevelDetails($usuario_aplicacion_key, $nivel, $puntuacion) {
         // Guardar en mundoletras_niveles
         $result1 = $db->query("
             INSERT INTO mundoletras_niveles 
-            (usuario_aplicacion_key, nivel, tema_id, puntuacion, completado_at) 
-            VALUES (?, ?, ?, ?, NOW())
+            (usuario_aplicacion_key, nivel, tema_id, puntuacion, monedas, completado_at) 
+            VALUES (?, ?, ?, ?, ?, NOW())
             ON DUPLICATE KEY UPDATE 
             puntuacion = VALUES(puntuacion), 
+            monedas = VALUES(monedas),
             completado_at = VALUES(completado_at)
-        ", [$usuario_aplicacion_key, $nivel, $tema, $puntuacion]);
+        ", [$usuario_aplicacion_key, $nivel, $tema, $puntuacion, $monedas]);
         
         // Guardar en mundoletras_scores (adaptado a estructura real)
         $result2 = $db->query("
             INSERT INTO mundoletras_scores 
-            (usuario_aplicacion_key, nivel_id, score, tiempo_ms, estrellas, fecha, device_hash, validado) 
-            VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)
+            (usuario_aplicacion_key, nivel_id, score, tiempo_ms, estrellas, monedas, fecha, device_hash, validado) 
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, ?)
             ON DUPLICATE KEY UPDATE 
             score = VALUES(score),
             tiempo_ms = VALUES(tiempo_ms),
             estrellas = VALUES(estrellas),
+            monedas = VALUES(monedas),
             fecha = VALUES(fecha),
             device_hash = VALUES(device_hash),
             validado = VALUES(validado)
-        ", [$usuario_aplicacion_key, $nivel, $puntuacion, 0, 3, 'test_device', 1]);
+        ", [$usuario_aplicacion_key, $nivel, $puntuacion, 0, 3, $monedas, 'test_device', 1]);
         
     } catch (Exception $e) {
         error_log("Error guardando detalles del nivel: " . $e->getMessage());

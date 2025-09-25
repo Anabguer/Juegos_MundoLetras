@@ -9,11 +9,27 @@ async function initGame() {
         await loadUserProgress();
     }
     
-    // Configurar palabras del nivel actual
-    gameState.currentWords = getLevelWords(gameState.currentLevel);
+    // Cargar configuración del nivel desde JSON
+    const levelConfig = await getLevelConfig(gameState.currentLevel);
     
-    // El grid ahora es dinámico basado en las palabras, no fijo por nivel
-    // CONFIG.GRID_SIZE ya no se usa - se calcula dinámicamente
+    if (levelConfig) {
+        // Usar configuración del JSON
+        setLevelWords(levelConfig.wordsDisplay, levelConfig.words);
+        setAllowedDirections(levelConfig.directions);
+        setHintsConfig(levelConfig.hints);
+        setCoinsConfig(levelConfig.coins);
+        gameState.currentLevelConfig = levelConfig;
+        console.log(`✅ Nivel ${gameState.currentLevel} cargado desde JSON:`, levelConfig);
+    } else {
+        // Fallback: usar sistema anterior
+        const fallbackWords = getLevelWords(gameState.currentLevel);
+        setLevelWords(fallbackWords, null); // Generar wordsLogic automáticamente
+        setAllowedDirections(['H', 'V']); // Direcciones básicas por defecto
+        setHintsConfig({ base: 0, adMaxExtra: 2 }); // Pistas por defecto
+        setCoinsConfig({ base: 10, timeBonus: 5, starMultiplier: 1.5, firstTimeBonus: 20 }); // Monedas por defecto
+        gameState.currentLevelConfig = null;
+        console.log(`⚠️ Usando sistema anterior para nivel ${gameState.currentLevel}`);
+    }
     
     // Ocultar botón de reiniciar progreso (no disponible para invitados)
     const clearProgressBtn = document.getElementById('clear-progress-btn');
@@ -27,9 +43,29 @@ async function initGame() {
     generateGrid();
     updateHUD();
     
-    // Generar y aplicar mecánicas aleatorias DESPUÉS de generar el grid
-    const randomMechanics = generateRandomMechanics(gameState.currentLevel);
-    applyMechanics(randomMechanics);
+    // Aplicar tema del nivel
+    applyTheme(gameState.currentLevel);
+    
+    // Iniciar cronómetro del nivel
+    if (levelConfig && levelConfig.timerSec !== undefined) {
+        startLevelTimer(levelConfig.timerSec);
+    } else {
+        // Fallback: sin límite de tiempo
+        startLevelTimer(0);
+    }
+    
+    // Aplicar mecánicas según configuración del nivel
+    if (levelConfig && levelConfig.mechanics && levelConfig.mechanics.special) {
+        // Usar mecánicas del JSON
+        const mechanics = levelConfig.mechanics.special === 'none' ? [] : [levelConfig.mechanics.special];
+        applyMechanics(mechanics);
+        console.log(`🎮 Aplicando mecánicas del JSON: ${mechanics.join(', ') || 'ninguna'}`);
+    } else {
+        // Fallback: generar mecánicas aleatorias
+        const randomMechanics = generateRandomMechanics(gameState.currentLevel);
+        applyMechanics(randomMechanics);
+        console.log(`🎲 Aplicando mecánicas aleatorias: ${randomMechanics.join(', ') || 'ninguna'}`);
+    }
     
     // Actualizar lista de palabras DESPUÉS de aplicar mecánicas
     updateWordsList();
@@ -41,7 +77,7 @@ async function initGame() {
 }
 
 // Generar siguiente nivel
-function generateNextLevel() {
+async function generateNextLevel() {
     
     // LIMPIAR mecánicas del nivel anterior
     gameState.activeMechanics = [];
@@ -64,20 +100,59 @@ function generateNextLevel() {
         clearInterval(gameState.wordTimerInterval);
         gameState.wordTimerInterval = null;
     }
+    if (gameState.levelTimerInterval) {
+        clearInterval(gameState.levelTimerInterval);
+        gameState.levelTimerInterval = null;
+    }
     
-    // Cambiar palabras según el nivel
-    const levelWords = getLevelWords(gameState.currentLevel);
-    gameState.currentWords = levelWords;
+    // Cargar configuración del nivel desde JSON
+    const levelConfig = await getLevelConfig(gameState.currentLevel);
     
-    // La dificultad ahora se maneja con el número y tipo de palabras, no con grid fijo
-    // El grid se calcula dinámicamente basado en las palabras seleccionadas
+    if (levelConfig) {
+        // Usar configuración del JSON
+        setLevelWords(levelConfig.wordsDisplay, levelConfig.words);
+        setAllowedDirections(levelConfig.directions);
+        setHintsConfig(levelConfig.hints);
+        setCoinsConfig(levelConfig.coins);
+        gameState.currentLevelConfig = levelConfig;
+        console.log(`✅ Nivel ${gameState.currentLevel} cargado desde JSON:`, levelConfig);
+    } else {
+        // Fallback: usar sistema anterior
+        const fallbackWords = getLevelWords(gameState.currentLevel);
+        setLevelWords(fallbackWords, null); // Generar wordsLogic automáticamente
+        setAllowedDirections(['H', 'V']); // Direcciones básicas por defecto
+        setHintsConfig({ base: 0, adMaxExtra: 2 }); // Pistas por defecto
+        setCoinsConfig({ base: 10, timeBonus: 5, starMultiplier: 1.5, firstTimeBonus: 20 }); // Monedas por defecto
+        gameState.currentLevelConfig = null;
+        console.log(`⚠️ Usando sistema anterior para nivel ${gameState.currentLevel}`);
+    }
     
     generateGrid();
     updateHUD();
     
-    // Generar y aplicar mecánicas aleatorias DESPUÉS de generar el grid
-    const randomMechanics = generateRandomMechanics(gameState.currentLevel);
-    applyMechanics(randomMechanics);
+    // Aplicar tema del nivel
+    applyTheme(gameState.currentLevel);
+    
+    // Iniciar cronómetro del nivel
+    if (levelConfig && levelConfig.timerSec !== undefined) {
+        startLevelTimer(levelConfig.timerSec);
+    } else {
+        // Fallback: sin límite de tiempo
+        startLevelTimer(0);
+    }
+    
+    // Aplicar mecánicas según configuración del nivel
+    if (levelConfig && levelConfig.mechanics && levelConfig.mechanics.special) {
+        // Usar mecánicas del JSON
+        const mechanics = levelConfig.mechanics.special === 'none' ? [] : [levelConfig.mechanics.special];
+        applyMechanics(mechanics);
+        console.log(`🎮 Aplicando mecánicas del JSON: ${mechanics.join(', ') || 'ninguna'}`);
+    } else {
+        // Fallback: generar mecánicas aleatorias
+        const randomMechanics = generateRandomMechanics(gameState.currentLevel);
+        applyMechanics(randomMechanics);
+        console.log(`🎲 Aplicando mecánicas aleatorias: ${randomMechanics.join(', ') || 'ninguna'}`);
+    }
     
     // Actualizar lista de palabras DESPUÉS de aplicar mecánicas
     updateWordsList();
@@ -240,21 +315,41 @@ function generateGrid() {
 
 // Colocar palabras en el grid
 function placeWordsInGrid(words, gridSize) {
+    console.log('🎯 Intentando colocar palabras en el grid:', words);
+    console.log('📐 Tamaño del grid:', gridSize);
+    console.log('🧭 Direcciones permitidas:', gameState.allowedDirections);
     
     words.forEach((word, wordIndex) => {
+        console.log(`🔤 Colocando palabra ${wordIndex + 1}/${words.length}: "${word}"`);
         let placed = false;
         let attempts = 0;
         const maxAttempts = 200; // Aumentar intentos
         
-        // Intentar todas las direcciones posibles para cada palabra
-        const directions = [0, 1, 2, 3, 4, 5, 6, 7]; // 8 direcciones incluyendo reversa
+        // Usar solo las direcciones permitidas según el JSON
+        const allowedDirections = gameState.allowedDirections || ['H', 'V'];
+        const directions = [];
+        
+        // Convertir direcciones del JSON a números de dirección
+        allowedDirections.forEach(dir => {
+            if (dir === 'H') {
+                directions.push(0); // Horizontal normal
+                directions.push(4); // Horizontal reversa
+            } else if (dir === 'V') {
+                directions.push(1); // Vertical normal
+                directions.push(5); // Vertical reversa
+            } else if (dir === 'R') {
+                directions.push(0, 1, 4, 5); // Horizontal y vertical (normal y reversa)
+            } else if (dir === 'D') {
+                directions.push(2, 3, 6, 7); // Diagonal (normal y reversa)
+            }
+        });
         
         // Mejorar: intentar direcciones de forma más sistemática
         const shuffledDirections = [...directions].sort(() => Math.random() - 0.5);
         
         while (!placed && attempts < maxAttempts) {
             // Usar dirección del array mezclado para mejor distribución
-            const direction = shuffledDirections[attempts % 8];
+            const direction = shuffledDirections[attempts % shuffledDirections.length];
             
             let startRow, startCol;
             
@@ -367,15 +462,21 @@ function placeWordsInGrid(words, gridSize) {
     
     // Validación final: verificar que todas las palabras se colocaron
     let placedCount = 0;
+    console.log('🔍 Verificando palabras colocadas en el grid:');
     words.forEach(word => {
         if (isWordInGrid(word, gridSize)) {
             placedCount++;
+            console.log(`✅ Palabra colocada: ${word}`);
         } else {
+            console.log(`❌ Palabra NO colocada: ${word}`);
         }
     });
+    console.log(`📊 Palabras colocadas: ${placedCount}/${words.length}`);
     
     if (placedCount === words.length) {
+        console.log('✅ Todas las palabras se colocaron correctamente');
     } else {
+        console.log(`⚠️ Solo se colocaron ${placedCount} de ${words.length} palabras`);
     }
 }
 
@@ -607,34 +708,44 @@ function isValidSelection(cells) {
     const deltaRow = last.row - first.row;
     const deltaCol = last.col - first.col;
     
+    let direction = null;
+    let isStraightLine = false;
+    
     // Verificar si es horizontal (deltaRow = 0)
     if (deltaRow === 0) {
-        return cellPositions.every((cell, i) => 
+        direction = 'H';
+        isStraightLine = cellPositions.every((cell, i) => 
             cell.row === first.row && 
             cell.col === first.col + i
         );
     }
-    
     // Verificar si es vertical (deltaCol = 0)
-    if (deltaCol === 0) {
-        return cellPositions.every((cell, i) => 
+    else if (deltaCol === 0) {
+        direction = 'V';
+        isStraightLine = cellPositions.every((cell, i) => 
             cell.col === first.col && 
             cell.row === first.row + i
         );
     }
-    
     // Verificar si es diagonal
-    if (Math.abs(deltaRow) === Math.abs(deltaCol)) {
+    else if (Math.abs(deltaRow) === Math.abs(deltaCol)) {
+        direction = 'D';
         const stepRow = deltaRow > 0 ? 1 : -1;
         const stepCol = deltaCol > 0 ? 1 : -1;
         
-        return cellPositions.every((cell, i) => 
+        isStraightLine = cellPositions.every((cell, i) => 
             cell.row === first.row + (i * stepRow) && 
             cell.col === first.col + (i * stepCol)
         );
     }
     
-    return false;
+    // Si no es una línea recta, no es válida
+    if (!isStraightLine) {
+        return false;
+    }
+    
+    // Verificar si la dirección está permitida
+    return isDirectionAllowed(direction);
 }
 
 // Validar que las celdas seleccionadas están en lí­nea recta
@@ -777,10 +888,14 @@ function checkForWord() {
     const reverseWord = selectedWord.split('').reverse().join('');
     
     
-    // Verificar si la palabra está en la lista
-    const foundWord = gameState.currentWords.find(word => 
-        word === selectedWord || word === reverseWord
+    // Verificar si la palabra está en la lista (usando comparación normalizada)
+    const foundWordLogic = gameState.currentWordsLogic.find(word => 
+        compareWords(word, selectedWord) || compareWords(word, reverseWord)
     );
+    
+    // Obtener la palabra de display correspondiente
+    const foundWord = foundWordLogic ? 
+        gameState.currentWordsDisplay[gameState.currentWordsLogic.indexOf(foundWordLogic)] : null;
     
     if (foundWord && !gameState.foundWords.includes(foundWord)) {
         // Verificar si la palabra expiró - BLOQUEAR si expiró
@@ -794,6 +909,9 @@ function checkForWord() {
         // Palabra encontrada - revelar todas las celdas con niebla de la palabra
         gameState.foundWords.push(foundWord);
         
+        // Limpiar pistas de la palabra encontrada
+        clearHintsForWord(foundWord);
+        
         // Calcular puntuación
         const scoreMultiplier = gameState.streak + 1;
         
@@ -801,11 +919,7 @@ function checkForWord() {
         gameState.streak++;
         
         // Animaciones
-        const scoreElement = document.getElementById('score');
         const coinsElement = document.getElementById('coins');
-        if (scoreElement) {
-            animateScore(scoreElement, foundWord.length * 100 * scoreMultiplier);
-        }
         if (coinsElement) {
             // No animar monedas por palabra individual
         }
@@ -854,7 +968,7 @@ function checkForWord() {
         updateWordsList();
         
         // Verificar si se completó el nivel
-        if (gameState.foundWords.length === gameState.currentWords.length) {
+        if (gameState.foundWords.length === gameState.currentWordsDisplay.length) {
             setTimeout(async () => {
                 // Mostrar mensaje animado de nivel completado
                 showLevelComplete();
@@ -952,14 +1066,22 @@ function submitSelection() {
     
     const reverseWord = selectedWord.split('').reverse().join('');
     
-    // Verificar si la palabra está en la lista
-    const foundWord = gameState.currentWords.find(word => 
-        word === selectedWord || word === reverseWord
+    // Verificar si la palabra está en la lista (usando comparación normalizada)
+    const foundWordLogic = gameState.currentWordsLogic.find(word => 
+        compareWords(word, selectedWord) || compareWords(word, reverseWord)
     );
+    
+    // Obtener la palabra de display correspondiente
+    const foundWord = foundWordLogic ? 
+        gameState.currentWordsDisplay[gameState.currentWordsLogic.indexOf(foundWordLogic)] : null;
     
     if (foundWord && !gameState.foundWords.includes(foundWord)) {
         // Palabra encontrada
         gameState.foundWords.push(foundWord);
+        
+        // Limpiar pistas de la palabra encontrada
+        clearHintsForWord(foundWord);
+        
         gameState.score += foundWord.length * 100 * (gameState.streak + 1);
         gameState.streak++;
         
@@ -982,7 +1104,7 @@ function submitSelection() {
         playSound('word'); // Sonido al encontrar palabra
         
         // Verificar si se completó el nivel
-        if (gameState.foundWords.length === gameState.currentWords.length) {
+        if (gameState.foundWords.length === gameState.currentWordsDisplay.length) {
             setTimeout(() => {
                 // Mostrar mensaje animado de nivel completado
                 showLevelComplete();

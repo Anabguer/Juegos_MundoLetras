@@ -102,8 +102,47 @@ function createFlyingCoins(amount, targetElement) {
     }
 }
 
+// Calcular estrellas basadas en rendimiento
+function calculateStars() {
+    let stars = 0;
+    
+    // Estrella por completar el nivel
+    stars++;
+    
+    // Estrella por tiempo (si hay límite de tiempo)
+    if (gameState.levelTimerLimit > 0) {
+        const timeUsed = gameState.levelTimer;
+        const timeLimit = gameState.levelTimerLimit;
+        const timePercentage = timeUsed / timeLimit;
+        
+        if (timePercentage <= 0.5) { // Completado en menos del 50% del tiempo
+            stars++;
+        }
+    }
+    
+    // Estrella por pocos errores
+    if (gameState.errors <= 1) {
+        stars++;
+    }
+    
+    return Math.min(stars, 3); // Máximo 3 estrellas
+}
+
 // Mostrar nivel completado
 function showLevelComplete() {
+    // Calcular estrellas basadas en tiempo y errores
+    const stars = calculateStars();
+    
+    // Calcular tiempo restante
+    const timeRemaining = gameState.levelTimerLimit > 0 ? 
+        Math.max(0, gameState.levelTimerLimit - gameState.levelTimer) : 0;
+    
+    // Verificar si es primera vez (placeholder - debería verificar en base de datos)
+    const isFirstTime = true; // TODO: Implementar verificación real
+    
+    // Calcular monedas ganadas
+    const coinsEarned = calculateLevelCoins(stars, timeRemaining, isFirstTime);
+    
     // Crear overlay de nivel completado
     const overlay = document.createElement('div');
     overlay.className = 'level-complete-overlay';
@@ -112,20 +151,42 @@ function showLevelComplete() {
             <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
             <h2 style="color: #10b981; margin-bottom: 0.5rem;">¡Nivel Completado!</h2>
             <p style="margin-bottom: 1.5rem; color: #6b7280;">Nivel ${gameState.currentLevel} superado</p>
-            <div style="display: flex; gap: 1rem; justify-content: center;">
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem;">
                 <div style="text-align: center;">
-                    <div style="font-size: 1.5rem; font-weight: bold; color: #fbbf24;">+10</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #fbbf24;">+${coinsEarned}</div>
                     <div style="font-size: 0.875rem; color: #6b7280;">Monedas</div>
                 </div>
                 <div style="text-align: center;">
                     <div style="font-size: 1.5rem; font-weight: bold; color: #10b981;">${gameState.foundWords.length}</div>
                     <div style="font-size: 0.875rem; color: #6b7280;">Palabras</div>
                 </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #fbbf24;">${'⭐'.repeat(stars)}</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Estrellas</div>
+                </div>
             </div>
+            <button onclick="showCoinsSummary(${coinsEarned}, ${stars}, ${timeRemaining}, ${isFirstTime})" 
+                    style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer;">
+                Ver Detalle
+            </button>
         </div>
     `;
     
     document.body.appendChild(overlay);
+    
+    // Guardar progreso
+    console.log('🎯 Completando nivel, guardando progreso...');
+    console.log('👤 Usuario actual:', gameState.currentUser);
+    
+    if (gameState.currentUser && gameState.currentUser.isGuest) {
+        console.log('👤 Usuario invitado, guardando en localStorage');
+        saveGuestProgress();
+    } else if (gameState.currentUser && !gameState.currentUser.isGuest) {
+        console.log('👤 Usuario registrado, guardando en BBDD');
+        saveUserProgress();
+    } else {
+        console.log('❌ No hay usuario definido, no se puede guardar progreso');
+    }
     
     // Remover overlay después de 4 segundos
     setTimeout(() => {
@@ -166,18 +227,26 @@ function animateWordFound(word) {
 
 // Guardar progreso de invitado
 function saveGuestProgress() {
-    if (!gameState.currentUser || !gameState.currentUser.isGuest) return;
+    console.log('💾 Intentando guardar progreso de invitado...');
+    
+    if (!gameState.currentUser || !gameState.currentUser.isGuest) {
+        console.log('❌ No se puede guardar: usuario no es invitado');
+        return;
+    }
     
     const progressData = {
         level: gameState.currentLevel,
         score: gameState.score,
         streak: gameState.streak,
         coins: gameState.coins,
+        totalCoins: gameState.totalCoins,
         foundWords: gameState.foundWords,
         timestamp: Date.now()
     };
     
+    console.log('📤 Guardando datos de progreso en localStorage:', progressData);
     localStorage.setItem('mundo_letras_guest_progress', JSON.stringify(progressData));
+    console.log('✅ Progreso de invitado guardado exitosamente');
 }
 
 // Cargar progreso de usuario registrado
@@ -205,6 +274,7 @@ async function loadUserProgress() {
             gameState.currentLevel = data.data.nivel_max || 1;
             gameState.score = data.data.puntuacion_total || 0;
             gameState.coins = data.data.monedas || 50;
+            gameState.totalCoins = data.data.monedas_total || data.data.monedas || 50;
         } else {
         }
     } catch (error) {
@@ -213,32 +283,45 @@ async function loadUserProgress() {
 
 // Guardar progreso de usuario registrado
 async function saveUserProgress() {
-    if (!gameState.currentUser || gameState.currentUser.isGuest) return;
+    console.log('💾 Intentando guardar progreso de usuario...');
+    
+    if (!gameState.currentUser || gameState.currentUser.isGuest) {
+        console.log('❌ No se puede guardar: usuario invitado o no definido');
+        return;
+    }
     
     // Validar que el user_key esté definido
     if (!gameState.currentUser.usuario_aplicacion_key) {
+        console.log('❌ No se puede guardar: user_key no definido');
         return;
     }
+    
+    const progressData = {
+        action: 'save',
+        user_key: gameState.currentUser.usuario_aplicacion_key,
+        nivel_max: gameState.currentLevel,
+        puntuacion_total: gameState.score,
+        monedas: gameState.totalCoins
+    };
+    
+    console.log('📤 Enviando datos de progreso:', progressData);
     
     try {
         const response = await fetch(CONFIG.API_BASE_URL + 'progress.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: 'save',
-                user_key: gameState.currentUser.usuario_aplicacion_key,
-                level: gameState.currentLevel,
-                score: gameState.score,
-                coins: gameState.coins
-            })
+            body: JSON.stringify(progressData)
         });
         
         const data = await response.json();
         
         if (data.success) {
+            console.log('✅ Progreso guardado exitosamente:', data);
         } else {
+            console.log('❌ Error al guardar progreso:', data.message);
         }
     } catch (error) {
+        console.log('❌ Error de conexión al guardar progreso:', error);
     }
 }
 
@@ -262,6 +345,7 @@ function loadGuestProgress() {
             gameState.score = progressData.score || 0;
             gameState.streak = progressData.streak || 0;
             gameState.coins = progressData.coins || 50;
+            gameState.totalCoins = progressData.totalCoins || 50;
             gameState.foundWords = progressData.foundWords || [];
             
         } else {
@@ -301,23 +385,23 @@ function updateUserInfo() {
     
     if (gameState.currentUser) {
         if (gameState.currentUser.isGuest) {
-            userIcon.textContent = '👤';
-            userName.textContent = 'Invitado';
+            if (userIcon) userIcon.textContent = '👤';
+            if (userName) userName.textContent = 'Invitado';
             if (userStatus) {
                 userStatus.textContent = 'Invitado';
                 userStatus.className = 'user-status-guest';
             }
         } else {
-            userIcon.textContent = '🎮';
-            userName.textContent = gameState.currentUser.nombre || 'Usuario';
+            if (userIcon) userIcon.textContent = '🎮';
+            if (userName) userName.textContent = gameState.currentUser.nombre || 'Usuario';
             if (userStatus) {
                 userStatus.textContent = 'Registrado';
                 userStatus.className = 'user-status-logged';
             }
         }
     } else {
-        userIcon.textContent = '❓';
-        userName.textContent = 'No identificado';
+        if (userIcon) userIcon.textContent = '❓';
+        if (userName) userName.textContent = 'No identificado';
         if (userStatus) {
             userStatus.textContent = 'Sin sesión';
             userStatus.className = 'user-status-guest';
@@ -348,25 +432,67 @@ function updateMenuButton() {
 
 // Actualizar HUD
 function updateHUD() {
-    document.getElementById('score').textContent = gameState.score;
-    document.getElementById('streak').textContent = gameState.streak;
-    document.getElementById('coins').textContent = gameState.coins;
-    document.getElementById('level').textContent = gameState.currentLevel;
+    // Actualizar streak
+    const streakElement = document.getElementById('streak');
+    if (streakElement) {
+        streakElement.textContent = gameState.streak;
+    }
+    
+    // Actualizar monedas
+    const coinsElement = document.getElementById('coins');
+    if (coinsElement) {
+        coinsElement.textContent = gameState.totalCoins || 50;
+    }
+    
+    // Actualizar nivel
+    const levelElement = document.getElementById('level');
+    if (levelElement) {
+        levelElement.textContent = gameState.currentLevel;
+    }
+    
+    // Actualizar cronómetro del nivel
+    const levelTimerElement = document.getElementById('level-timer');
+    if (levelTimerElement) {
+        if (gameState.levelTimerLimit > 0) {
+            // Cronómetro con límite (cuenta atrás)
+            const minutes = Math.floor(gameState.levelTimer / 60);
+            const seconds = gameState.levelTimer % 60;
+            levelTimerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            levelTimerElement.className = 'timer-limit';
+        } else {
+            // Cronómetro informativo (cuenta hacia arriba)
+            const minutes = Math.floor(gameState.levelTimer / 60);
+            const seconds = gameState.levelTimer % 60;
+            levelTimerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            levelTimerElement.className = 'timer-info';
+        }
+    }
     
     // Actualizar timer dinámico si está activo
     if (gameState.activeMechanics.includes('dynamicTimer') && gameState.dynamicTimer !== null) {
         const minutes = Math.floor(gameState.dynamicTimer / 60);
         const seconds = gameState.dynamicTimer % 60;
-        document.getElementById('dynamic-timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        const dynamicTimerElement = document.getElementById('dynamic-timer');
+        if (dynamicTimerElement) {
+            dynamicTimerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
     }
+    
+    // Actualizar display de pistas
+    updateHintsDisplay();
+    
+    // Actualizar display de monedas
+    updateCoinsDisplay();
 }
 
 // Actualizar lista de palabras
 function updateWordsList() {
     const wordsList = document.getElementById('words-list');
+    if (!wordsList) return;
+    
     wordsList.innerHTML = '';
     
-    gameState.currentWords.forEach(word => {
+    gameState.currentWordsDisplay.forEach(word => {
         const wordItem = document.createElement('div');
         wordItem.className = 'word-item';
         

@@ -320,7 +320,7 @@ function showRanking() {
         <div class="ranking-content">
             <div class="ranking-header">
                 <h2 class="ranking-title">🥇 Ranking Global</h2>
-                <button class="ranking-close" onclick="closeRanking()">&times;</button>
+                <button class="ranking-close" onclick="closeRanking()" title="Cerrar">&times;</button>
             </div>
             <div class="ranking-list" id="ranking-list">
                 <div class="ranking-loading">Cargando ranking...</div>
@@ -416,8 +416,11 @@ function createRankingItem(player, position, userContext) {
     const item = document.createElement('div');
     item.className = 'ranking-item';
     
-    // Resaltar usuario actual
+    // Debug: mostrar datos del jugador
+    console.log(`👤 Jugador ${position}:`, player);
+    console.log(`💰 Monedas del jugador:`, player.monedas);
     
+    // Resaltar usuario actual
     if (userContext && player.usuario_aplicacion_key === userContext.usuario_aplicacion_key) {
         item.classList.add('current-user');
     }
@@ -435,8 +438,7 @@ function createRankingItem(player, position, userContext) {
             <div class="ranking-level">Nivel ${player.nivel_max || 1}</div>
         </div>
         <div class="ranking-stats">
-            <div class="ranking-score">${player.puntuacion_total || 0} pts</div>
-            <div class="ranking-date">${player.ultima_partida || 'N/A'}</div>
+            <div class="ranking-score">${player.monedas || 50} 💰</div>
         </div>
     `;
     

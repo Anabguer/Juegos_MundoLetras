@@ -64,6 +64,10 @@ function applyMechanics(mechanics) {
             case 'dynamicTimer':
                 applyDynamicTimerMechanic();
                 break;
+            case 'none':
+                // Sin mecánicas especiales - solo contador informativo
+                console.log('📝 Nivel sin mecánicas especiales');
+                break;
         }
     });
     
@@ -82,6 +86,8 @@ function applyMechanics(mechanics) {
 // Actualizar display de mecánicas activas
 function updateMechanicsDisplay() {
     const mechanicsDisplay = document.getElementById('mechanics-display');
+    
+    if (!mechanicsDisplay) return;
     
     if (gameState.activeMechanics.length > 0) {
         
@@ -111,7 +117,10 @@ function updateMechanicsDisplay() {
                     badge.textContent = '⏰ Timer por Palabra';
                     break;
                 case 'dynamicTimer':
-                    badge.textContent = '⏱️Timer Dinámico';
+                    badge.textContent = '⏱️ Timer Dinámico';
+                    break;
+                case 'none':
+                    badge.textContent = '📝 Sin Mecánicas';
                     break;
                 default:
                     badge.textContent = `🔄 ${mechanic}`;

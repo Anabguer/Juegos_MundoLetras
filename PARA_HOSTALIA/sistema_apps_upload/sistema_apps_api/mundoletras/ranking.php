@@ -89,13 +89,14 @@ function getRanking($pdo, $appCodigo = 'mundoletras', $limit = 50) {
                 COALESCE(ua.nick, ua.nombre) as nick,
                 p.nivel_max,
                 p.puntuacion_total,
+                p.monedas,
                 p.actualizado_at
             FROM usuarios_aplicaciones ua
             INNER JOIN mundoletras_progreso p ON ua.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci = p.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci
             WHERE ua.app_codigo COLLATE utf8mb4_unicode_ci = ? 
             AND ua.activo = 1
             AND p.nivel_max > 0
-            ORDER BY p.nivel_max DESC, p.puntuacion_total DESC
+            ORDER BY p.nivel_max DESC, p.monedas DESC
             LIMIT ?
         ";
         
@@ -125,12 +126,13 @@ function getRanking($pdo, $appCodigo = 'mundoletras', $limit = 50) {
                     COALESCE(ua.nick, ua.nombre) as nick,
                     COALESCE(p.nivel_max, 0) as nivel_max,
                     COALESCE(p.puntuacion_total, 0) as puntuacion_total,
+                    COALESCE(p.monedas, 50) as monedas,
                     COALESCE(p.actualizado_at, ua.created_at) as actualizado_at
                 FROM usuarios_aplicaciones ua
                 LEFT JOIN mundoletras_progreso p ON ua.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci = p.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci
                 WHERE ua.app_codigo COLLATE utf8mb4_unicode_ci = ? 
                 AND ua.activo = 1
-                ORDER BY nivel_max DESC, puntuacion_total DESC
+                ORDER BY nivel_max DESC, monedas DESC
                 LIMIT ?
             ";
             
@@ -245,7 +247,8 @@ try {
                             ua.app_codigo,
                             ua.activo,
                             p.nivel_max,
-                            p.puntuacion_total
+                            p.puntuacion_total,
+                            p.monedas
                         FROM usuarios_aplicaciones ua
                         LEFT JOIN mundoletras_progreso p ON ua.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci = p.usuario_aplicacion_key COLLATE utf8mb4_unicode_ci
                         WHERE ua.app_codigo COLLATE utf8mb4_unicode_ci = 'mundoletras'
