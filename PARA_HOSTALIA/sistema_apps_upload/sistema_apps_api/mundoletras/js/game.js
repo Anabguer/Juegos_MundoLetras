@@ -20,7 +20,6 @@ async function loadLevelsFromJSON() {
             throw new Error(`Error al cargar niveles: ${response.status}`);
         }
         levelsCache = await response.json();
-        console.log(`✅ Cargados ${levelsCache.length} niveles desde JSON`);
         return levelsCache;
     } catch (error) {
         console.error('❌ Error cargando niveles:', error);
@@ -72,16 +71,16 @@ function startLevelTimer(timerSec) {
                 gameState.levelExpired = true;
                 showMessage('¡Tiempo agotado! Debes repetir el nivel', 'error');
                 // TODO: Implementar lógica para repetir nivel
-            }
-        }, 1000);
-        console.log(`⏰ Iniciado cronómetro con límite: ${timerSec} segundos`);
-    } else {
+        }
+    }, 1000);
+}
+
+} else {
         // Cronómetro informativo (cuenta hacia arriba)
         gameState.levelTimerInterval = setInterval(() => {
             gameState.levelTimer++;
             updateHUD();
         }, 1000);
-        console.log(`⏱️ Iniciado cronómetro informativo`);
     }
 }
 
@@ -137,15 +136,11 @@ function setLevelWords(wordsDisplay, wordsLogic) {
     // Mantener compatibilidad con sistema anterior
     gameState.currentWords = gameState.currentWordsDisplay;
     
-    console.log('📝 Palabras configuradas:');
-    console.log('  Display:', gameState.currentWordsDisplay);
-    console.log('  Logic:', gameState.currentWordsLogic);
 }
 
 // Configurar direcciones permitidas
 function setAllowedDirections(directions) {
     gameState.allowedDirections = directions || ['H', 'V'];
-    console.log('🧭 Direcciones permitidas:', gameState.allowedDirections);
 }
 
 // Detectar dirección de una selección de celdas
@@ -203,7 +198,6 @@ function validateCellSelection(selectedCells) {
     const direction = detectDirection(selectedCells);
     const isAllowed = isDirectionAllowed(direction);
     
-    console.log(`🧭 Dirección detectada: ${direction}, Permitida: ${isAllowed}`);
     
     return isAllowed;
 }
@@ -213,7 +207,6 @@ function setHintsConfig(hintsConfig) {
     gameState.hintsConfig = hintsConfig || { base: 0, adMaxExtra: 2 };
     gameState.hintsMax = gameState.hintsConfig.base + gameState.hintsConfig.adMaxExtra;
     gameState.hintsUsed = 0;
-    console.log('💡 Configuración de pistas:', gameState.hintsConfig);
 }
 
 // Verificar si se puede usar una pista
@@ -242,16 +235,16 @@ function useHint() {
 
 // Revelar una letra útil de una palabra no resuelta
 function revealHintLetter() {
-    console.log('🔍 Iniciando pista...');
-    console.log('📝 Palabras disponibles:', gameState.currentWordsDisplay);
-    console.log('✅ Palabras encontradas:', gameState.foundWords);
+    // console.log('🔍 Iniciando pista...');
+    // console.log('📝 Palabras disponibles:', gameState.currentWordsDisplay);
+    // console.log('✅ Palabras encontradas:', gameState.foundWords);
     
     // Encontrar palabras no resueltas
     const unresolvedWords = gameState.currentWordsDisplay.filter(word => 
         !gameState.foundWords.includes(word)
     );
     
-    console.log('❓ Palabras no resueltas:', unresolvedWords);
+    // console.log('❓ Palabras no resueltas:', unresolvedWords);
     
     if (unresolvedWords.length === 0) {
         showMessage('¡Todas las palabras están resueltas!', 'info');
@@ -260,22 +253,22 @@ function revealHintLetter() {
     
     // Seleccionar palabra aleatoria no resuelta
     const randomWord = unresolvedWords[Math.floor(Math.random() * unresolvedWords.length)];
-    console.log('🎯 Palabra seleccionada para pista:', randomWord);
+    // console.log('🎯 Palabra seleccionada para pista:', randomWord);
     
     // Encontrar la palabra en el grid y revelar una letra útil
     const wordPositions = findWordInGrid(randomWord);
-    console.log('📍 Posiciones encontradas:', wordPositions);
+    // console.log('📍 Posiciones encontradas:', wordPositions);
     
     if (wordPositions && wordPositions.length > 0) {
         // Revelar primera o última letra (más útil)
         const revealIndex = Math.random() < 0.5 ? 0 : wordPositions.length - 1;
         const cellIndex = wordPositions[revealIndex];
         
-        console.log('🎯 Índice de celda a revelar:', cellIndex);
+        // console.log('🎯 Índice de celda a revelar:', cellIndex);
         
         // Revelar la celda
         const cell = document.querySelector(`[data-index="${cellIndex}"]`);
-        console.log('🔍 Celda encontrada:', cell);
+        // console.log('🔍 Celda encontrada:', cell);
         
         if (cell) {
             cell.classList.add('hint-revealed');
@@ -288,7 +281,7 @@ function revealHintLetter() {
                 cell.style.transform = 'scale(1)';
             }, 300);
             
-            console.log(`💡 Pista revelada: letra "${gameState.currentGrid[cellIndex]}" de "${randomWord}"`);
+            // console.log(`💡 Pista revelada: letra "${gameState.currentGrid[cellIndex]}" de "${randomWord}"`);
         } else {
             console.error('❌ No se encontró la celda con data-index:', cellIndex);
         }
@@ -324,12 +317,11 @@ function clearAllHints() {
 
 // Encontrar posiciones de una palabra en el grid
 function findWordInGrid(word) {
-    console.log('🔍 Buscando palabra en grid:', word);
+    // console.log('🔍 Buscando palabra en grid:', word);
     const gridSize = Math.sqrt(gameState.currentGrid.length);
     const normalizedWord = normalizeWordForLogic(word);
-    console.log('📐 Tamaño del grid:', gridSize);
-    console.log('🔤 Palabra normalizada:', normalizedWord);
-    console.log('🧭 Direcciones permitidas:', gameState.allowedDirections);
+    // console.log('📐 Tamaño del grid:', gridSize);
+    // console.log('🔤 Palabra normalizada:', normalizedWord);
     
     // Usar la misma lógica que isWordInGrid() para consistencia
     const directions = [
@@ -362,15 +354,15 @@ function findWordInGrid(word) {
                 }
                 
                 if (valid && (currentWord === normalizedWord || currentWord === normalizedWord.split('').reverse().join(''))) {
-                    console.log(`✅ Palabra encontrada: "${word}" en posición (${row}, ${col}) dirección (${dir.dr}, ${dir.dc})`);
-                    console.log('📍 Posiciones:', positions);
+                    // console.log(`✅ Palabra encontrada: "${word}" en posición (${row}, ${col}) dirección (${dir.dr}, ${dir.dc})`);
+                    // console.log('📍 Posiciones:', positions);
                     return positions;
                 }
             }
         }
     }
     
-    console.log('❌ Palabra no encontrada en el grid');
+    // console.log('❌ Palabra no encontrada en el grid');
     return null;
 }
 
@@ -379,31 +371,31 @@ function checkWordAtPosition(word, startRow, startCol, deltaRow, deltaCol, gridS
     const normalizedWord = normalizeWordForLogic(word);
     const positions = [];
     
-    console.log(`🔍 Verificando "${word}" (normalizada: "${normalizedWord}") en posición (${startRow}, ${startCol}) con delta (${deltaRow}, ${deltaCol})`);
+    // console.log(`🔍 Verificando "${word}" (normalizada: "${normalizedWord}") en posición (${startRow}, ${startCol}) con delta (${deltaRow}, ${deltaCol})`);
     
     for (let i = 0; i < normalizedWord.length; i++) {
         const row = startRow + (i * deltaRow);
         const col = startCol + (i * deltaCol);
         
         if (row < 0 || row >= gridSize || col < 0 || col >= gridSize) {
-            console.log(`❌ Posición fuera de límites: (${row}, ${col})`);
+            // console.log(`❌ Posición fuera de límites: (${row}, ${col})`);
             return null;
         }
         
         const cellIndex = row * gridSize + col;
         const cellLetter = normalizeWordForLogic(gameState.currentGrid[cellIndex]);
         
-        console.log(`🔤 Letra ${i}: esperada "${normalizedWord[i]}", encontrada "${cellLetter}" en posición (${row}, ${col})`);
+        // console.log(`🔤 Letra ${i}: esperada "${normalizedWord[i]}", encontrada "${cellLetter}" en posición (${row}, ${col})`);
         
         if (cellLetter !== normalizedWord[i]) {
-            console.log(`❌ Letra no coincide: "${cellLetter}" !== "${normalizedWord[i]}"`);
+            // console.log(`❌ Letra no coincide: "${cellLetter}" !== "${normalizedWord[i]}"`);
             return null;
         }
         
         positions.push(cellIndex);
     }
     
-    console.log(`✅ Palabra completa encontrada en posiciones:`, positions);
+    // console.log(`✅ Palabra completa encontrada en posiciones:`, positions);
     return positions;
 }
 
@@ -695,7 +687,7 @@ function setCoinsConfig(coinsConfig) {
         starMultiplier: 1.5,
         firstTimeBonus: 20
     };
-    console.log('💰 Configuración de monedas:', gameState.coinsConfig);
+    // console.log('💰 Configuración de monedas:', gameState.coinsConfig);
 }
 
 // Calcular monedas ganadas en el nivel
@@ -716,19 +708,19 @@ function calculateLevelCoins(stars, timeRemaining, isFirstTime) {
     if (gameState.levelTimerLimit > 0 && timeRemaining > 0) {
         const timeBonus = Math.floor(timeRemaining / 10) * (gameState.coinsConfig.timeBonus || 5);
         coins += timeBonus;
-        console.log(`⏰ Bonus por tiempo restante: ${timeBonus} monedas`);
+        // console.log(`⏰ Bonus por tiempo restante: ${timeBonus} monedas`);
     }
     
     // Multiplicador por estrellas
     if (stars > 0) {
         coins = Math.floor(coins * ((gameState.coinsConfig.starMultiplier || 1.5) * stars));
-        console.log(`⭐ Multiplicador por ${stars} estrellas: ${coins} monedas`);
+        // console.log(`⭐ Multiplicador por ${stars} estrellas: ${coins} monedas`);
     }
     
     // Bonus por primera vez
     if (isFirstTime) {
         coins += (gameState.coinsConfig.firstTimeBonus || 20);
-        console.log(`🎉 Bonus primera vez: ${gameState.coinsConfig.firstTimeBonus || 20} monedas`);
+        // console.log(`🎉 Bonus primera vez: ${gameState.coinsConfig.firstTimeBonus || 20} monedas`);
     }
     
     // Asegurar que coins sea un número válido
@@ -740,7 +732,7 @@ function calculateLevelCoins(stars, timeRemaining, isFirstTime) {
     gameState.levelCoinsEarned = coins;
     gameState.totalCoins = (gameState.totalCoins || 50) + coins;
     
-    console.log(`💰 Monedas ganadas: ${coins} (Total: ${gameState.totalCoins})`);
+    // console.log(`💰 Monedas ganadas: ${coins} (Total: ${gameState.totalCoins})`);
     return coins;
 }
 
@@ -748,7 +740,7 @@ function calculateLevelCoins(stars, timeRemaining, isFirstTime) {
 function addCoins(amount) {
     gameState.totalCoins = (gameState.totalCoins || 50) + amount;
     updateCoinsDisplay();
-    console.log(`💰 Monedas añadidas: ${amount} (Total: ${gameState.totalCoins})`);
+    // console.log(`💰 Monedas añadidas: ${amount} (Total: ${gameState.totalCoins})`);
 }
 
 // Gastar monedas
@@ -757,10 +749,10 @@ function spendCoins(amount) {
     if (gameState.totalCoins >= amount) {
         gameState.totalCoins -= amount;
         updateCoinsDisplay();
-        console.log(`💰 Monedas gastadas: ${amount} (Total: ${gameState.totalCoins})`);
+        // console.log(`💰 Monedas gastadas: ${amount} (Total: ${gameState.totalCoins})`);
         return true;
     } else {
-        console.log(`💰 Monedas insuficientes: ${gameState.totalCoins}/${amount}`);
+        // console.log(`💰 Monedas insuficientes: ${gameState.totalCoins}/${amount}`);
         return false;
     }
 }
@@ -907,7 +899,7 @@ function applyTheme(levelId) {
     // Actualizar display del tema si existe
     updateThemeDisplay(theme);
     
-    console.log(`🎨 Tema aplicado: ${theme.description} para nivel ${levelId}`);
+    // console.log(`🎨 Tema aplicado: ${theme.description} para nivel ${levelId}`);
 }
 
 // Actualizar display del tema
@@ -972,7 +964,7 @@ async function testLevel() {
         // Actualizar configuración
         updateTestConfig(levelConfig);
         
-        console.log(`🧪 Test del nivel ${levelId} completado`);
+        // console.log(`🧪 Test del nivel ${levelId} completado`);
         
     } catch (error) {
         console.error('Error al cargar nivel de test:', error);

@@ -19,7 +19,7 @@ async function initGame() {
         setHintsConfig(levelConfig.hints);
         setCoinsConfig(levelConfig.coins);
         gameState.currentLevelConfig = levelConfig;
-        console.log(`✅ Nivel ${gameState.currentLevel} cargado desde JSON:`, levelConfig);
+        // console.log(`✅ Nivel ${gameState.currentLevel} cargado desde JSON:`, levelConfig);
     } else {
         // Fallback: usar sistema anterior
         const fallbackWords = getLevelWords(gameState.currentLevel);
@@ -28,7 +28,7 @@ async function initGame() {
         setHintsConfig({ base: 0, adMaxExtra: 2 }); // Pistas por defecto
         setCoinsConfig({ base: 10, timeBonus: 5, starMultiplier: 1.5, firstTimeBonus: 20 }); // Monedas por defecto
         gameState.currentLevelConfig = null;
-        console.log(`⚠️ Usando sistema anterior para nivel ${gameState.currentLevel}`);
+        // console.log(`⚠️ Usando sistema anterior para nivel ${gameState.currentLevel}`);
     }
     
     // Ocultar botón de reiniciar progreso (no disponible para invitados)
@@ -59,12 +59,12 @@ async function initGame() {
         // Usar mecánicas del JSON
         const mechanics = levelConfig.mechanics.special === 'none' ? [] : [levelConfig.mechanics.special];
         applyMechanics(mechanics);
-        console.log(`🎮 Aplicando mecánicas del JSON: ${mechanics.join(', ') || 'ninguna'}`);
+        // console.log(`🎮 Aplicando mecánicas del JSON: ${mechanics.join(', ') || 'ninguna'}`);
     } else {
         // Fallback: generar mecánicas aleatorias
         const randomMechanics = generateRandomMechanics(gameState.currentLevel);
         applyMechanics(randomMechanics);
-        console.log(`🎲 Aplicando mecánicas aleatorias: ${randomMechanics.join(', ') || 'ninguna'}`);
+        // console.log(`🎲 Aplicando mecánicas aleatorias: ${randomMechanics.join(', ') || 'ninguna'}`);
     }
     
     // Actualizar lista de palabras DESPUÉS de aplicar mecánicas
@@ -115,7 +115,7 @@ async function generateNextLevel() {
         setHintsConfig(levelConfig.hints);
         setCoinsConfig(levelConfig.coins);
         gameState.currentLevelConfig = levelConfig;
-        console.log(`✅ Nivel ${gameState.currentLevel} cargado desde JSON:`, levelConfig);
+        // console.log(`✅ Nivel ${gameState.currentLevel} cargado desde JSON:`, levelConfig);
     } else {
         // Fallback: usar sistema anterior
         const fallbackWords = getLevelWords(gameState.currentLevel);
@@ -124,7 +124,7 @@ async function generateNextLevel() {
         setHintsConfig({ base: 0, adMaxExtra: 2 }); // Pistas por defecto
         setCoinsConfig({ base: 10, timeBonus: 5, starMultiplier: 1.5, firstTimeBonus: 20 }); // Monedas por defecto
         gameState.currentLevelConfig = null;
-        console.log(`⚠️ Usando sistema anterior para nivel ${gameState.currentLevel}`);
+        // console.log(`⚠️ Usando sistema anterior para nivel ${gameState.currentLevel}`);
     }
     
     generateGrid();
@@ -146,12 +146,12 @@ async function generateNextLevel() {
         // Usar mecánicas del JSON
         const mechanics = levelConfig.mechanics.special === 'none' ? [] : [levelConfig.mechanics.special];
         applyMechanics(mechanics);
-        console.log(`🎮 Aplicando mecánicas del JSON: ${mechanics.join(', ') || 'ninguna'}`);
+        // console.log(`🎮 Aplicando mecánicas del JSON: ${mechanics.join(', ') || 'ninguna'}`);
     } else {
         // Fallback: generar mecánicas aleatorias
         const randomMechanics = generateRandomMechanics(gameState.currentLevel);
         applyMechanics(randomMechanics);
-        console.log(`🎲 Aplicando mecánicas aleatorias: ${randomMechanics.join(', ') || 'ninguna'}`);
+        // console.log(`🎲 Aplicando mecánicas aleatorias: ${randomMechanics.join(', ') || 'ninguna'}`);
     }
     
     // Actualizar lista de palabras DESPUÉS de aplicar mecánicas
@@ -315,12 +315,12 @@ function generateGrid() {
 
 // Colocar palabras en el grid
 function placeWordsInGrid(words, gridSize) {
-    console.log('🎯 Intentando colocar palabras en el grid:', words);
-    console.log('📐 Tamaño del grid:', gridSize);
-    console.log('🧭 Direcciones permitidas:', gameState.allowedDirections);
+    // console.log('🎯 Intentando colocar palabras en el grid:', words);
+    // console.log('📐 Tamaño del grid:', gridSize);
+    // console.log('🧭 Direcciones permitidas:', gameState.allowedDirections);
     
     words.forEach((word, wordIndex) => {
-        console.log(`🔤 Colocando palabra ${wordIndex + 1}/${words.length}: "${word}"`);
+        // console.log(`🔤 Colocando palabra ${wordIndex + 1}/${words.length}: "${word}"`);
         let placed = false;
         let attempts = 0;
         const maxAttempts = 200; // Aumentar intentos
@@ -462,21 +462,21 @@ function placeWordsInGrid(words, gridSize) {
     
     // Validación final: verificar que todas las palabras se colocaron
     let placedCount = 0;
-    console.log('🔍 Verificando palabras colocadas en el grid:');
+    // console.log('🔍 Verificando palabras colocadas en el grid:');
     words.forEach(word => {
         if (isWordInGrid(word, gridSize)) {
             placedCount++;
-            console.log(`✅ Palabra colocada: ${word}`);
+            // console.log(`✅ Palabra colocada: ${word}`);
         } else {
-            console.log(`❌ Palabra NO colocada: ${word}`);
+            // console.log(`❌ Palabra NO colocada: ${word}`);
         }
     });
-    console.log(`📊 Palabras colocadas: ${placedCount}/${words.length}`);
+    // console.log(`📊 Palabras colocadas: ${placedCount}/${words.length}`);
     
     if (placedCount === words.length) {
-        console.log('✅ Todas las palabras se colocaron correctamente');
+        // console.log('✅ Todas las palabras se colocaron correctamente');
     } else {
-        console.log(`⚠️ Solo se colocaron ${placedCount} de ${words.length} palabras`);
+        // console.log(`⚠️ Solo se colocaron ${placedCount} de ${words.length} palabras`);
     }
 }
 

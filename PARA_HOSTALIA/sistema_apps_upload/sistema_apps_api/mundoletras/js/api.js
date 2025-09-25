@@ -35,15 +35,13 @@ function showLogin() {
             <!-- Pestaña de Login -->
             <div id="login-tab" class="tab-panel active">
                 <div style="text-align: left;">
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
-                        <input type="email" id="login-email" placeholder="tu@email.com" 
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    <div class="form-field">
+                        <label>Email:</label>
+                        <input type="email" id="login-email" placeholder="tu@email.com">
                     </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
-                        <input type="password" id="login-password" placeholder="********************"
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    <div class="form-field">
+                        <label>Contraseña:</label>
+                        <input type="password" id="login-password" placeholder="********************">
                     </div>
                 </div>
                 
@@ -55,25 +53,21 @@ function showLogin() {
             <!-- Pestaña de Registro -->
             <div id="register-tab" class="tab-panel">
                 <div style="text-align: left;">
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre:</label>
-                        <input type="text" id="register-name" placeholder="Tu nombre completo" 
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    <div class="form-field">
+                        <label>Nombre:</label>
+                        <input type="text" id="register-name" placeholder="Tu nombre completo">
                     </div>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nick:</label>
-                        <input type="text" id="register-nick" placeholder="Tu nick único" 
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    <div class="form-field">
+                        <label>Nick:</label>
+                        <input type="text" id="register-nick" placeholder="Tu nick único">
                     </div>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
-                        <input type="email" id="register-email" placeholder="tu@email.com" 
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    <div class="form-field">
+                        <label>Email:</label>
+                        <input type="email" id="register-email" placeholder="tu@email.com">
                     </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Contraseña:</label>
-                        <input type="password" id="register-password" placeholder="************************"
-                               style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 16px;">
+                    <div class="form-field">
+                        <label>Contraseña:</label>
+                        <input type="password" id="register-password" placeholder="************************">
                     </div>
                 </div>
                 
@@ -98,10 +92,10 @@ function showVerification(email, password) {
             <p style="font-weight: bold; color: #fbbf24;">${email}</p>
         </div>
         
-        <div style="margin-bottom: 1.5rem;">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; text-align: center;">Código de Verificación:</label>
+        <div class="form-field" style="margin-bottom: 1.5rem;">
+            <label style="text-align: center;">Código de Verificación:</label>
             <input type="text" id="verify-code" placeholder="123456" maxlength="6"
-                   style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 18px; text-align: center; letter-spacing: 0.2em;">
+                   style="font-size: 18px; text-align: center; letter-spacing: 0.2em;">
         </div>
         
         <button class="btn btn-primary" onclick="doVerify('${email}', '${password}')">
@@ -346,16 +340,83 @@ function closeRanking() {
     }
 }
 
+// Cargar ranking para usuarios guest
+async function loadGuestRanking() {
+    try {
+        // Obtener ranking completo
+        const response = await fetch(CONFIG.API_BASE_URL + 'ranking.php?action=full', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const rankingData = await response.json();
+        
+        if (rankingData.success) {
+            const list = document.getElementById('ranking-list');
+            
+            // Solo limpiar si no hay información de guest
+            if (!list.querySelector('.ranking-guest-info')) {
+                list.innerHTML = '';
+                
+                // Crear información del usuario guest
+                const guestInfo = document.createElement('div');
+                guestInfo.className = 'ranking-guest-info';
+                guestInfo.innerHTML = `
+                    <div class="ranking-item guest-user">
+                        <div class="ranking-position">👤</div>
+                        <div class="ranking-player">
+                            <div class="ranking-name">Invitado</div>
+                            <div class="ranking-level">Nivel ${gameState.currentLevel || 1}</div>
+                        </div>
+                        <div class="ranking-stats">
+                            <div class="ranking-score">${gameState.totalCoins || 50} 💰</div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(guestInfo);
+                
+                // Crear mensaje de registro
+                const guestMessage = document.createElement('div');
+                guestMessage.className = 'ranking-guest-message';
+                guestMessage.innerHTML = `
+                    <p>🔓 Para participar en el ranking y competir con otros jugadores</p>
+                    <p>debes registrarte creando una cuenta</p>
+                `;
+                list.appendChild(guestMessage);
+            } else {
+                // Actualizar información del guest si ya existe
+                const guestUser = list.querySelector('.ranking-item.guest-user');
+                if (guestUser) {
+                    const levelElement = guestUser.querySelector('.ranking-level');
+                    const scoreElement = guestUser.querySelector('.ranking-score');
+                    if (levelElement) levelElement.textContent = `Nivel ${gameState.currentLevel || 1}`;
+                    if (scoreElement) scoreElement.textContent = `${gameState.totalCoins || 50} 💰`;
+                }
+            }
+            
+            // Mostrar el ranking de usuarios registrados
+            displayRanking(rankingData.data, null);
+            
+            // Actualizar controles para guest
+            updateRankingControlsForGuest();
+        } else {
+            throw new Error(rankingData.message);
+        }
+        
+    } catch (error) {
+        showRankingError(error.message);
+    }
+}
+
 // Cargar ranking
 async function loadRanking() {
     try {
         if (!gameState.currentUser || gameState.currentUser.isGuest) {
-            document.getElementById('ranking-list').innerHTML = `
-                <div class="ranking-error">
-                    <p>🔒 Sólo usuarios registrados pueden ver el ranking</p>
-                    <p>Regí­strate para competir con otros jugadores</p>
-                </div>
-            `;
+            await loadGuestRanking();
             return;
         }
         
@@ -398,10 +459,26 @@ async function loadRanking() {
 // Mostrar ranking
 function displayRanking(ranking, userContext) {
     const list = document.getElementById('ranking-list');
-    list.innerHTML = '';
+    
+    // Si no hay contexto de usuario (guest), limpiar solo los elementos de ranking
+    if (!userContext) {
+        // Eliminar solo los elementos de ranking existentes, mantener guest-info y guest-message
+        const existingRankingItems = list.querySelectorAll('.ranking-item:not(.guest-user)');
+        existingRankingItems.forEach(item => item.remove());
+    } else {
+        // Para usuarios registrados, limpiar todo
+        list.innerHTML = '';
+    }
     
     if (!ranking || ranking.length === 0) {
-        list.innerHTML = '<div class="ranking-error">No hay datos de ranking disponibles</div>';
+        if (!userContext) {
+            // Para guest, no mostrar error si ya hay información de guest
+            if (!list.querySelector('.ranking-guest-info')) {
+                list.innerHTML = '<div class="ranking-error">No hay datos de ranking disponibles</div>';
+            }
+        } else {
+            list.innerHTML = '<div class="ranking-error">No hay datos de ranking disponibles</div>';
+        }
         return;
     }
     
@@ -416,9 +493,6 @@ function createRankingItem(player, position, userContext) {
     const item = document.createElement('div');
     item.className = 'ranking-item';
     
-    // Debug: mostrar datos del jugador
-    console.log(`👤 Jugador ${position}:`, player);
-    console.log(`💰 Monedas del jugador:`, player.monedas);
     
     // Resaltar usuario actual
     if (userContext && player.usuario_aplicacion_key === userContext.usuario_aplicacion_key) {
@@ -462,13 +536,21 @@ async function loadFullRanking() {
         const data = await response.json();
         
         if (data.success) {
-            // Pasar el usuario actual como contexto para la comparación
-            const userContextForDisplay = {
-                usuario_aplicacion_key: gameState.currentUser.usuario_aplicacion_key
-            };
-            displayRanking(data.data, userContextForDisplay);
-            // Actualizar controles para mostrar botón "Actualizar"
-            updateRankingControls(true);
+            // Si es usuario guest, mantener la lógica de guest
+            if (!gameState.currentUser || gameState.currentUser.isGuest) {
+                // Para guest, solo mostrar el ranking completo sin cambiar controles
+                displayRanking(data.data, null);
+                // Mantener controles de guest
+                updateRankingControlsForGuest();
+            } else {
+                // Para usuarios registrados, usar la lógica normal
+                const userContextForDisplay = {
+                    usuario_aplicacion_key: gameState.currentUser.usuario_aplicacion_key
+                };
+                displayRanking(data.data, userContextForDisplay);
+                // Actualizar controles para mostrar botón "Actualizar"
+                updateRankingControls(true);
+            }
         } else {
             throw new Error(data.message);
         }
@@ -550,6 +632,42 @@ function scrollToUserPosition() {
         showMessage('Mostrando tu posición en el ranking', 'success');
     } else {
         showMessage('No se encontró tu posición en el ranking', 'error');
+    }
+}
+
+// Actualizar controles del ranking para usuarios guest
+function updateRankingControlsForGuest() {
+    const controls = document.querySelector('.ranking-controls');
+    if (controls) {
+        controls.innerHTML = `
+            <button class="ranking-btn" onclick="loadFullRanking()">Ver Top 50</button>
+            <button class="ranking-btn" onclick="loadGuestRanking()">Actualizar</button>
+        `;
+    }
+}
+
+// Función para salir de la aplicación APK
+function exitApp() {
+    if (confirm('¿Estás seguro de que quieres salir de la aplicación?')) {
+        // Para aplicaciones APK (Capacitor/Cordova)
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+            // Capacitor
+            window.Capacitor.Plugins.App.exitApp();
+        } else if (window.cordova && window.cordova.plugins && window.cordova.plugins.exitApp) {
+            // Cordova
+            window.cordova.plugins.exitApp();
+        } else if (window.navigator && window.navigator.app && window.navigator.app.exitApp) {
+            // PhoneGap
+            window.navigator.app.exitApp();
+        } else {
+            // Fallback para navegador web - cerrar ventana
+            if (window.close) {
+                window.close();
+            } else {
+                // Si no se puede cerrar la ventana, mostrar mensaje
+                alert('No se puede cerrar la aplicación desde el navegador. Usa el botón atrás del dispositivo.');
+            }
+        }
     }
 }
 

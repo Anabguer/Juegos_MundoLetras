@@ -66,7 +66,7 @@ function applyMechanics(mechanics) {
                 break;
             case 'none':
                 // Sin mecánicas especiales - solo contador informativo
-                console.log('📝 Nivel sin mecánicas especiales');
+                // console.log('📝 Nivel sin mecánicas especiales');
                 break;
         }
     });

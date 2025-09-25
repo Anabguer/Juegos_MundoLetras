@@ -95,7 +95,7 @@ Cada nivel en el JSON se define así:
 
 ---
 
-## 6) Ranking
+## 6) Ranking-----ESTO NO LO HACEMOS, ES MUY COMPLICADO Y NO VALE LA PENA...
 - Ranking global por **nivel máximo superado** + **monedas acumuladas**.
 - Al superar a alguien: mensaje **“¡Has superado a [Usuario] en el ranking global!”**.
 

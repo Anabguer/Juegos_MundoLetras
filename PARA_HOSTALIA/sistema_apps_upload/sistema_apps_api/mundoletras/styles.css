@@ -28,7 +28,7 @@
         
         .screen {
             position: absolute;
-            top: 0;
+            top: 15px;
             left: 0;
             right: 0;
             bottom: 0;
@@ -51,7 +51,7 @@
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 1rem;
-            padding: 2rem;
+            padding: 0.5rem 0.10rem 0.40rem 0.10rem;
             max-width: 400px;
             width: 100%;
             text-align: center;
@@ -120,6 +120,15 @@
         
         .btn-secondary:hover {
             background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-danger {
+            background-color: rgba(239, 68, 68, 0.8);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: rgba(239, 68, 68, 1);
         }
         
         /* Game Screen */
@@ -762,6 +771,31 @@
             font-size: 1rem;
         }
         
+        .ranking-guest-message {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            color: #3b82f6;
+        }
+        
+        .ranking-guest-message p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .ranking-guest-info {
+            margin-bottom: 1rem;
+        }
+        
+        .ranking-item.guest-user {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 0.5rem;
+        }
+        
         /* Responsive para móvil - MEDIA QUERY CONSOLIDADA */
         @media (max-width: 480px) {
             /* Game Screen */
@@ -1353,6 +1387,44 @@
             color: #e5e7eb;
             font-weight: bold;
             font-size: 0.9rem;
+        }
+        
+        /* Estilos para formularios de registro y login */
+        .form-field {
+            margin-bottom: 0.75rem;
+        }
+        
+        .form-field label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #e5e7eb;
+        }
+        
+        .form-field input {
+            width: 100%;
+            padding: 0.6rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-field input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+        
+        .form-field input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .form-field:last-child {
+            margin-bottom: 1rem;
         }
         
         .test-input {

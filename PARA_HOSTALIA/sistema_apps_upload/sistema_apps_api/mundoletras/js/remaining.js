@@ -22,7 +22,6 @@ function animateScore(scoreElement, points) {
 
 // Animación de monedas mejorada
 function animateCoins(coinsElement, amount = 10) {
-    console.log('💰 Animando monedas:', amount);
     // Solo animar si hay monedas para añadir
     if (amount <= 0) return;
     
@@ -175,17 +174,10 @@ function showLevelComplete() {
     document.body.appendChild(overlay);
     
     // Guardar progreso
-    console.log('🎯 Completando nivel, guardando progreso...');
-    console.log('👤 Usuario actual:', gameState.currentUser);
-    
     if (gameState.currentUser && gameState.currentUser.isGuest) {
-        console.log('👤 Usuario invitado, guardando en localStorage');
         saveGuestProgress();
     } else if (gameState.currentUser && !gameState.currentUser.isGuest) {
-        console.log('👤 Usuario registrado, guardando en BBDD');
         saveUserProgress();
-    } else {
-        console.log('❌ No hay usuario definido, no se puede guardar progreso');
     }
     
     // Remover overlay después de 4 segundos
@@ -227,10 +219,7 @@ function animateWordFound(word) {
 
 // Guardar progreso de invitado
 function saveGuestProgress() {
-    console.log('💾 Intentando guardar progreso de invitado...');
-    
     if (!gameState.currentUser || !gameState.currentUser.isGuest) {
-        console.log('❌ No se puede guardar: usuario no es invitado');
         return;
     }
     
@@ -244,9 +233,7 @@ function saveGuestProgress() {
         timestamp: Date.now()
     };
     
-    console.log('📤 Guardando datos de progreso en localStorage:', progressData);
     localStorage.setItem('mundo_letras_guest_progress', JSON.stringify(progressData));
-    console.log('✅ Progreso de invitado guardado exitosamente');
 }
 
 // Cargar progreso de usuario registrado
@@ -283,16 +270,12 @@ async function loadUserProgress() {
 
 // Guardar progreso de usuario registrado
 async function saveUserProgress() {
-    console.log('💾 Intentando guardar progreso de usuario...');
-    
     if (!gameState.currentUser || gameState.currentUser.isGuest) {
-        console.log('❌ No se puede guardar: usuario invitado o no definido');
         return;
     }
     
     // Validar que el user_key esté definido
     if (!gameState.currentUser.usuario_aplicacion_key) {
-        console.log('❌ No se puede guardar: user_key no definido');
         return;
     }
     
@@ -304,8 +287,6 @@ async function saveUserProgress() {
         monedas: gameState.totalCoins
     };
     
-    console.log('📤 Enviando datos de progreso:', progressData);
-    
     try {
         const response = await fetch(CONFIG.API_BASE_URL + 'progress.php', {
             method: 'POST',
@@ -314,14 +295,8 @@ async function saveUserProgress() {
         });
         
         const data = await response.json();
-        
-        if (data.success) {
-            console.log('✅ Progreso guardado exitosamente:', data);
-        } else {
-            console.log('❌ Error al guardar progreso:', data.message);
-        }
     } catch (error) {
-        console.log('❌ Error de conexión al guardar progreso:', error);
+        // Error silencioso
     }
 }
 
