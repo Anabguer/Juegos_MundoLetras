@@ -3,7 +3,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.colisan.mundoletras',
   appName: 'Mundo Letras',
-  webDir: 'dist',
+  webDir: 'PARA_HOSTALIA',
   server: {
     androidScheme: 'https'
   },

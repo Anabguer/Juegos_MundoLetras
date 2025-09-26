@@ -1565,4 +1565,140 @@
                 width: 100px;
             }
         }
+
+/* Modal de salida personalizado */
+.exit-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.exit-modal {
+    background: linear-gradient(135deg, #1e3a8a, #1e40af);
+    border-radius: 16px;
+    padding: 0;
+    max-width: 90%;
+    width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.exit-modal-header {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 14px 14px 0 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.exit-modal-header h3 {
+    color: white;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.exit-modal-body {
+    padding: 24px 20px;
+    text-align: center;
+}
+
+.exit-modal-body p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.exit-modal-footer {
+    padding: 20px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    border-radius: 0 0 14px 14px;
+}
+
+.exit-btn-cancel,
+.exit-btn-confirm {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.exit-btn-cancel {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: white;
+}
+
+.exit-btn-cancel:hover {
+    background: linear-gradient(135deg, #4b5563, #374151);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.exit-btn-confirm {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: white;
+}
+
+.exit-btn-confirm:hover {
+    background: linear-gradient(135deg, #b91c1c, #991b1b);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+}
+
+/* Responsive para móvil */
+@media (max-width: 480px) {
+    .exit-modal {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .exit-modal-header h3 {
+        font-size: 18px;
+    }
+    
+    .exit-modal-body p {
+        font-size: 15px;
+    }
+    
+    .exit-modal-footer {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .exit-btn-cancel,
+    .exit-btn-confirm {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 16px;
+    }
+}
     

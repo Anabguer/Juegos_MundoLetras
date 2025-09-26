@@ -648,26 +648,79 @@ function updateRankingControlsForGuest() {
 
 // Función para salir de la aplicación APK
 function exitApp() {
-    if (confirm('¿Estás seguro de que quieres salir de la aplicación?')) {
-        // Para aplicaciones APK (Capacitor/Cordova)
-        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
-            // Capacitor
-            window.Capacitor.Plugins.App.exitApp();
-        } else if (window.cordova && window.cordova.plugins && window.cordova.plugins.exitApp) {
-            // Cordova
-            window.cordova.plugins.exitApp();
-        } else if (window.navigator && window.navigator.app && window.navigator.app.exitApp) {
-            // PhoneGap
-            window.navigator.app.exitApp();
+    showExitModal();
+}
+
+// Mostrar modal personalizado para salir
+function showExitModal() {
+    const modal = document.createElement('div');
+    modal.className = 'exit-modal-overlay';
+    modal.innerHTML = `
+        <div class="exit-modal">
+            <div class="exit-modal-header">
+                <h3>🚪 Salir de la aplicación</h3>
+            </div>
+            <div class="exit-modal-body">
+                <p>¿Estás seguro de que quieres salir de Mundo Letras?</p>
+            </div>
+            <div class="exit-modal-footer">
+                <button class="exit-btn-cancel" onclick="closeExitModal()">
+                    ❌ Cancelar
+                </button>
+                <button class="exit-btn-confirm" onclick="confirmExit()">
+                    ✅ Salir
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Cerrar con ESC
+    document.addEventListener('keydown', handleExitModalKeydown);
+}
+
+// Cerrar modal de salida
+function closeExitModal() {
+    const modal = document.querySelector('.exit-modal-overlay');
+    if (modal) {
+        document.body.removeChild(modal);
+        document.removeEventListener('keydown', handleExitModalKeydown);
+    }
+}
+
+// Confirmar salida
+function confirmExit() {
+    closeExitModal();
+    
+    // Para aplicaciones APK (Android Studio nativo)
+    if (window.Android && window.Android.exitApp) {
+        // Android Studio nativo con JavaScript Interface
+        window.Android.exitApp();
+    } else if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+        // Capacitor
+        window.Capacitor.Plugins.App.exitApp();
+    } else if (window.cordova && window.cordova.plugins && window.cordova.plugins.exitApp) {
+        // Cordova
+        window.cordova.plugins.exitApp();
+    } else if (window.navigator && window.navigator.app && window.navigator.app.exitApp) {
+        // PhoneGap
+        window.navigator.app.exitApp();
+    } else {
+        // Fallback para navegador web - cerrar ventana
+        if (window.close) {
+            window.close();
         } else {
-            // Fallback para navegador web - cerrar ventana
-            if (window.close) {
-                window.close();
-            } else {
-                // Si no se puede cerrar la ventana, mostrar mensaje
-                alert('No se puede cerrar la aplicación desde el navegador. Usa el botón atrás del dispositivo.');
-            }
+            // Si no se puede cerrar la ventana, mostrar mensaje
+            alert('No se puede cerrar la aplicación desde el navegador. Usa el botón atrás del dispositivo.');
         }
+    }
+}
+
+// Manejador de teclado para el modal de salida
+function handleExitModalKeydown(event) {
+    if (event.key === 'Escape') {
+        closeExitModal();
     }
 }
 
