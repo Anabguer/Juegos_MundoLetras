@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Mundo Letras</string>
-    <string name="title_activity_main">Mundo Letras</string>
-    <string name="package_name">com.colisan.mundoletras</string>
-    <string name="custom_url_scheme">com.colisan.mundoletras</string>
-</resources>

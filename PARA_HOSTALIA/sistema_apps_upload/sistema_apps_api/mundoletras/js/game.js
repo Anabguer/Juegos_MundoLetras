@@ -71,11 +71,9 @@ function startLevelTimer(timerSec) {
                 gameState.levelExpired = true;
                 showMessage('¡Tiempo agotado! Debes repetir el nivel', 'error');
                 // TODO: Implementar lógica para repetir nivel
-        }
-    }, 1000);
-}
-
-} else {
+            }
+        }, 1000);
+    } else {
         // Cronómetro informativo (cuenta hacia arriba)
         gameState.levelTimerInterval = setInterval(() => {
             gameState.levelTimer++;
