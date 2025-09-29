@@ -1,5 +1,8 @@
 ﻿// Inicializar juego
 async function initGame() {
+    // Inicializar eventos de arrastre
+    initDragEvents();
+    
     // Cargar progreso según tipo de usuario
     if (gameState.currentUser && gameState.currentUser.isGuest) {
         // Invitado: cargar de localStorage
@@ -307,6 +310,9 @@ function generateGrid() {
         cell.textContent = letter;
         cell.dataset.index = index;
         cell.onclick = () => selectCell(index);
+        
+        // Añadir eventos de arrastre para móvil y desktop
+        addDragEvents(cell, index);
         
         gridContainer.appendChild(cell);
     });
@@ -640,6 +646,128 @@ function fillEmptyCells() {
 }
 
 // Seleccionar celda
+// Variables globales para el arrastre
+let isDragging = false;
+let dragStartIndex = null;
+let lastHoveredIndex = null;
+
+// Añadir eventos de arrastre a una celda
+function addDragEvents(cell, index) {
+    // Eventos de mouse (desktop)
+    cell.addEventListener('mousedown', (e) => startDrag(e, index));
+    cell.addEventListener('mouseenter', (e) => handleDrag(e, index));
+    cell.addEventListener('mouseup', (e) => endDrag(e, index));
+    
+    // Eventos de touch (móvil)
+    cell.addEventListener('touchstart', (e) => startDrag(e, index), { passive: false });
+    cell.addEventListener('touchmove', (e) => handleTouchMove(e), { passive: false });
+    cell.addEventListener('touchend', (e) => endDrag(e, index), { passive: false });
+    
+    // Prevenir el menú contextual en móvil
+    cell.addEventListener('contextmenu', (e) => e.preventDefault());
+}
+
+// Iniciar arrastre
+function startDrag(e, index) {
+    e.preventDefault();
+    isDragging = true;
+    dragStartIndex = index;
+    lastHoveredIndex = index;
+    
+    // Seleccionar la celda inicial
+    selectCell(index);
+    
+    // Añadir clase de arrastre al body para CSS
+    document.body.classList.add('dragging');
+}
+
+// Manejar arrastre
+function handleDrag(e, index) {
+    if (!isDragging || dragStartIndex === null) return;
+    
+    e.preventDefault();
+    
+    // Solo procesar si es una celda diferente
+    if (index !== lastHoveredIndex) {
+        lastHoveredIndex = index;
+        
+        // Verificar si la selección es válida (línea recta)
+        const currentSelection = [...gameState.selectedCells];
+        const newSelection = [...currentSelection, index];
+        
+        if (isValidSelection(newSelection)) {
+            // Añadir celda a la selección solo si no está ya seleccionada
+            if (!gameState.selectedCells.includes(index)) {
+                gameState.selectedCells.push(index);
+                updateCellSelection();
+            }
+        } else {
+            // Si la nueva selección no es válida, mantener solo la celda actual
+            gameState.selectedCells = [index];
+            updateCellSelection();
+        }
+    }
+}
+
+// Manejar movimiento de touch
+function handleTouchMove(e) {
+    if (!isDragging) return;
+    
+    e.preventDefault();
+    
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (element && element.classList.contains('grid-cell')) {
+        const index = parseInt(element.dataset.index);
+        handleDrag(e, index);
+    }
+}
+
+// Finalizar arrastre
+function endDrag(e, index) {
+    if (!isDragging) return;
+    
+    e.preventDefault();
+    isDragging = false;
+    dragStartIndex = null;
+    lastHoveredIndex = null;
+    
+    // Remover clase de arrastre
+    document.body.classList.remove('dragging');
+    
+    // Verificar si se formó una palabra válida
+    if (gameState.selectedCells.length >= 2 && isValidWordSelection()) {
+        checkForWord();
+    }
+    // NO limpiar automáticamente - dejar que el usuario controle la selección
+}
+
+
+// Añadir eventos globales para el arrastre
+function initDragEvents() {
+    // Eventos globales de mouse
+    document.addEventListener('mouseup', (e) => {
+        if (isDragging) {
+            endDrag(e, null);
+        }
+    });
+    
+    // Eventos globales de touch
+    document.addEventListener('touchend', (e) => {
+        if (isDragging) {
+            endDrag(e, null);
+        }
+    });
+    
+    // Prevenir scroll durante el arrastre en móvil
+    document.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+}
+
 function selectCell(index) {
     const cell = document.querySelector(`[data-index="${index}"]`);
     
@@ -678,9 +806,12 @@ function selectCell(index) {
     updateCellSelection();
     
     // Solo verificar palabras si tenemos al menos 2 celdas seleccionadas
-    // Y solo si la selección forma una lí­nea recta válida
+    // Y solo si la selección forma una línea recta válida
     if (gameState.selectedCells.length >= 2 && isValidWordSelection()) {
         checkForWord();
+    } else if (gameState.selectedCells.length >= 2) {
+        // Si hay 2 o más celdas pero no forman línea recta, mostrar mensaje de error
+        showMessage('Las letras deben estar en línea recta', 'error');
     }
 }
 

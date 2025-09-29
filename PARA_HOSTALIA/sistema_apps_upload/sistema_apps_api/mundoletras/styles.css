@@ -1893,4 +1893,74 @@
         font-size: 16px; /* Evitar zoom en iOS */
     }
 }
+
+/* Estilos para selección por arrastre */
+.dragging {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.dragging .grid-cell {
+    cursor: grabbing;
+    transition: all 0.1s ease;
+}
+
+.grid-cell {
+    cursor: grab;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.grid-cell:hover {
+    transform: scale(1.02);
+}
+
+.grid-cell.selected {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1f2937;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+    transform: scale(1.05);
+}
+
+.grid-cell.selected::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #fbbf24, #f59e0b, #d97706);
+    border-radius: inherit;
+    z-index: -1;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}
+
+/* Mejorar la experiencia táctil */
+.grid-cell:active {
+    transform: scale(0.98);
+}
+
+/* Prevenir selección de texto durante el arrastre */
+.dragging * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
     

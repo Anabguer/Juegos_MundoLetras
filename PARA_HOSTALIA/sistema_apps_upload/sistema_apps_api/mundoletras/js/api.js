@@ -53,6 +53,10 @@ function showLogin() {
                     <a href="#" onclick="showForgotPassword()" style="color: #fbbf24; text-decoration: none; font-size: 0.9rem;">
                         🔑 ¿He olvidado la contraseña?
                     </a>
+                    <br>
+                    <a href="#" onclick="clearSavedCredentials()" style="color: #ef4444; text-decoration: none; font-size: 0.8rem; margin-top: 0.5rem; display: inline-block;">
+                        🗑️ Borrar credenciales guardadas
+                    </a>
                 </div>
             </div>
             
@@ -87,6 +91,11 @@ function showLogin() {
             ⬅️ Volver
         </button>
     `;
+    
+    // Cargar credenciales guardadas después de crear el HTML
+    setTimeout(() => {
+        loadSavedCredentials();
+    }, 100);
 }
 
 function showForgotPassword() {
@@ -320,6 +329,9 @@ async function doLogin() {
                 key: data.data.user.usuario_aplicacion_key,
                 ...data.data.user
             };
+
+            // Siempre guardar las credenciales del usuario
+            saveUserCredentials(email, password);
 
             showMessage('¡Bienvenido de nuevo! Iniciando juego...', 'success');
             setTimeout(async () => {
@@ -923,6 +935,99 @@ function updateRankingControls(isFullRanking = false) {
                 <button class="ranking-btn" onclick="scrollToUserPosition()">Mi Posición</button>
             `;
         }
+    }
+}
+
+// Guardar credenciales del usuario
+function saveUserCredentials(email, password) {
+    console.log('💾 Guardando credenciales del usuario...');
+    const credentials = {
+        email: email,
+        password: password,
+        timestamp: Date.now()
+    };
+    localStorage.setItem('mundo_letras_user_credentials', JSON.stringify(credentials));
+    console.log('✅ Credenciales guardadas:', credentials);
+}
+
+// Cargar credenciales del usuario
+function loadUserCredentials() {
+    try {
+        console.log('🔍 Buscando credenciales en localStorage...');
+        const saved = localStorage.getItem('mundo_letras_user_credentials');
+        console.log('📦 Datos encontrados en localStorage:', saved);
+        
+        if (saved) {
+            const credentials = JSON.parse(saved);
+            console.log('📋 Credenciales parseadas:', credentials);
+            
+            // Verificar que los datos no sean muy antiguos (máximo 30 días)
+            const daysSinceSave = (Date.now() - credentials.timestamp) / (1000 * 60 * 60 * 24);
+            console.log('⏰ Días desde el guardado:', daysSinceSave);
+            
+            if (daysSinceSave > 30) {
+                console.log('⏰ Credenciales expiradas, limpiando...');
+                clearUserCredentials();
+                return null;
+            }
+            
+            console.log('✅ Credenciales válidas encontradas');
+            return credentials;
+        } else {
+            console.log('❌ No hay datos guardados en localStorage');
+        }
+    } catch (error) {
+        console.log('❌ Error al cargar credenciales:', error);
+        clearUserCredentials();
+    }
+    return null;
+}
+
+// Limpiar credenciales del usuario
+function clearUserCredentials() {
+    localStorage.removeItem('mundo_letras_user_credentials');
+}
+
+// Borrar credenciales guardadas
+function clearSavedCredentials() {
+    // Borrar credenciales directamente sin confirmación
+    clearUserCredentials();
+    
+    showMessage('✅ Credenciales guardadas borradas', 'success');
+    
+    // Limpiar los campos del formulario
+    const emailInput = document.getElementById('login-email');
+    const passwordInput = document.getElementById('login-password');
+    
+    if (emailInput) emailInput.value = '';
+    if (passwordInput) passwordInput.value = '';
+}
+
+// Cargar datos guardados al mostrar el login
+function loadSavedCredentials() {
+    console.log('🔍 Intentando cargar credenciales guardadas...');
+    const credentials = loadUserCredentials();
+    console.log('📋 Credenciales encontradas:', credentials);
+    
+    if (credentials) {
+        const emailInput = document.getElementById('login-email');
+        const passwordInput = document.getElementById('login-password');
+        
+        console.log('📝 Elementos encontrados:', {
+            emailInput: !!emailInput,
+            passwordInput: !!passwordInput
+        });
+        
+        if (emailInput) {
+            emailInput.value = credentials.email;
+            console.log('✅ Email cargado:', credentials.email);
+        }
+        if (passwordInput) {
+            passwordInput.value = credentials.password;
+            console.log('✅ Contraseña cargada');
+        }
+    } else {
+        console.log('❌ No se encontraron credenciales guardadas');
     }
 }
 
