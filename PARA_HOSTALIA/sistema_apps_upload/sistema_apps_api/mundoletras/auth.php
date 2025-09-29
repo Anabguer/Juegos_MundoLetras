@@ -4,6 +4,11 @@
  * Maneja login, registro y verificación de usuarios
  */
 
+// Activar reporte de errores para debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // No mostrar errores en pantalla
+ini_set('log_errors', 1);
+
 // Headers CORS
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -20,11 +25,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 try {
     require_once 'config.php';
 } catch (Exception $e) {
+    error_log("Error cargando config.php: " . $e->getMessage());
     http_response_code(500);
     echo json_encode([
         'success' => false,
         'data' => null,
         'message' => 'Error de configuración: ' . $e->getMessage(),
+        'timestamp' => date('Y-m-d H:i:s')
+    ]);
+    exit();
+} catch (Error $e) {
+    error_log("Error fatal cargando config.php: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'data' => null,
+        'message' => 'Error fatal de configuración',
         'timestamp' => date('Y-m-d H:i:s')
     ]);
     exit();
@@ -47,34 +63,54 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 
 $action = $data['action'] ?? '';
 
-switch ($action) {
-    case 'register':
-        handleRegister($data);
-        break;
-    case 'verify':
-        handleVerify($data);
-        break;
-    case 'login':
-        handleLogin($data);
-        break;
-    case 'refresh':
-        handleRefresh($data);
-        break;
-    case 'forgot_password':
-        handleForgotPassword($data);
-        break;
-    case 'reset_password':
-        handleResetPassword($data);
-        break;
-    default:
-        http_response_code(400);
-        echo json_encode([
-            'success' => false,
-            'data' => null,
-            'message' => 'Acción no válida: ' . $action,
-            'timestamp' => date('Y-m-d H:i:s')
-        ]);
-        exit();
+try {
+    switch ($action) {
+        case 'register':
+            handleRegister($data);
+            break;
+        case 'verify':
+            handleVerify($data);
+            break;
+        case 'login':
+            handleLogin($data);
+            break;
+        case 'refresh':
+            handleRefresh($data);
+            break;
+        case 'forgot_password':
+            handleForgotPassword($data);
+            break;
+        case 'reset_password':
+            handleResetPassword($data);
+            break;
+        default:
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'data' => null,
+                'message' => 'Acción no válida: ' . $action,
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+            exit();
+    }
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'data' => null,
+        'message' => 'Error interno del servidor',
+        'timestamp' => date('Y-m-d H:i:s')
+    ]);
+    exit();
+} catch (Error $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'data' => null,
+        'message' => 'Error fatal del servidor',
+        'timestamp' => date('Y-m-d H:i:s')
+    ]);
+    exit();
 }
 
 /**
@@ -524,11 +560,8 @@ function handleForgotPassword($input) {
         try {
             $emailSent = Utils::sendPasswordResetEmail($email, $user['nombre'], $verificationCode);
         } catch (Exception $e) {
-            error_log("Error enviando email de reset: " . $e->getMessage());
+            // Email no es crítico
         }
-        
-        // Log del código para debugging
-        error_log("Código de reset para $email: $verificationCode");
         
         http_response_code(200);
         echo json_encode([

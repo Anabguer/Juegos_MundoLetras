@@ -77,6 +77,11 @@ async function initGame() {
     setTimeout(() => {
         applyVisualMechanics();
     }, 200);
+    
+    // Iniciar música de fondo si el sonido está habilitado
+    if (gameState.soundEnabled) {
+        startBackgroundMusic();
+    }
 }
 
 // Generar siguiente nivel

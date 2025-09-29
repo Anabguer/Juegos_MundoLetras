@@ -22,10 +22,10 @@ function showLogin() {
         <div class="tabs-container">
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('login')" id="tab-login">
-                    🔑 Iniciar Sesión
+                    Iniciar Sesión
                 </button>
                 <button class="tab-btn" onclick="switchTab('register')" id="tab-register">
-                    📝 Registro
+                    Registro
                 </button>
             </div>
         </div>
@@ -45,17 +45,17 @@ function showLogin() {
                     </div>
                 </div>
                 
-                <button class="btn btn-primary" onclick="doLogin()">
-                    📝 Iniciar Sesión
+                <button class="btn btn-primary" onclick="doLogin()" style="font-size: 1rem; padding: 1rem 1.5rem; width: auto; max-width: 280px; background: linear-gradient(145deg, #4ade80, #22c55e); border-radius: 20px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">
+                    ¡Empezar a Jugar!
                 </button>
                 
                 <div style="text-align: center; margin-top: 1rem;">
-                    <a href="#" onclick="showForgotPassword()" style="color: #fbbf24; text-decoration: none; font-size: 0.9rem;">
-                        🔑 ¿He olvidado la contraseña?
+                    <a href="#" onclick="showForgotPassword()" style="color: #fbbf24; text-decoration: none; font-size: 1rem;">
+                        ¿He olvidado la contraseña?
                     </a>
                     <br>
-                    <a href="#" onclick="clearSavedCredentials()" style="color: #ef4444; text-decoration: none; font-size: 0.8rem; margin-top: 0.5rem; display: inline-block;">
-                        🗑️ Borrar credenciales guardadas
+                    <a href="#" onclick="clearSavedCredentials()" style="color: #ef4444; text-decoration: none; font-size: 1rem; margin-top: 0.5rem; display: inline-block;">
+                        Borrar credenciales guardadas
                     </a>
                 </div>
             </div>
@@ -81,14 +81,14 @@ function showLogin() {
                     </div>
                 </div>
                 
-                <button class="btn btn-primary" onclick="doRegister()">
-                    ✅ Crear Cuenta
+                <button class="btn btn-primary" onclick="doRegister()" style="font-size: 1rem; padding: 1rem 1.5rem; width: auto; max-width: 280px; background: linear-gradient(145deg, #a78bfa, #8b5cf6); border-radius: 20px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">
+                    ¡Crear mi Cuenta!
                 </button>
             </div>
         </div>
         
-        <button class="btn btn-secondary" onclick="backToMainMenu()">
-            ⬅️ Volver
+        <button class="btn btn-secondary" onclick="backToMainMenu()" style="font-size: 0.9rem; padding: 0.8rem 1.2rem; width: auto; max-width: 220px; background: linear-gradient(145deg, #9ca3af, #6b7280); border-radius: 18px; box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 500; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">
+            Regresar al Inicio
         </button>
     `;
     
@@ -112,7 +112,7 @@ function showForgotPassword() {
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <h3>🔑 Recuperar Contraseña</h3>
+                <h3>Recuperar Contraseña</h3>
                 <button class="modal-close" onclick="closeForgotPasswordModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -194,7 +194,7 @@ function showPasswordResetForm(email) {
     const loginContent = document.getElementById('login-content');
     loginContent.innerHTML = `
         <div style="text-align: center; margin-bottom: 1.5rem;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🔑</div>
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔐</div>
             <p style="margin-bottom: 0.5rem;">Código enviado a:</p>
             <p style="font-weight: bold; color: #fbbf24;">${email}</p>
         </div>
@@ -215,12 +215,12 @@ function showPasswordResetForm(email) {
             <input type="password" id="confirm-password" placeholder="Confirmar contraseña">
         </div>
         
-        <button class="btn btn-primary" onclick="doPasswordReset('${email}')">
-            🔄 Cambiar Contraseña
+        <button class="btn btn-primary" onclick="doPasswordReset('${email}')" style="font-size: 1rem; padding: 0.8rem 1.2rem; width: auto; max-width: 250px; background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3); border: 2px solid #fbbf24;">
+            ¡Restablecer Contraseña!
         </button>
         
-        <button class="btn btn-secondary" onclick="backToMainMenu()">
-            ⬅️ Volver
+        <button class="btn btn-secondary" onclick="backToMainMenu()" style="font-size: 0.9rem; padding: 0.7rem 1rem; width: auto; max-width: 200px; background: linear-gradient(135deg, #6b7280, #4b5563); box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3); border: 2px solid #9ca3af;">
+            Regresar al Inicio
         </button>
     `;
 }
@@ -262,7 +262,6 @@ async function doPasswordReset(email) {
         const data = await response.json();
         
         if (data.success) {
-            showMessage('Contraseña cambiada exitosamente. Inicia sesión con tu nueva contraseña.', 'success');
             setTimeout(() => {
                 backToMainMenu();
             }, 2000);
@@ -289,12 +288,12 @@ function showVerification(email, password) {
                    style="font-size: 18px; text-align: center; letter-spacing: 0.2em;">
         </div>
         
-        <button class="btn btn-primary" onclick="doVerify('${email}', '${password}')">
-            🔍 Verificar Código
+        <button class="btn btn-primary" onclick="doVerify('${email}', '${password}')" style="font-size: 1rem; padding: 0.8rem 1.2rem; width: auto; max-width: 250px; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); border: 2px solid #34d399;">
+            ¡Verificar y Jugar!
         </button>
         
-        <button class="btn btn-secondary" onclick="backToMainMenu()">
-            ⬅️ Volver
+        <button class="btn btn-secondary" onclick="backToMainMenu()" style="font-size: 0.9rem; padding: 0.7rem 1rem; width: auto; max-width: 200px; background: linear-gradient(135deg, #6b7280, #4b5563); box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3); border: 2px solid #9ca3af;">
+            Regresar al Inicio
         </button>
     `;
 }
@@ -308,7 +307,6 @@ async function doLogin() {
         return;
     }
     
-    showMessage('Iniciando sesión...', 'success');
     
     try {
         const response = await fetch(CONFIG.API_BASE_URL + 'auth.php', {
@@ -333,7 +331,6 @@ async function doLogin() {
             // Siempre guardar las credenciales del usuario
             saveUserCredentials(email, password);
 
-            showMessage('¡Bienvenido de nuevo! Iniciando juego...', 'success');
             setTimeout(async () => {
                 await initGame();
                 showScreen('game-screen');
@@ -465,7 +462,6 @@ async function doVerify(email, password) {
         const data = await response.json();
         
         if (data.success) {
-            showMessage('¡Cuenta verificada! Iniciando sesión...', 'success');
             
             setTimeout(async () => {
                 const loginResponse = await fetch(CONFIG.API_BASE_URL + 'auth.php', {
@@ -661,7 +657,7 @@ function displayRanking(ranking, userContext) {
         existingRankingItems.forEach(item => item.remove());
     } else {
         // Para usuarios registrados, limpiar todo
-        list.innerHTML = '';
+    list.innerHTML = '';
     }
     
     if (!ranking || ranking.length === 0) {
@@ -671,7 +667,7 @@ function displayRanking(ranking, userContext) {
                 list.innerHTML = '<div class="ranking-error">No hay datos de ranking disponibles</div>';
             }
         } else {
-            list.innerHTML = '<div class="ranking-error">No hay datos de ranking disponibles</div>';
+        list.innerHTML = '<div class="ranking-error">No hay datos de ranking disponibles</div>';
         }
         return;
     }
@@ -738,12 +734,12 @@ async function loadFullRanking() {
                 updateRankingControlsForGuest();
             } else {
                 // Para usuarios registrados, usar la lógica normal
-                const userContextForDisplay = {
-                    usuario_aplicacion_key: gameState.currentUser.usuario_aplicacion_key
-                };
-                displayRanking(data.data, userContextForDisplay);
-                // Actualizar controles para mostrar botón "Actualizar"
-                updateRankingControls(true);
+            const userContextForDisplay = {
+                usuario_aplicacion_key: gameState.currentUser.usuario_aplicacion_key
+            };
+            displayRanking(data.data, userContextForDisplay);
+            // Actualizar controles para mostrar botón "Actualizar"
+            updateRankingControls(true);
             }
         } else {
             throw new Error(data.message);
@@ -858,11 +854,11 @@ function showExitModal() {
                 <p>¿Estás seguro de que quieres salir de Mundo Letras?</p>
             </div>
             <div class="exit-modal-footer">
-                <button class="exit-btn-cancel" onclick="closeExitModal()">
-                    ❌ Cancelar
+                <button class="exit-btn-cancel" onclick="closeExitModal()" style="font-size: 0.9rem; padding: 0.7rem 1rem; width: auto; max-width: 180px; background: linear-gradient(135deg, #6b7280, #4b5563); box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3); border: 2px solid #9ca3af;">
+                    Seguir Jugando
                 </button>
-                <button class="exit-btn-confirm" onclick="confirmExit()">
-                    ✅ Salir
+                <button class="exit-btn-confirm" onclick="confirmExit()" style="font-size: 0.9rem; padding: 0.7rem 1rem; width: auto; max-width: 180px; background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); border: 2px solid #f87171;">
+                    Salir del Juego
                 </button>
             </div>
         </div>
@@ -940,44 +936,33 @@ function updateRankingControls(isFullRanking = false) {
 
 // Guardar credenciales del usuario
 function saveUserCredentials(email, password) {
-    console.log('💾 Guardando credenciales del usuario...');
     const credentials = {
         email: email,
         password: password,
         timestamp: Date.now()
     };
     localStorage.setItem('mundo_letras_user_credentials', JSON.stringify(credentials));
-    console.log('✅ Credenciales guardadas:', credentials);
 }
 
 // Cargar credenciales del usuario
 function loadUserCredentials() {
     try {
-        console.log('🔍 Buscando credenciales en localStorage...');
         const saved = localStorage.getItem('mundo_letras_user_credentials');
-        console.log('📦 Datos encontrados en localStorage:', saved);
         
         if (saved) {
             const credentials = JSON.parse(saved);
-            console.log('📋 Credenciales parseadas:', credentials);
             
             // Verificar que los datos no sean muy antiguos (máximo 30 días)
             const daysSinceSave = (Date.now() - credentials.timestamp) / (1000 * 60 * 60 * 24);
-            console.log('⏰ Días desde el guardado:', daysSinceSave);
             
             if (daysSinceSave > 30) {
-                console.log('⏰ Credenciales expiradas, limpiando...');
                 clearUserCredentials();
                 return null;
             }
             
-            console.log('✅ Credenciales válidas encontradas');
             return credentials;
-        } else {
-            console.log('❌ No hay datos guardados en localStorage');
         }
     } catch (error) {
-        console.log('❌ Error al cargar credenciales:', error);
         clearUserCredentials();
     }
     return null;
@@ -993,7 +978,6 @@ function clearSavedCredentials() {
     // Borrar credenciales directamente sin confirmación
     clearUserCredentials();
     
-    showMessage('✅ Credenciales guardadas borradas', 'success');
     
     // Limpiar los campos del formulario
     const emailInput = document.getElementById('login-email');
@@ -1005,30 +989,100 @@ function clearSavedCredentials() {
 
 // Cargar datos guardados al mostrar el login
 function loadSavedCredentials() {
-    console.log('🔍 Intentando cargar credenciales guardadas...');
     const credentials = loadUserCredentials();
-    console.log('📋 Credenciales encontradas:', credentials);
     
     if (credentials) {
         const emailInput = document.getElementById('login-email');
         const passwordInput = document.getElementById('login-password');
         
-        console.log('📝 Elementos encontrados:', {
-            emailInput: !!emailInput,
-            passwordInput: !!passwordInput
-        });
-        
         if (emailInput) {
             emailInput.value = credentials.email;
-            console.log('✅ Email cargado:', credentials.email);
         }
         if (passwordInput) {
             passwordInput.value = credentials.password;
-            console.log('✅ Contraseña cargada');
         }
-    } else {
-        console.log('❌ No se encontraron credenciales guardadas');
     }
+}
+
+// Función inteligente para jugar
+function smartPlay() {
+    // Verificar si hay un usuario logueado en gameState
+    if (gameState.currentUser && !gameState.currentUser.isGuest) {
+        // Usuario logueado - ir directamente al juego
+        setTimeout(async () => {
+            try {
+                await initGame();
+                showScreen('game-screen');
+            } catch (error) {
+                // Error silencioso - jugar como invitado
+                startAsGuest();
+            }
+        }, 100);
+    } else {
+        // Verificar si hay credenciales guardadas
+        const credentials = loadUserCredentials();
+        
+        if (credentials && credentials.email && credentials.password) {
+            // Hay credenciales guardadas - intentar login automático
+            doLoginWithCredentials(credentials.email, credentials.password);
+        } else {
+            // No hay credenciales - jugar como invitado
+            startAsGuest();
+        }
+    }
+}
+
+// Función para hacer login automático con credenciales guardadas
+function doLoginWithCredentials(email, password) {
+    // Hacer la petición de login
+    fetch(CONFIG.API_BASE_URL + 'auth.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            action: 'login',
+            email: email,
+            password: password
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Login exitoso
+            // Establecer el usuario en gameState
+            gameState.currentUser = {
+                id: data.data.user.usuario_aplicacion_id,
+                usuario_aplicacion_key: data.data.user.usuario_aplicacion_key,
+                email: data.data.user.email,
+                nombre: data.data.user.nombre,
+                isGuest: false
+            };
+            
+            // Ir directamente al juego
+            setTimeout(async () => {
+                try {
+                    await initGame();
+                    showScreen('game-screen');
+                } catch (error) {
+                    // Error silencioso - jugar como invitado
+                    startAsGuest();
+                }
+            }, 1000);
+            
+        } else {
+            // Login fallido - limpiar credenciales y jugar como invitado
+            // Limpiar credenciales inválidas
+            clearUserCredentials();
+            
+            // Jugar como invitado
+            startAsGuest();
+        }
+    })
+    .catch(error => {
+        // En caso de error, jugar como invitado
+        startAsGuest();
+    });
 }
 
 

@@ -120,10 +120,10 @@ function updateMechanicsDisplay() {
                     badge.textContent = '⏱️ Timer Dinámico';
                     break;
                 case 'none':
-                    badge.textContent = '📝 Sin Mecánicas';
+                    badge.textContent = 'Sin Mecánicas';
                     break;
                 default:
-                    badge.textContent = `🔄 ${mechanic}`;
+                    badge.textContent = `${mechanic}`;
             }
             
             mechanicsDisplay.appendChild(badge);

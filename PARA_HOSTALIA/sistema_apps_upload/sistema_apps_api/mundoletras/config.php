@@ -135,7 +135,7 @@ class Utils {
      * Hash de contraseña
      */
     public static function hashPassword($password) {
-        return password_hash($password . PASSWORD_SALT, PASSWORD_HASH_DEFAULT);
+        return password_hash($password . PASSWORD_SALT, PASSWORD_DEFAULT);
     }
     
     /**

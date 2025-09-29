@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Fuentes - Mundo Letras</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&family=Nunito:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=JetBrains+Mono:wght@300;400;500;700&family=Fira+Code:wght@300;400;500;700&family=Source+Code+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .font-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .font-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #fbbf24;
+            border-bottom: 2px solid #fbbf24;
+            padding-bottom: 0.5rem;
+        }
+        
+        .font-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .example {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .example-title {
+            font-size: 0.9rem;
+            color: #e0e7ff;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .example-text {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Ejemplos de diferentes tipos de texto */
+        .text-examples {
+            margin-top: 1rem;
+        }
+        
+        .text-example {
+            margin-bottom: 0.8rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .text-example-title {
+            font-size: 0.8rem;
+            color: #e0e7ff;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .text-example-content {
+            font-size: 0.9rem;
+        }
+        
+        /* Simulación de elementos de la app */
+        .app-simulation {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .sim-button {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: white;
+            font-weight: 600;
+            margin: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sim-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 8px 12px;
+            color: white;
+            margin: 4px;
+            width: 100%;
+        }
+        
+        .sim-label {
+            display: block;
+            font-size: 0.8rem;
+            color: #e0e7ff;
+            margin-bottom: 0.3rem;
+        }
+        
+        /* Fuentes Sans-Serif Modernas */
+        .inter { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .roboto { font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .open-sans { font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .nunito { font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        
+        /* Fuentes Display */
+        .poppins { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .montserrat { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .lato { font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        
+        /* Fuentes Monospace */
+        .jetbrains { font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace; }
+        .fira-code { font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', monospace; }
+        .source-code { font-family: 'Source Code Pro', 'Consolas', monospace; }
+        
+        /* Fuentes Sistema */
+        .system { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif; }
+        
+        /* Tamaños de ejemplo */
+        .size-large { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+        .size-medium { font-size: clamp(1rem, 3vw, 1.5rem); }
+        .size-normal { font-size: clamp(0.875rem, 2.5vw, 1.125rem); }
+        .size-small { font-size: clamp(0.75rem, 2vw, 0.875rem); }
+        
+        /* Grid de letras simulado */
+        .letter-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            margin-top: 1rem;
+        }
+        
+        .letter-cell {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .letter-cell:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .button-example {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+        }
+        
+        .button-example:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .current-font {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+        
+        @media (max-width: 768px) {
+            .font-examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .current-font {
+                position: static;
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="current-font" id="currentFont">
+        Fuente actual: Sistema
+    </div>
+    
+    <div class="container">
+        <h1>🎨 Prueba de Fuentes - Mundo Letras</h1>
+        
+        <!-- Fuentes Sans-Serif Modernas -->
+        <div class="font-section">
+            <div class="font-name">Sans-Serif Modernas</div>
+            <div class="font-examples">
+                <div class="example inter">
+                    <div class="example-title">Inter</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    
+                    <div class="text-examples">
+                        <div class="text-example">
+                            <div class="text-example-title">Títulos y encabezados</div>
+                            <div class="text-example-content">🎮 ¡Bienvenido a Mundo Letras!</div>
+                        </div>
+                        <div class="text-example">
+                            <div class="text-example-title">Botones y acciones</div>
+                            <div class="text-example-content">Jugar como Invitado | Identificarse | Salir</div>
+                        </div>
+                        <div class="text-example">
+                            <div class="text-example-title">Mensajes del sistema</div>
+                            <div class="text-example-content">✅ Palabra encontrada: MAR | ⏰ Tiempo restante: 2:30</div>
+                        </div>
+                        <div class="text-example">
+                            <div class="text-example-title">Formularios</div>
+                            <div class="text-example-content">Email: usuario@ejemplo.com | Contraseña: ••••••••</div>
+                        </div>
+                    </div>
+                    
+                    <div class="app-simulation">
+                        <div class="sim-label">Simulación de elementos de la app:</div>
+                        <button class="sim-button">Jugar</button>
+                        <button class="sim-button">Configuración</button>
+                        <input class="sim-input" placeholder="Buscar palabras..." />
+                    </div>
+                    
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('inter')">Usar Inter</button>
+                </div>
+                
+                <div class="example roboto">
+                    <div class="example-title">Roboto</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    
+                    <div class="text-examples">
+                        <div class="text-example">
+                            <div class="text-example-title">Títulos y encabezados</div>
+                            <div class="text-example-content">🎮 ¡Bienvenido a Mundo Letras!</div>
+                        </div>
+                        <div class="text-example">
+                            <div class="text-example-title">Botones y acciones</div>
+                            <div class="text-example-content">Jugar como Invitado | Identificarse | Salir</div>
+                        </div>
+                        <div class="text-example">
+                            <div class="text-example-title">Mensajes del sistema</div>
+                            <div class="text-example-content">✅ Palabra encontrada: MAR | ⏰ Tiempo restante: 2:30</div>
+                        </div>
+                        <div class="text-example">
+                            <div class="text-example-title">Formularios</div>
+                            <div class="text-example-content">Email: usuario@ejemplo.com | Contraseña: ••••••••</div>
+                        </div>
+                    </div>
+                    
+                    <div class="app-simulation">
+                        <div class="sim-label">Simulación de elementos de la app:</div>
+                        <button class="sim-button">Jugar</button>
+                        <button class="sim-button">Configuración</button>
+                        <input class="sim-input" placeholder="Buscar palabras..." />
+                    </div>
+                    
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('roboto')">Usar Roboto</button>
+                </div>
+                
+                <div class="example open-sans">
+                    <div class="example-title">Open Sans</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('open-sans')">Usar Open Sans</button>
+                </div>
+                
+                <div class="example nunito">
+                    <div class="example-title">Nunito</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('nunito')">Usar Nunito</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fuentes Display -->
+        <div class="font-section">
+            <div class="font-name">Fuentes Display</div>
+            <div class="font-examples">
+                <div class="example poppins">
+                    <div class="example-title">Poppins</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('poppins')">Usar Poppins</button>
+                </div>
+                
+                <div class="example montserrat">
+                    <div class="example-title">Montserrat</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('montserrat')">Usar Montserrat</button>
+                </div>
+                
+                <div class="example lato">
+                    <div class="example-title">Lato</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('lato')">Usar Lato</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fuentes Monospace -->
+        <div class="font-section">
+            <div class="font-name">Fuentes Monospace (Para el Grid)</div>
+            <div class="font-examples">
+                <div class="example jetbrains">
+                    <div class="example-title">JetBrains Mono</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('jetbrains')">Usar JetBrains Mono</button>
+                </div>
+                
+                <div class="example fira-code">
+                    <div class="example-title">Fira Code</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('fira-code')">Usar Fira Code</button>
+                </div>
+                
+                <div class="example source-code">
+                    <div class="example-title">Source Code Pro</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('source-code')">Usar Source Code Pro</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fuente Sistema -->
+        <div class="font-section">
+            <div class="font-name">Fuente Sistema (Actual)</div>
+            <div class="font-examples">
+                <div class="example system">
+                    <div class="example-title">Sistema</div>
+                    <div class="example-text size-large">Mundo Letras</div>
+                    <div class="example-text size-medium">Juego de sopa de letras</div>
+                    <div class="example-text size-normal">Encuentra las palabras ocultas en la cuadrícula</div>
+                    <div class="example-text size-small">Nivel 1 - Puntuación: 1,250</div>
+                    <div class="letter-grid">
+                        <div class="letter-cell">M</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">R</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">O</div>
+                        <div class="letter-cell">L</div>
+                        <div class="letter-cell">U</div>
+                        <div class="letter-cell">N</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">C</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">S</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">A</div>
+                        <div class="letter-cell">G</div>
+                    </div>
+                    <button class="button-example" onclick="setFont('system')">Usar Sistema</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function setFont(fontName) {
+            const fontClasses = {
+                'inter': 'Inter',
+                'roboto': 'Roboto',
+                'open-sans': 'Open Sans',
+                'nunito': 'Nunito',
+                'poppins': 'Poppins',
+                'montserrat': 'Montserrat',
+                'lato': 'Lato',
+                'jetbrains': 'JetBrains Mono',
+                'fira-code': 'Fira Code',
+                'source-code': 'Source Code Pro',
+                'system': 'Sistema'
+            };
+            
+            const fontFamilies = {
+                'inter': "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                'roboto': "'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                'open-sans': "'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                'nunito': "'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                'poppins': "'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                'montserrat': "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                'lato': "'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                'jetbrains': "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
+                'fira-code': "'Fira Code', 'JetBrains Mono', 'Consolas', monospace",
+                'source-code': "'Source Code Pro', 'Consolas', monospace",
+                'system': "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif"
+            };
+            
+            // Cambiar la fuente del body
+            document.body.style.fontFamily = fontFamilies[fontName];
+            
+            // Actualizar el indicador
+            document.getElementById('currentFont').textContent = `Fuente actual: ${fontClasses[fontName]}`;
+            
+            // Guardar la preferencia
+            localStorage.setItem('mundo_letras_font_preference', fontName);
+            
+            // Mostrar mensaje
+            alert(`Fuente cambiada a: ${fontClasses[fontName]}\n\nEsta es una vista previa. Para aplicar la fuente a la aplicación completa, dime cuál prefieres.`);
+        }
+        
+        // Cargar preferencia guardada
+        window.addEventListener('load', function() {
+            const savedFont = localStorage.getItem('mundo_letras_font_preference');
+            if (savedFont) {
+                setFont(savedFont);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -474,6 +474,8 @@ let gameState = {
     revealedCells: [],
     hiddenWords: [],
     soundEnabled: true,
+    backgroundMusic: null,
+    backgroundMusicPlaying: false,
     wordTimers: {},
     dynamicTimer: null,
     dynamicTimerInterval: null,
@@ -530,13 +532,12 @@ function startAsGuest() {
         key: 'guest_' + Date.now()
     };
     
-    showMessage('Bienvenido! Iniciando juego...', 'success');
     setTimeout(async () => {
         try {
             await initGame();
             showScreen('game-screen');
         } catch (error) {
-            showMessage('Error iniciando el juego. Intenta de nuevo.', 'error');
+            // Error silencioso
         }
     }, 1500);
 }
@@ -544,17 +545,20 @@ function startAsGuest() {
 function backToMainMenu() {
     const loginContent = document.getElementById('login-content');
     loginContent.innerHTML = `
-        <button class="btn btn-primary" onclick="startAsGuest()">
-            👤 Jugar como Invitado
+        <button class="btn btn-primary" onclick="smartPlay()" style="font-size: 1.3rem; padding: 0.8rem 2rem; height: 50px; width: auto; max-width: 280px; background: linear-gradient(145deg, #4ade80, #22c55e); border-radius: 25px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 700; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center;">
+            ¡JUGAR!
         </button>
-        <button class="btn btn-secondary" onclick="showLogin()">
-            🔐 Identificarse
+        
+        <button class="btn btn-secondary" onclick="showLogin()" style="font-size: 1rem; padding: 1rem 1.5rem; min-height: 55px; width: auto; max-width: 280px; background: linear-gradient(145deg, #60a5fa, #3b82f6); border-radius: 20px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">
+            Identificarse
         </button>
-        <button class="btn btn-danger" onclick="exitApp()">
-            🚪 Salir
-        </button>
+        
         <button class="btn btn-secondary" onclick="showScreen('test-screen'); testLevel();" style="background: #fbbf24; color: #000; font-weight: bold; display: none;">
-            🧪 PANTALLA DE TEST
+            PANTALLA DE TEST
+        </button>
+        
+        <button class="btn btn-secondary" onclick="window.open('font_test.html', '_blank');" style="background: #8b5cf6; color: #fff; font-weight: bold; display: none;">
+            PRUEBA DE FUENTES
         </button>
     `;
 }
@@ -565,12 +569,16 @@ function backToMenu() {
         logout();
     } else {
         // Si es invitado, volver al menú
+        stopBackgroundMusic();
         restoreLoginContent();
         showScreen('login-screen');
     }
 }
 
 function logout() {
+    // Detener música de fondo
+    stopBackgroundMusic();
+    
     gameState.currentUser = null;
     gameState.currentLevel = 1;
     gameState.score = 0;
@@ -580,7 +588,6 @@ function logout() {
     gameState.selectedCells = [];
     gameState.foundWords = [];
     
-    showMessage('Sesión cerrada. Volviendo al menú...', 'success');
     setTimeout(() => {
         // Restaurar el contenido original del login
         restoreLoginContent();
@@ -593,20 +600,20 @@ function restoreLoginContent() {
     const loginContent = document.getElementById('login-content');
     if (loginContent) {
         loginContent.innerHTML = `
-            <button class="btn btn-primary" onclick="startAsGuest()">
-                 👤 Jugar como Invitado
+            <button class="btn btn-primary" onclick="smartPlay()" style="font-size: 1.3rem; padding: 0.8rem 2rem; height: 50px; width: auto; max-width: 280px; background: linear-gradient(145deg, #4ade80, #22c55e); border-radius: 25px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 700; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center;">
+                ¡JUGAR!
             </button>
             
-            <button class="btn btn-secondary" onclick="showLogin()">
-                🔐 Identificarse
-            </button>
-            
-            <button class="btn btn-danger" onclick="exitApp()">
-                🚪 Salir
+            <button class="btn btn-secondary" onclick="showLogin()" style="font-size: 1rem; padding: 1rem 1.5rem; min-height: 55px; width: auto; max-width: 280px; background: linear-gradient(145deg, #60a5fa, #3b82f6); border-radius: 20px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">
+                Identificarse
             </button>
             
             <button class="btn btn-secondary" onclick="showScreen('test-screen'); testLevel();" style="background: #fbbf24; color: #000; font-weight: bold; display: none;">
-                🧪 PANTALLA DE TEST
+                PANTALLA DE TEST
+            </button>
+            
+            <button class="btn btn-secondary" onclick="window.open('font_test.html', '_blank');" style="background: #8b5cf6; color: #fff; font-weight: bold; display: none;">
+                PRUEBA DE FUENTES
             </button>
         `;
     }
@@ -632,9 +639,11 @@ function toggleSound() {
             soundControl.textContent = '🔊';
             soundControl.classList.remove('muted');
             playSound('toggle');
+            startBackgroundMusic();
         } else {
             soundControl.textContent = '🔇';
             soundControl.classList.add('muted');
+            stopBackgroundMusic();
         }
     }
 }
@@ -708,6 +717,86 @@ function playSound(type) {
         }
     } catch (error) {
     }
+}
+
+// Función para iniciar la música de fondo
+function startBackgroundMusic() {
+    if (!gameState.soundEnabled || gameState.backgroundMusicPlaying) return;
+    
+    try {
+        if (!window.audioContext) {
+            window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        const ctx = window.audioContext;
+        
+        if (ctx.state === 'suspended') {
+            ctx.resume().catch(() => {});
+        }
+        
+        // Crear una melodía suave y relajante
+        const melody = [
+            { freq: 261.63, duration: 0.5 }, // C4
+            { freq: 293.66, duration: 0.5 }, // D4
+            { freq: 329.63, duration: 0.5 }, // E4
+            { freq: 349.23, duration: 0.5 }, // F4
+            { freq: 392.00, duration: 0.5 }, // G4
+            { freq: 440.00, duration: 0.5 }, // A4
+            { freq: 493.88, duration: 0.5 }, // B4
+            { freq: 523.25, duration: 1.0 }, // C5
+            { freq: 493.88, duration: 0.5 }, // B4
+            { freq: 440.00, duration: 0.5 }, // A4
+            { freq: 392.00, duration: 0.5 }, // G4
+            { freq: 349.23, duration: 0.5 }, // F4
+            { freq: 329.63, duration: 0.5 }, // E4
+            { freq: 293.66, duration: 0.5 }, // D4
+            { freq: 261.63, duration: 1.0 }  // C4
+        ];
+        
+        let currentTime = ctx.currentTime;
+        
+        // Crear la melodía principal
+        melody.forEach((note, index) => {
+            const oscillator = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            oscillator.connect(gain);
+            gain.connect(ctx.destination);
+            
+            oscillator.frequency.setValueAtTime(note.freq, currentTime);
+            oscillator.type = 'sine';
+            
+            // Volumen suave
+            gain.gain.setValueAtTime(0.03, currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, currentTime + note.duration);
+            
+            oscillator.start(currentTime);
+            oscillator.stop(currentTime + note.duration);
+            
+            currentTime += note.duration;
+        });
+        
+        // Repetir la melodía cada 8 segundos
+        gameState.backgroundMusic = setInterval(() => {
+            if (gameState.soundEnabled && gameState.backgroundMusicPlaying) {
+                startBackgroundMusic();
+            }
+        }, 8000);
+        
+        gameState.backgroundMusicPlaying = true;
+        
+    } catch (error) {
+        // Error silencioso
+    }
+}
+
+// Función para detener la música de fondo
+function stopBackgroundMusic() {
+    if (gameState.backgroundMusic) {
+        clearInterval(gameState.backgroundMusic);
+        gameState.backgroundMusic = null;
+    }
+    gameState.backgroundMusicPlaying = false;
 }
 
 // Configurar sistema de monedas

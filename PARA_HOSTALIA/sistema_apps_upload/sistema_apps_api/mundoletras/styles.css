@@ -1,4 +1,8 @@
 ﻿
+        :root {
+            --app-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -19,7 +23,7 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-family: var(--app-font-family);
             background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
             color: white;
             height: 100vh;
@@ -57,6 +61,19 @@
             text-align: center;
         }
         
+        /* Contenedor de botones de login */
+        #login-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        /* Estilos específicos para botones fuera de contenedores */
+        .btn + .btn {
+            margin-top: 0.5rem;
+        }
+        
         .logo {
             font-size: 4rem;
             margin-bottom: 1rem;
@@ -75,7 +92,7 @@
         }
         
         .btn {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
@@ -85,11 +102,40 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
+            line-height: 1.2;
             transition: all 0.2s ease;
             text-decoration: none;
             min-height: 44px;
-            margin: 0.5rem;
-            width: calc(100% - 1rem);
+            margin: 0;
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* Botones principales (pantalla de inicio) - emoji y texto en línea */
+        .login-card .btn {
+            flex-direction: row; /* Emoji y texto en la misma línea */
+        }
+        
+        /* Mejorar centrado vertical de emojis en botones */
+        .btn {
+            vertical-align: middle;
+        }
+        
+        /* Centrar perfectamente emojis y texto */
+        .btn * {
+            vertical-align: middle;
+            line-height: 1;
+        }
+        
+        /* Asegurar que los emojis estén bien centrados */
+        .btn::before,
+        .btn::after {
+            vertical-align: middle;
+            line-height: 1;
+        }
+        
+        /* Botones del juego - emoji arriba, texto abajo */
+        .game-controls .btn {
             flex-direction: column; /* Icono arriba, texto abajo */
         }
         
@@ -264,7 +310,7 @@
             
              /* En pantallas más grandes, mostrar texto normal */
             .game-controls .btn {
-                font-size: 0.75rem;
+                font-size: 1rem;
                 padding: 0.4rem 0.6rem;
                 min-width: auto;
                 min-height: auto;
@@ -728,7 +774,7 @@
         }
         
         .ranking-date {
-            font-size: 0.75rem;
+            font-size: 1rem;
             opacity: 0.7;
         }
         
@@ -871,7 +917,7 @@
             }
             
             .game-controls .btn {
-                font-size: 0.75rem;
+                font-size: 1rem;
                 padding: 0.4rem 0.6rem;
                 min-width: auto;
                 min-height: auto;
@@ -886,7 +932,7 @@
             /* General Button */
             .btn {
                 padding: 0.4rem 0.6rem;
-                font-size: 0.75rem;
+                font-size: 1rem;
                 margin: 0;
                 flex-direction: column !important; /* Forzar icono arriba, texto abajo */
             }
@@ -1379,7 +1425,7 @@
         
         .level-controls .btn-sm {
             padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
+            font-size: 1rem;
             min-width: auto;
         }
         
@@ -1407,7 +1453,7 @@
             padding: 0.6rem;
             border: none;
             border-radius: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 1rem;
             background: rgba(255, 255, 255, 0.1);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.2);
