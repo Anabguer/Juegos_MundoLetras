@@ -150,12 +150,12 @@
         
         
         .btn-primary {
-            background-color: #3b82f6;
+            background-color: #fbbf24;
             color: white;
         }
         
         .btn-primary:hover {
-            background-color: #1e40af;
+            background-color: #f59e0b;
             transform: translateY(-1px);
         }
         
