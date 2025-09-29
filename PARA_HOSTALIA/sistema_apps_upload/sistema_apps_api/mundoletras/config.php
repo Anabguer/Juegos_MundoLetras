@@ -218,6 +218,39 @@ class Utils {
     }
     
     /**
+     * Enviar email de recuperación de contraseña
+     */
+    public static function sendPasswordResetEmail($email, $nombre, $codigo) {
+        $subject = "Recuperar contraseña - " . APP_NOMBRE;
+        $message = "
+        <html>
+        <head>
+            <title>Recuperar contraseña</title>
+        </head>
+        <body>
+            <h2>Recuperar contraseña - " . APP_NOMBRE . "</h2>
+            <p>Hola $nombre,</p>
+            <p>Has solicitado recuperar tu contraseña. Tu código de verificación es: <strong>$codigo</strong></p>
+            <p>Este código expira en 15 minutos.</p>
+            <p>Si no solicitaste este cambio, puedes ignorar este email.</p>
+            <br>
+            <p>¡Que disfrutes jugando!</p>
+        </body>
+        </html>
+        ";
+        
+        $headers = [
+            'MIME-Version: 1.0',
+            'Content-type: text/html; charset=UTF-8',
+            'From: ' . FROM_NAME . ' <' . FROM_EMAIL . '>',
+            'Reply-To: ' . FROM_EMAIL,
+            'X-Mailer: PHP/' . phpversion()
+        ];
+        
+        return mail($email, $subject, $message, implode("\r\n", $headers));
+    }
+    
+    /**
      * Validar hash de dispositivo para anti-trampas
      */
     public static function validateDeviceHash($levelId, $score, $timeMs, $seed, $clientHash) {

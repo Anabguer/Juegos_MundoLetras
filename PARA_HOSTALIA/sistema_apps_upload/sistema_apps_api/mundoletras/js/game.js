@@ -548,7 +548,13 @@ function backToMainMenu() {
             👤 Jugar como Invitado
         </button>
         <button class="btn btn-secondary" onclick="showLogin()">
-            👤 Identificarse
+            🔐 Identificarse
+        </button>
+        <button class="btn btn-danger" onclick="exitApp()">
+            🚪 Salir
+        </button>
+        <button class="btn btn-secondary" onclick="showScreen('test-screen'); testLevel();" style="background: #fbbf24; color: #000; font-weight: bold; display: none;">
+            🧪 PANTALLA DE TEST
         </button>
     `;
 }
@@ -559,6 +565,7 @@ function backToMenu() {
         logout();
     } else {
         // Si es invitado, volver al menú
+        restoreLoginContent();
         showScreen('login-screen');
     }
 }
@@ -575,8 +582,34 @@ function logout() {
     
     showMessage('Sesión cerrada. Volviendo al menú...', 'success');
     setTimeout(() => {
+        // Restaurar el contenido original del login
+        restoreLoginContent();
         showScreen('login-screen');
     }, 1500);
+}
+
+// Función para restaurar el contenido original del login
+function restoreLoginContent() {
+    const loginContent = document.getElementById('login-content');
+    if (loginContent) {
+        loginContent.innerHTML = `
+            <button class="btn btn-primary" onclick="startAsGuest()">
+                 👤 Jugar como Invitado
+            </button>
+            
+            <button class="btn btn-secondary" onclick="showLogin()">
+                🔐 Identificarse
+            </button>
+            
+            <button class="btn btn-danger" onclick="exitApp()">
+                🚪 Salir
+            </button>
+            
+            <button class="btn btn-secondary" onclick="showScreen('test-screen'); testLevel();" style="background: #fbbf24; color: #000; font-weight: bold; display: none;">
+                🧪 PANTALLA DE TEST
+            </button>
+        `;
+    }
 }
 
 // Funciones de mensajes

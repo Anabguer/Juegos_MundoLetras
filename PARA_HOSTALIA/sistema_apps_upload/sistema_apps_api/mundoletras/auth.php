@@ -60,6 +60,12 @@ switch ($action) {
     case 'refresh':
         handleRefresh($data);
         break;
+    case 'forgot_password':
+        handleForgotPassword($data);
+        break;
+    case 'reset_password':
+        handleResetPassword($data);
+        break;
     default:
         http_response_code(400);
         echo json_encode([
@@ -450,5 +456,181 @@ function handleRefresh($input) {
         'message' => 'Funcionalidad no implementada aún',
         'timestamp' => date('Y-m-d H:i:s')
     ]);
+}
+
+/**
+ * Manejar olvido de contraseña
+ */
+function handleForgotPassword($input) {
+    global $db;
+    
+    $email = $input['email'] ?? '';
+    
+    if (empty($email)) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Email requerido',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
+    }
+    
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Email no válido',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
+    }
+    
+    // Verificar que el email existe
+    $user = $db->fetchOne(
+        "SELECT usuario_aplicacion_id, email, nombre, nick FROM usuarios_aplicaciones 
+         WHERE email = ? AND app_codigo = 'mundoletras'",
+        [$email]
+    );
+    
+    if (!$user) {
+        http_response_code(404);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Email no encontrado',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
+    }
+    
+    // Generar código de 6 dígitos (igual que en registro)
+    $verificationCode = sprintf('%06d', mt_rand(100000, 999999));
+    $verificationExpiry = date('Y-m-d H:i:s', time() + 900); // 15 minutos
+    
+    // Actualizar código en la base de datos
+    $result = $db->query(
+        "UPDATE usuarios_aplicaciones 
+         SET verification_code = ?, verification_expiry = ? 
+         WHERE email = ? AND app_codigo = 'mundoletras'",
+        [$verificationCode, $verificationExpiry, $email]
+    );
+    
+    if ($result) {
+        // Enviar email de recuperación
+        $emailSent = false;
+        try {
+            $emailSent = Utils::sendPasswordResetEmail($email, $user['nombre'], $verificationCode);
+        } catch (Exception $e) {
+            error_log("Error enviando email de reset: " . $e->getMessage());
+        }
+        
+        // Log del código para debugging
+        error_log("Código de reset para $email: $verificationCode");
+        
+        http_response_code(200);
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'email' => $email,
+                'email_sent' => $emailSent,
+                'message' => $emailSent ? 'Código enviado por email' : 'Código generado (revisa logs)'
+            ],
+            'message' => 'Código de recuperación enviado',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+    } else {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Error generando código de recuperación',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+    }
+}
+
+/**
+ * Manejar cambio de contraseña
+ */
+function handleResetPassword($input) {
+    global $db;
+    
+    $email = $input['email'] ?? '';
+    $code = $input['code'] ?? '';
+    $newPassword = $input['new_password'] ?? '';
+    
+    if (empty($email) || empty($code) || empty($newPassword)) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Todos los campos son requeridos',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
+    }
+    
+    if (strlen($newPassword) < 6) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'La contraseña debe tener al menos 6 caracteres',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
+    }
+    
+    // Verificar código válido y no expirado (igual que en verificación de registro)
+    $user = $db->fetchOne(
+        "SELECT usuario_aplicacion_id, email, nombre, nick FROM usuarios_aplicaciones 
+         WHERE email = ? AND verification_code = ? AND verification_expiry > NOW() AND app_codigo = 'mundoletras'",
+        [$email, $code]
+    );
+    
+    if (!$user) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Código inválido o expirado',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+        return;
+    }
+    
+    // Actualizar contraseña (usando el mismo hash que en registro)
+    $passwordHash = password_hash($newPassword . 'MundoLetras_Salt_2024', PASSWORD_DEFAULT);
+    
+    $result = $db->query(
+        "UPDATE usuarios_aplicaciones 
+         SET password_hash = ?, verification_code = NULL, verification_expiry = NULL 
+         WHERE email = ? AND app_codigo = 'mundoletras'",
+        [$passwordHash, $email]
+    );
+    
+    if ($result) {
+        http_response_code(200);
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'email' => $email,
+                'message' => 'Contraseña actualizada'
+            ],
+            'message' => 'Contraseña cambiada exitosamente',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+    } else {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'data' => null,
+            'message' => 'Error actualizando contraseña',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+    }
 }
 ?>

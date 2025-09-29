@@ -48,6 +48,12 @@ function showLogin() {
                 <button class="btn btn-primary" onclick="doLogin()">
                     📝 Iniciar Sesión
                 </button>
+                
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="#" onclick="showForgotPassword()" style="color: #fbbf24; text-decoration: none; font-size: 0.9rem;">
+                        🔑 ¿He olvidado la contraseña?
+                    </a>
+                </div>
             </div>
             
             <!-- Pestaña de Registro -->
@@ -81,6 +87,182 @@ function showLogin() {
             ⬅️ Volver
         </button>
     `;
+}
+
+function showForgotPassword() {
+    // Verificar si ya existe el modal
+    const existingModal = document.getElementById('forgot-password-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Crear modal de olvido de contraseña
+    const modal = document.createElement('div');
+    modal.id = 'forgot-password-modal';
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔑 Recuperar Contraseña</h3>
+                <button class="modal-close" onclick="closeForgotPasswordModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; margin-bottom: 1.5rem; color: #666;">
+                    Introduce tu email y te enviaremos un código para cambiar tu contraseña
+                </p>
+                <div class="form-field">
+                    <label>Email:</label>
+                    <input type="email" id="forgot-email" placeholder="tu@email.com">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeForgotPasswordModal()">
+                    Cancelar
+                </button>
+                <button class="btn btn-primary" onclick="sendPasswordReset()">
+                    📧 Enviar Código
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Añadir el modal al final del body para asegurar que esté encima
+    document.body.appendChild(modal);
+    
+    // Añadir listener para cerrar con ESC
+    const handleKeydown = (e) => {
+        if (e.key === 'Escape') {
+            closeForgotPasswordModal();
+            document.removeEventListener('keydown', handleKeydown);
+        }
+    };
+    document.addEventListener('keydown', handleKeydown);
+}
+
+function closeForgotPasswordModal() {
+    const modal = document.getElementById('forgot-password-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+async function sendPasswordReset() {
+    const email = document.getElementById('forgot-email').value;
+    
+    if (!email) {
+        showMessage('Por favor introduce tu email', 'error');
+        return;
+    }
+    
+    try {
+        const response = await fetch('sistema_apps_api/mundoletras/auth.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'forgot_password',
+                email: email
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            closeForgotPasswordModal();
+            showMessage('Código enviado. Revisa tu email.', 'success');
+            // Mostrar formulario de cambio de contraseña
+            showPasswordResetForm(email);
+        } else {
+            showMessage(data.message || 'Error enviando el código', 'error');
+        }
+    } catch (error) {
+        showMessage('Error de conexión. Intenta de nuevo.', 'error');
+    }
+}
+
+function showPasswordResetForm(email) {
+    const loginContent = document.getElementById('login-content');
+    loginContent.innerHTML = `
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔑</div>
+            <p style="margin-bottom: 0.5rem;">Código enviado a:</p>
+            <p style="font-weight: bold; color: #fbbf24;">${email}</p>
+        </div>
+        
+        <div class="form-field" style="margin-bottom: 1rem;">
+            <label>Código de Verificación:</label>
+            <input type="text" id="reset-code" placeholder="123456" maxlength="6"
+                   style="font-size: 18px; text-align: center; letter-spacing: 0.2em;">
+        </div>
+        
+        <div class="form-field" style="margin-bottom: 1rem;">
+            <label>Nueva Contraseña:</label>
+            <input type="password" id="new-password" placeholder="Nueva contraseña">
+        </div>
+        
+        <div class="form-field" style="margin-bottom: 1.5rem;">
+            <label>Confirmar Contraseña:</label>
+            <input type="password" id="confirm-password" placeholder="Confirmar contraseña">
+        </div>
+        
+        <button class="btn btn-primary" onclick="doPasswordReset('${email}')">
+            🔄 Cambiar Contraseña
+        </button>
+        
+        <button class="btn btn-secondary" onclick="backToMainMenu()">
+            ⬅️ Volver
+        </button>
+    `;
+}
+
+async function doPasswordReset(email) {
+    const code = document.getElementById('reset-code').value;
+    const newPassword = document.getElementById('new-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    
+    if (!code || !newPassword || !confirmPassword) {
+        showMessage('Por favor completa todos los campos', 'error');
+        return;
+    }
+    
+    if (newPassword !== confirmPassword) {
+        showMessage('Las contraseñas no coinciden', 'error');
+        return;
+    }
+    
+    if (newPassword.length < 6) {
+        showMessage('La contraseña debe tener al menos 6 caracteres', 'error');
+        return;
+    }
+    
+    try {
+        const response = await fetch('sistema_apps_api/mundoletras/auth.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'reset_password',
+                email: email,
+                code: code,
+                new_password: newPassword
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showMessage('Contraseña cambiada exitosamente. Inicia sesión con tu nueva contraseña.', 'success');
+            setTimeout(() => {
+                backToMainMenu();
+            }, 2000);
+        } else {
+            showMessage(data.message || 'Error cambiando la contraseña', 'error');
+        }
+    } catch (error) {
+        showMessage('Error de conexión. Intenta de nuevo.', 'error');
+    }
 }
 
 function showVerification(email, password) {
