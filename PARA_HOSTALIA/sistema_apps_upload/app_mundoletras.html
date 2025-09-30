@@ -21,8 +21,58 @@
     
     <link rel="stylesheet" href="sistema_apps_api/mundoletras/styles.css">
     
+    <style>
+        /* Efecto de letras cayendo */
+        .falling-letters {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .falling-letter {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.6rem;
+            font-weight: bold;
+            font-family: 'Poppins', sans-serif;
+            animation: fall linear infinite;
+            user-select: none;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.3;
+            }
+            95% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(calc(100vh + 50px)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Asegurar que la tarjeta esté por encima */
+        .login-screen {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+    
 </head>
 <body>
+    <!-- Efecto de letras cayendo -->
+    <div class="falling-letters" id="falling-letters"></div>
+    
     <!-- Login Screen -->
     <div id="login-screen" class="screen login-screen active">
         <div class="login-card">
@@ -30,11 +80,11 @@
             <p class="subtitle">Rompe rutinas: + de mil sopas de letras con sorpresas en cada nivel</p>
             
             <div id="login-content">
-                <button class="btn btn-primary" onclick="smartPlay()" style="font-size: 1.3rem; padding: 0.8rem 2rem; height: 50px; width: auto; max-width: 280px; background: linear-gradient(145deg, #4ade80, #22c55e); border-radius: 25px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 700; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center;">
+                <button class="btn btn-primary" onclick="smartPlay()">
                     ¡JUGAR!
                 </button>
                 
-                <button class="btn btn-secondary" onclick="showLogin()" style="font-size: 1rem; padding: 1rem 1.5rem; min-height: 55px; width: auto; max-width: 280px; background: linear-gradient(145deg, #60a5fa, #3b82f6); border-radius: 20px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">
+                <button class="btn btn-secondary" onclick="showLogin()">
                     Identificarse
                 </button>
                 
@@ -117,44 +167,67 @@
     
     <!-- Game Screen -->
     <div id="game-screen" class="screen game-screen">
+        <!-- Header horizontal: Logo izquierda, Nivel centro, Botones derecha -->
+        <div class="game-header">
+            <div class="header-logo">
+                <img src="sistema_apps_api/mundoletras/img/Logo.png" alt="Mundo Letras" class="game-logo">
+            </div>
+            <div class="header-level">
+                <h2>Nivel <span id="level-display">1</span></h2>
+            </div>
+            <div class="header-buttons">
+                <button class="header-btn" onclick="backToMenu()" title="Menú" aria-label="Menú">
+                    <svg class="hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                    </svg>
+                </button>
+                <button class="header-btn" id="sound-control" onclick="toggleSound()" title="Altavoz" aria-label="Altavoz">
+                    <svg class="hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                </button>
+                <button class="header-btn" onclick="showRanking()" title="Ranking" aria-label="Ranking">
+                    <svg class="hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                        <path d="M4 22h16"></path>
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21l-1.25.5c-.5.2-1.28.2-1.78 0l-1.25-.5A1.25 1.25 0 0 1 4 17v-2.34"></path>
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21l1.25.5c.5.2 1.28.2 1.78 0l1.25-.5c.5-.23.97-.66.97-1.21v-2.34"></path>
+                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
         <!-- HUD -->
         <div class="game-hud">
             <!-- Primera lí­nea: Información del usuario -->
-            <div class="hud-user-line">
-                <div class="hud-item user-info">
-                     <span id="user-icon">👤</span>
-                    <span id="user-name">Invitado</span>
-                    <span id="user-status" class="user-status-guest">Invitado</span>
-                </div>
-                <span id="sound-control" class="sound-control" onclick="toggleSound()" title="Activar/Desactivar sonido">🔊</span>
-            </div>
             
             <!-- Segunda línea: Estadí­sticas del juego -->
             <div class="hud-stats-line">
-                <div class="hud-item">
-                    <span>🔥</span>
-                    <span id="streak" class="hud-value">0</span>
-                </div>
-                <div class="hud-item">
-                    <span>💰</span>
+                <div class="hud-item" title="Monedas">
+                    <svg class="hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="9" r="6"></circle>
+                        <circle cx="15" cy="15" r="6"></circle>
+                        <path d="M9 9h6v6"></path>
+                    </svg>
                     <span id="coins" class="hud-value">50</span>
                 </div>
-                <div class="hud-item">
-                    <span>📊</span>
-                    <span>Nivel <span id="level" class="hud-value">1</span></span>
-                </div>
-                <div class="hud-item">
-                    <span>⏰</span>
+                <div class="hud-item" title="Tiempo">
+                    <svg class="hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12,6 12,12 16,14"></polyline>
+                    </svg>
                     <span id="level-timer" class="hud-value">0:00</span>
                 </div>
-                <div class="hud-item">
-                    <span>💡</span>
-                    <span id="hints-display" class="hud-value">0/2</span>
-                </div>
-                <div class="hud-item" id="dynamic-timer-display" style="display: none;">
-                    <span>⏱️</span>
-                    <span id="dynamic-timer" class="hud-value">120</span>
-                </div>
+                <button class="hud-item" onclick="useHint()" title="Pista" aria-label="Pista">
+                    <svg class="hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1z"></path>
+                        <path d="M12 2C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"></path>
+                    </svg>
+                </button>
             </div>
         </div>
         
@@ -175,9 +248,6 @@
         
                 <!-- Game Controls -->
         <div class="game-controls">
-            <button class="btn btn-secondary btn-sm" onclick="clearSelection()" data-icon="🚫" title="Limpiar Selección">
-                🚫 Limpiar Selección
-            </button>
             <button class="btn btn-primary btn-sm" onclick="useHint()" id="hint-button" data-icon="💡" title="Usar Pista">
                 💡 Pista
             </button>
@@ -197,6 +267,7 @@
 
 
     <!-- JavaScript externo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
     <script src="sistema_apps_api/mundoletras/js/game.js"></script>
     <script src="sistema_apps_api/mundoletras/js/api.js"></script>
     <script src="sistema_apps_api/mundoletras/js/mechanics.js"></script>
@@ -205,9 +276,76 @@
     <script>
         // Código de inicializacin y funciones no duplicadas
         
+        // Efecto de letras cayendo
+        function createFallingLetter() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const letter = letters[Math.floor(Math.random() * letters.length)];
+            
+            const fallingLetter = document.createElement('div');
+            fallingLetter.className = 'falling-letter';
+            fallingLetter.textContent = letter;
+            
+            // Posición aleatoria horizontal
+            fallingLetter.style.left = Math.random() * 100 + '%';
+            
+            // Duración más rápida para evitar atascos (6-10 segundos)
+            const duration = 6 + Math.random() * 4;
+            fallingLetter.style.animationDuration = duration + 's';
+            
+            // Sin delay para que caigan inmediatamente
+            fallingLetter.style.animationDelay = '0s';
+            
+            document.getElementById('falling-letters').appendChild(fallingLetter);
+            
+            // Remover la letra después de que termine la animación
+            setTimeout(() => {
+                if (fallingLetter.parentNode) {
+                    fallingLetter.parentNode.removeChild(fallingLetter);
+                }
+            }, (duration + 3) * 1000);
+        }
+        
+        // Variable para controlar el intervalo de letras cayendo
+        let fallingLettersInterval = null;
+        
+        // Crear letras cayendo
+        function startFallingLetters() {
+            // Limpiar cualquier intervalo existente
+            if (fallingLettersInterval) {
+                clearInterval(fallingLettersInterval);
+            }
+            
+            // Crear letras cada 800ms para más densidad
+            fallingLettersInterval = setInterval(createFallingLetter, 800);
+            
+            // Crear algunas letras iniciales con buena separación
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createFallingLetter, i * 300);
+            }
+        }
+        
+        // Detener letras cayendo
+        function stopFallingLetters() {
+            if (fallingLettersInterval) {
+                clearInterval(fallingLettersInterval);
+                fallingLettersInterval = null;
+            }
+            
+            // Limpiar todas las letras existentes
+            const fallingLettersContainer = document.getElementById('falling-letters');
+            if (fallingLettersContainer) {
+                fallingLettersContainer.innerHTML = '';
+            }
+        }
+        
         // Inicialización cuando se carga la página
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Mundo Letras cargado');
+            
+            // Solo iniciar efecto de letras cayendo en la pantalla de login
+            if (document.getElementById('login-screen').classList.contains('active')) {
+                startFallingLetters();
+            }
             
             // Manejar orientación
             window.addEventListener('orientationchange', function() {

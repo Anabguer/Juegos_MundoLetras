@@ -445,10 +445,81 @@ function placeWordsInGrid(words, gridSize) {
             attempts++;
         }
         
-        // Si no se pudo colocar, intentar estrategias alternativas
+        // Si no se pudo colocar después de 200 intentos, FORZAR colocación
         if (!placed) {
+            console.warn(`⚠️ No se pudo colocar "${word}" después de ${maxAttempts} intentos. Forzando colocación...`);
             
-            // Estrategia 1: Intentar con posiciones más especí­ficas
+            // FORZAR: Buscar cualquier espacio libre en el grid
+            let forcedPlaced = false;
+            
+            // Intentar todas las posiciones posibles sistemáticamente
+            for (let row = 0; row < gridSize && !forcedPlaced; row++) {
+                for (let col = 0; col < gridSize && !forcedPlaced; col++) {
+                    // Intentar cada dirección permitida
+                    for (let dirIndex = 0; dirIndex < directions.length && !forcedPlaced; dirIndex++) {
+                        const direction = directions[dirIndex];
+                        const useReverse = direction >= 4;
+                        const actualDirection = direction % 4;
+                        const actualWord = useReverse ? word.split('').reverse().join('') : word;
+                        
+                        // Verificar si cabe desde esta posición
+                        let fitsHere = true;
+                        const positions = [];
+                        
+                        for (let i = 0; i < actualWord.length; i++) {
+                            let currentRow, currentCol;
+                            
+                            if (actualDirection === 0) { // Horizontal
+                                currentRow = row;
+                                currentCol = col + i;
+                            } else if (actualDirection === 1) { // Vertical
+                                currentRow = row + i;
+                                currentCol = col;
+                            } else if (actualDirection === 2) { // Diagonal izquierda
+                                currentRow = row + i;
+                                currentCol = col + i;
+                            } else { // Diagonal derecha
+                                currentRow = row + i;
+                                currentCol = col - i;
+                            }
+                            
+                            // Verificar límites
+                            if (currentRow < 0 || currentRow >= gridSize || currentCol < 0 || currentCol >= gridSize) {
+                                fitsHere = false;
+                                break;
+                            }
+                            
+                            const index = currentRow * gridSize + currentCol;
+                            positions.push(index);
+                            
+                            // Verificar si hay conflicto
+                            const currentLetter = gameState.currentGrid[index];
+                            if (currentLetter && currentLetter !== actualWord[i]) {
+                                fitsHere = false;
+                                break;
+                            }
+                        }
+                        
+                        if (fitsHere && positions.length === actualWord.length) {
+                            // COLOCAR LA PALABRA FORZADAMENTE
+                            positions.forEach((index, i) => {
+                                gameState.currentGrid[index] = actualWord[i];
+                            });
+                            forcedPlaced = true;
+                            placed = true;
+                            console.log(`✅ Palabra "${word}" colocada FORZADAMENTE en posición (${row}, ${col})`);
+                        }
+                    }
+                }
+            }
+            
+            // Si AÚN no se pudo colocar, ERROR CRÍTICO
+            if (!forcedPlaced) {
+                console.error(`🚨 ERROR CRÍTICO: No se pudo colocar la palabra "${word}".`);
+                alert(`Error: La palabra "${word}" no cabe en el grid. El nivel puede tener un error de diseño.`);
+            }
+            
+            // Estrategia 1: Intentar con posiciones más especí­ficas (CÓDIGO ANTIGUO - ya no necesario)
             const specificPositions = [
                 {row: 0, col: 0, dir: 0}, // Esquina superior izquierda, horizontal
                 {row: 0, col: 0, dir: 1}, // Esquina superior izquierda, vertical
@@ -696,6 +767,15 @@ function handleDrag(e, index) {
     if (index !== lastHoveredIndex) {
         lastHoveredIndex = index;
         
+        // Verificar si el usuario está retrocediendo (volviendo sobre la selección)
+        const indexInSelection = gameState.selectedCells.indexOf(index);
+        if (indexInSelection >= 0 && indexInSelection < gameState.selectedCells.length - 1) {
+            // El usuario está retrocediendo - eliminar celdas desde el final hasta esta posición
+            gameState.selectedCells = gameState.selectedCells.slice(0, indexInSelection + 1);
+            updateCellSelection();
+            return;
+        }
+        
         // Verificar si la selección es válida (línea recta)
         const currentSelection = [...gameState.selectedCells];
         const newSelection = [...currentSelection, index];
@@ -707,8 +787,9 @@ function handleDrag(e, index) {
                 updateCellSelection();
             }
         } else {
-            // Si la nueva selección no es válida, mantener solo la celda actual
+            // Si la nueva selección no es válida, reiniciar desde esta celda
             gameState.selectedCells = [index];
+            dragStartIndex = index;
             updateCellSelection();
         }
     }
@@ -744,13 +825,31 @@ function endDrag(e, index) {
     // Verificar si se formó una palabra válida
     if (gameState.selectedCells.length >= 2 && isValidWordSelection()) {
         checkForWord();
+    } else {
+        // Si la selección no es válida o es muy corta, limpiar automáticamente después de 500ms
+        // Esto permite al usuario ver qué seleccionó antes de que se borre
+        setTimeout(() => {
+            if (gameState.selectedCells.length < 2 || !isValidWordSelection()) {
+                clearSelection();
+            }
+        }, 500);
     }
-    // NO limpiar automáticamente - dejar que el usuario controle la selección
 }
 
 
 // Añadir eventos globales para el arrastre
 function initDragEvents() {
+    // Click en el contenedor del grid (fuera de las celdas) limpia la selección
+    const gridContainer = document.getElementById('game-grid');
+    if (gridContainer) {
+        gridContainer.addEventListener('click', (e) => {
+            // Solo limpiar si se hizo click en el contenedor, no en una celda
+            if (e.target === gridContainer) {
+                clearSelection();
+            }
+        });
+    }
+    
     // Eventos globales de mouse
     document.addEventListener('mouseup', (e) => {
         if (isDragging) {
@@ -1087,7 +1186,7 @@ function checkForWord() {
             // Animación escalonada para cada celda
             setTimeout(() => {
                 cell.style.transform = 'scale(1.2)';
-                cell.style.backgroundColor = '#10b981';
+                cell.style.backgroundColor = '#FCD34D';
                 setTimeout(() => {
                     cell.style.transform = '';
                 }, 200);
@@ -1105,39 +1204,26 @@ function checkForWord() {
         
         // Verificar si se completó el nivel
         if (gameState.foundWords.length === gameState.currentWordsDisplay.length) {
-            setTimeout(async () => {
-                // Mostrar mensaje animado de nivel completado
-                showLevelComplete();
-            
-            // Reproducir sonido de nivel completado
-            playSound('level');
-            
-                // Animar monedas inmediatamente (antes del overlay)
-                const coinsElement = document.getElementById('coins');
-                if (coinsElement) {
-                    animateCoins(coinsElement, 10);
-                }
+            // Verificar si ya se está mostrando la modal de nivel completado
+            const existingOverlay = document.querySelector('.level-complete-overlay');
+            const isLevelCompleteModal = existingOverlay?.querySelector('.level-complete-title')?.textContent.includes('Completado');
+            if (!existingOverlay || !isLevelCompleteModal) {
+                setTimeout(async () => {
+                    // Mostrar mensaje animado de nivel completado
+                    showLevelComplete();
                 
-                // Esperar a que termine la animación antes de continuar
-            setTimeout(() => {
-                    // Actualizar estado después de la animación
-                    gameState.currentLevel++;
-                    gameState.coins += 10;
-                    // Resetear errores
-                    gameState.foundWords = []; // Limpiar palabras encontradas
+                // Reproducir sonido de nivel completado
+                playSound('level');
+                
+                    // Animar monedas inmediatamente (antes del overlay)
+                    const coinsElement = document.getElementById('coins');
+                    if (coinsElement) {
+                        animateCoins(coinsElement, 10);
+                    }
                     
-                    // Guardar progreso según tipo de usuario
-                    if (gameState.currentUser && gameState.currentUser.isGuest) {
-            saveGuestProgress();
-                    } else if (gameState.currentUser && !gameState.currentUser.isGuest) {
-            saveUserProgress();
-        }
-        
-        setTimeout(() => {
-                        generateNextLevel();
-                    }, 1000);
-                }, 4500); // Esperar a que termine la animación del overlay (4s + 0.5s)
-        }, 1000);
+                    // NO avanzar automáticamente - esperar a que el usuario presione "Siguiente Nivel" (4s + 0.5s)
+            }, 1000);
+            }
         }
     } else if (gameState.selectedCells.length >= 2) {
         // Palabra no válida - limpiar selección automáticamente después de un breve delay
@@ -1229,7 +1315,7 @@ function submitSelection() {
             // Animación escalonada para cada celda
             setTimeout(() => {
                 cell.style.transform = 'scale(1.2)';
-                cell.style.backgroundColor = '#10b981';
+                cell.style.backgroundColor = '#FCD34D';
                 setTimeout(() => {
                     cell.style.transform = '';
                 }, 200);
@@ -1241,29 +1327,26 @@ function submitSelection() {
         
         // Verificar si se completó el nivel
         if (gameState.foundWords.length === gameState.currentWordsDisplay.length) {
-            setTimeout(() => {
-                // Mostrar mensaje animado de nivel completado
-                showLevelComplete();
-                
-                // Reproducir sonido de nivel completado
-                playSound('level');
-                
-                // Animar monedas inmediatamente (antes del overlay)
-                const coinsElement = document.getElementById('coins');
-                if (coinsElement) {
-                    animateCoins(coinsElement, 10);
-                }
-                
-                // Esperar a que termine la animación antes de continuar
+            // Verificar si ya se está mostrando la modal de nivel completado
+            const existingOverlay = document.querySelector('.level-complete-overlay');
+            const isLevelCompleteModal = existingOverlay?.querySelector('.level-complete-title')?.textContent.includes('Completado');
+            if (!existingOverlay || !isLevelCompleteModal) {
                 setTimeout(() => {
-                    // Actualizar estado después de la animación
-                    gameState.currentLevel++;
-                    gameState.coins += 10;
-                    setTimeout(() => {
-                        initGame();
-                    }, 1000);
-                }, 4500); // Esperar a que termine la animación del overlay
-            }, 1000);
+                    // Mostrar mensaje animado de nivel completado
+                    showLevelComplete();
+                    
+                    // Reproducir sonido de nivel completado
+                    playSound('level');
+                    
+                    // Animar monedas inmediatamente (antes del overlay)
+                    const coinsElement = document.getElementById('coins');
+                    if (coinsElement) {
+                        animateCoins(coinsElement, 10);
+                    }
+                    
+                    // NO avanzar automáticamente - esperar a que el usuario presione "Siguiente Nivel"
+                }, 1000);
+            }
         }
     } else {
         // Palabra incorrecta

@@ -69,8 +69,7 @@ function startLevelTimer(timerSec) {
                 clearInterval(gameState.levelTimerInterval);
                 gameState.levelTimerInterval = null;
                 gameState.levelExpired = true;
-                showMessage('¡Tiempo agotado! Debes repetir el nivel', 'error');
-                // TODO: Implementar lógica para repetir nivel
+                showLevelFailed();
             }
         }, 1000);
     } else {
@@ -476,6 +475,7 @@ let gameState = {
     soundEnabled: true,
     backgroundMusic: null,
     backgroundMusicPlaying: false,
+    backgroundAudio: null,
     wordTimers: {},
     dynamicTimer: null,
     dynamicTimerInterval: null,
@@ -521,6 +521,19 @@ function showScreen(screenId) {
     const targetScreen = document.getElementById(screenId);
     if (targetScreen) {
         targetScreen.classList.add('active');
+        
+        // Controlar efecto de letras cayendo
+        if (screenId === 'game-screen') {
+            // Detener letras cayendo cuando se va al juego
+            if (typeof stopFallingLetters === 'function') {
+                stopFallingLetters();
+            }
+        } else if (screenId === 'login-screen') {
+            // Iniciar letras cayendo cuando se vuelve al login
+            if (typeof startFallingLetters === 'function') {
+                startFallingLetters();
+            }
+        }
     } else {
     }
 }
@@ -635,13 +648,16 @@ function toggleSound() {
     gameState.soundEnabled = !gameState.soundEnabled;
     const soundControl = document.getElementById('sound-control');
     if (soundControl) {
+        const svg = soundControl.querySelector('svg');
         if (gameState.soundEnabled) {
-            soundControl.textContent = '🔊';
+            // Icono de sonido activo
+            svg.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>';
             soundControl.classList.remove('muted');
             playSound('toggle');
             startBackgroundMusic();
         } else {
-            soundControl.textContent = '🔇';
+            // Icono de sonido silenciado
+            svg.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
             soundControl.classList.add('muted');
             stopBackgroundMusic();
         }
@@ -664,30 +680,24 @@ function playSound(type) {
         
         switch(type) {
             case 'word':
-                const wordOscillator = ctx.createOscillator();
-                const wordGain = ctx.createGain();
-                wordOscillator.connect(wordGain);
-                wordGain.connect(ctx.destination);
-                wordOscillator.frequency.setValueAtTime(800, ctx.currentTime);
-                wordOscillator.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
-                wordGain.gain.setValueAtTime(0.1, ctx.currentTime);
-                wordGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-                wordOscillator.start(ctx.currentTime);
-                wordOscillator.stop(ctx.currentTime + 0.3);
+                // Usar el sonido MP3 de acierto
+                const wordAudio = new Audio('sistema_apps_api/mundoletras/audio/acierto.mp3');
+                wordAudio.volume = 0.5;
+                wordAudio.play().catch(() => {});
                 break;
                 
             case 'level':
-                const levelOscillator = ctx.createOscillator();
-                const levelGain = ctx.createGain();
-                levelOscillator.connect(levelGain);
-                levelGain.connect(ctx.destination);
-                levelOscillator.frequency.setValueAtTime(523, ctx.currentTime);
-                levelOscillator.frequency.setValueAtTime(659, ctx.currentTime + 0.2);
-                levelOscillator.frequency.setValueAtTime(784, ctx.currentTime + 0.4);
-                levelGain.gain.setValueAtTime(0.15, ctx.currentTime);
-                levelGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
-                levelOscillator.start(ctx.currentTime);
-                levelOscillator.stop(ctx.currentTime + 0.6);
+                // Usar el sonido MP3 de ganar nivel
+                const levelAudio = new Audio('sistema_apps_api/mundoletras/audio/ganar.mp3');
+                levelAudio.volume = 0.6;
+                levelAudio.play().catch(() => {});
+                break;
+                
+            case 'lose':
+                // Usar el sonido MP3 de perder nivel
+                const loseAudio = new Audio('sistema_apps_api/mundoletras/audio/perder.mp3');
+                loseAudio.volume = 0.5;
+                loseAudio.play().catch(() => {});
                 break;
                 
             case 'coin':
@@ -723,6 +733,34 @@ function playSound(type) {
 function startBackgroundMusic() {
     if (!gameState.soundEnabled || gameState.backgroundMusicPlaying) return;
     
+    try {
+        // Crear elemento de audio para el MP3
+        if (!gameState.backgroundAudio) {
+            gameState.backgroundAudio = new Audio('sistema_apps_api/mundoletras/audio/musicafondo.mp3');
+            gameState.backgroundAudio.loop = true; // Bucle infinito
+            gameState.backgroundAudio.volume = 0.3; // Volumen moderado
+            gameState.backgroundAudio.preload = 'auto';
+        }
+        
+        // Reproducir la música
+        gameState.backgroundAudio.play().then(() => {
+            gameState.backgroundMusicPlaying = true;
+            console.log('🎵 Música de fondo iniciada');
+        }).catch((error) => {
+            console.log('⚠️ No se pudo reproducir la música de fondo:', error);
+            // Fallback: usar melodía generada si el MP3 falla
+            startGeneratedMusic();
+        });
+        
+    } catch (error) {
+        console.log('⚠️ Error al iniciar música de fondo:', error);
+        // Fallback: usar melodía generada
+        startGeneratedMusic();
+    }
+}
+
+// Función de respaldo con melodía generada
+function startGeneratedMusic() {
     try {
         if (!window.audioContext) {
             window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -779,7 +817,7 @@ function startBackgroundMusic() {
         // Repetir la melodía cada 8 segundos
         gameState.backgroundMusic = setInterval(() => {
             if (gameState.soundEnabled && gameState.backgroundMusicPlaying) {
-                startBackgroundMusic();
+                startGeneratedMusic();
             }
         }, 8000);
         
@@ -792,11 +830,20 @@ function startBackgroundMusic() {
 
 // Función para detener la música de fondo
 function stopBackgroundMusic() {
+    // Detener música MP3
+    if (gameState.backgroundAudio) {
+        gameState.backgroundAudio.pause();
+        gameState.backgroundAudio.currentTime = 0;
+    }
+    
+    // Detener música generada
     if (gameState.backgroundMusic) {
         clearInterval(gameState.backgroundMusic);
         gameState.backgroundMusic = null;
     }
+    
     gameState.backgroundMusicPlaying = false;
+    console.log('🔇 Música de fondo detenida');
 }
 
 // Configurar sistema de monedas

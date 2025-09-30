@@ -58,7 +58,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -132,7 +132,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -209,7 +209,7 @@
     ],
     "timerSec": 300,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -249,7 +249,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -289,7 +289,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -329,7 +329,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -369,7 +369,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -450,7 +450,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -490,7 +490,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -571,7 +571,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -611,7 +611,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -692,7 +692,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -774,7 +774,7 @@
     ],
     "timerSec": 180,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -811,7 +811,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -855,7 +855,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -938,7 +938,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -1019,7 +1019,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -1108,7 +1108,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "fog"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -1187,7 +1187,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -1265,7 +1265,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -1304,7 +1304,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -1346,7 +1346,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -1393,7 +1393,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -1432,7 +1432,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -1516,7 +1516,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -1557,7 +1557,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -1602,7 +1602,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -1681,7 +1681,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -1773,7 +1773,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -1815,7 +1815,7 @@
     ],
     "timerSec": 180,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -1857,7 +1857,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -1934,7 +1934,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -1974,7 +1974,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -2011,7 +2011,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -2056,7 +2056,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -2181,7 +2181,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -2224,7 +2224,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -2266,7 +2266,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -2347,7 +2347,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -2437,7 +2437,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -2523,7 +2523,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -2560,7 +2560,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -2600,7 +2600,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -2641,7 +2641,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -2682,7 +2682,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -2768,7 +2768,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -2842,7 +2842,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -2927,7 +2927,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -3009,7 +3009,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -3055,7 +3055,7 @@
     ],
     "timerSec": 270,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -3101,7 +3101,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -3143,7 +3143,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -3184,7 +3184,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -3265,7 +3265,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -3346,7 +3346,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -3472,7 +3472,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -3518,7 +3518,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -3603,7 +3603,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -3678,7 +3678,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -3724,7 +3724,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -3770,7 +3770,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -3855,7 +3855,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -3933,7 +3933,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -4015,7 +4015,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -4060,7 +4060,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -4101,7 +4101,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -4184,7 +4184,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -4268,7 +4268,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -4306,7 +4306,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -4348,7 +4348,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -4439,7 +4439,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -4518,7 +4518,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -4595,7 +4595,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -4676,7 +4676,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -4763,7 +4763,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -4800,7 +4800,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -4846,7 +4846,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -4888,7 +4888,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -4932,7 +4932,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -4972,7 +4972,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -5014,7 +5014,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -5103,7 +5103,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -5269,7 +5269,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -5347,7 +5347,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -5432,7 +5432,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -5470,7 +5470,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -5516,7 +5516,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -5558,7 +5558,7 @@
     ],
     "timerSec": 180,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -5600,7 +5600,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -5681,7 +5681,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -5857,7 +5857,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -5897,7 +5897,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -5936,7 +5936,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -6019,7 +6019,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -6064,7 +6064,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -6104,7 +6104,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -6179,7 +6179,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -6263,7 +6263,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -6300,7 +6300,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -6342,7 +6342,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -6432,7 +6432,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -6518,7 +6518,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -6596,7 +6596,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -6636,7 +6636,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -6677,7 +6677,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -6763,7 +6763,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -6803,7 +6803,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -6849,7 +6849,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -6972,7 +6972,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -7009,7 +7009,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -7098,7 +7098,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -7181,7 +7181,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -7220,7 +7220,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -7260,7 +7260,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -7341,7 +7341,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -7509,7 +7509,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -7592,7 +7592,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -7672,7 +7672,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -7718,7 +7718,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -7762,7 +7762,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -7803,7 +7803,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -7842,7 +7842,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -7919,7 +7919,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -8001,7 +8001,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -8047,7 +8047,7 @@
     ],
     "timerSec": 270,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -8087,7 +8087,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -8172,7 +8172,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -8259,7 +8259,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -8340,7 +8340,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -8386,7 +8386,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -8429,7 +8429,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -8516,7 +8516,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -8593,7 +8593,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -8633,7 +8633,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -8670,7 +8670,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -8756,7 +8756,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -8839,7 +8839,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -8925,7 +8925,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -8963,7 +8963,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -9005,7 +9005,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -9095,7 +9095,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "ghost"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -9137,7 +9137,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -9178,7 +9178,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -9256,7 +9256,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -9296,7 +9296,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -9340,7 +9340,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -9425,7 +9425,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -9502,7 +9502,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -9543,7 +9543,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -9585,7 +9585,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -9666,7 +9666,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -9759,7 +9759,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -9844,7 +9844,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -9924,7 +9924,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -10006,7 +10006,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -10091,7 +10091,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -10130,7 +10130,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -10173,7 +10173,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -10215,7 +10215,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -10257,7 +10257,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -10333,7 +10333,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -10422,7 +10422,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -10464,7 +10464,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -10506,7 +10506,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -10544,7 +10544,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -10584,7 +10584,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -10667,7 +10667,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -10713,7 +10713,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -10754,7 +10754,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -10835,7 +10835,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -10920,7 +10920,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "ghost"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -11003,7 +11003,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -11092,7 +11092,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -11173,7 +11173,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -11251,7 +11251,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -11290,7 +11290,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -11334,7 +11334,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -11381,7 +11381,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -11420,7 +11420,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -11504,7 +11504,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -11588,7 +11588,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -11669,7 +11669,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -11759,7 +11759,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -11801,7 +11801,7 @@
     ],
     "timerSec": 180,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -11845,7 +11845,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -11885,7 +11885,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -11924,7 +11924,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -11964,7 +11964,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -12003,7 +12003,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -12088,7 +12088,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -12169,7 +12169,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -12254,7 +12254,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -12291,7 +12291,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -12333,7 +12333,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -12379,7 +12379,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -12425,7 +12425,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -12467,7 +12467,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -12511,7 +12511,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -12588,7 +12588,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -12672,7 +12672,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -12758,7 +12758,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -12836,7 +12836,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -12919,7 +12919,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -13001,7 +13001,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -13047,7 +13047,7 @@
     ],
     "timerSec": 270,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -13091,7 +13091,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -13176,7 +13176,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -13214,7 +13214,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -13255,7 +13255,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -13336,7 +13336,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -13382,7 +13382,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -13421,7 +13421,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -13460,7 +13460,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -13506,7 +13506,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -13589,7 +13589,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -13629,7 +13629,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -13668,7 +13668,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -13760,7 +13760,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -13843,7 +13843,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -13921,7 +13921,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "fog"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -14127,7 +14127,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -14172,7 +14172,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -14214,7 +14214,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -14256,7 +14256,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -14296,7 +14296,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -14338,7 +14338,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -14429,7 +14429,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -14508,7 +14508,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -14547,7 +14547,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -14587,7 +14587,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "ghost"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -14668,7 +14668,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -14755,7 +14755,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -14794,7 +14794,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -14840,7 +14840,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -14924,7 +14924,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -15004,7 +15004,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -15049,7 +15049,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -15095,7 +15095,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -15179,7 +15179,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -15259,7 +15259,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -15337,7 +15337,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -15383,7 +15383,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -15422,7 +15422,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -15506,7 +15506,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -15548,7 +15548,7 @@
     ],
     "timerSec": 180,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -15590,7 +15590,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -15628,7 +15628,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -15762,7 +15762,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -15845,7 +15845,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -15924,7 +15924,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -15965,7 +15965,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -16007,7 +16007,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -16092,7 +16092,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -16169,7 +16169,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -16211,7 +16211,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -16253,7 +16253,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -16334,7 +16334,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -16426,7 +16426,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "ghost"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -16512,7 +16512,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -16551,7 +16551,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -16592,7 +16592,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -16673,7 +16673,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -16719,7 +16719,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -16759,7 +16759,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -16799,7 +16799,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -16843,7 +16843,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -16885,7 +16885,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -16928,7 +16928,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -17005,7 +17005,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -17094,7 +17094,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -17136,7 +17136,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -17179,7 +17179,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -17341,7 +17341,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -17511,7 +17511,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -17594,7 +17594,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -17633,7 +17633,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -17674,7 +17674,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -17720,7 +17720,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -17764,7 +17764,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -17805,7 +17805,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -17842,7 +17842,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -17919,7 +17919,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -18047,7 +18047,7 @@
     ],
     "timerSec": 270,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -18087,7 +18087,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -18170,7 +18170,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -18257,7 +18257,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -18294,7 +18294,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -18336,7 +18336,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -18425,7 +18425,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -18510,7 +18510,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -18587,7 +18587,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -18664,7 +18664,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -18710,7 +18710,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -18750,7 +18750,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -18833,7 +18833,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -18876,7 +18876,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -18919,7 +18919,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -19001,7 +19001,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -19046,7 +19046,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -19093,7 +19093,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -19178,7 +19178,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -19256,7 +19256,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -19296,7 +19296,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -19338,7 +19338,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -19423,7 +19423,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -19461,7 +19461,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -19500,7 +19500,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -19585,7 +19585,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -19625,7 +19625,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -19666,7 +19666,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -19840,7 +19840,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -19920,7 +19920,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -19960,7 +19960,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -20002,7 +20002,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -20047,7 +20047,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -20087,7 +20087,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -20173,7 +20173,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -20257,7 +20257,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -20333,7 +20333,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -20422,7 +20422,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -20464,7 +20464,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -20508,7 +20508,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -20546,7 +20546,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -20586,7 +20586,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -20626,7 +20626,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -20669,7 +20669,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -20756,7 +20756,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -20839,7 +20839,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -21007,7 +21007,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -21052,7 +21052,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -21098,7 +21098,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -21177,7 +21177,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -21217,7 +21217,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -21257,7 +21257,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -21340,7 +21340,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -21426,7 +21426,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -21466,7 +21466,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -21510,7 +21510,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -21594,7 +21594,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -21673,7 +21673,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -21765,7 +21765,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -21807,7 +21807,7 @@
     ],
     "timerSec": 180,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -21851,7 +21851,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -21891,7 +21891,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -21930,7 +21930,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -22009,7 +22009,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -22094,7 +22094,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -22132,7 +22132,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -22177,7 +22177,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -22262,7 +22262,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -22343,7 +22343,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -22389,7 +22389,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -22433,7 +22433,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -22517,7 +22517,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -22594,7 +22594,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -22676,7 +22676,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -22762,7 +22762,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -22836,7 +22836,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -22921,7 +22921,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -22961,7 +22961,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -23003,7 +23003,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -23049,7 +23049,7 @@
     ],
     "timerSec": 270,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -23093,7 +23093,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -23176,7 +23176,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -23214,7 +23214,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -23255,7 +23255,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -23294,7 +23294,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -23338,7 +23338,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -23423,7 +23423,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -23506,7 +23506,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -23547,7 +23547,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -23589,7 +23589,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -23666,7 +23666,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -23758,7 +23758,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -23843,7 +23843,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -23921,7 +23921,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -24003,7 +24003,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -24089,7 +24089,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -24129,7 +24129,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -24172,7 +24172,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -24214,7 +24214,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -24256,7 +24256,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -24296,7 +24296,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -24338,7 +24338,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -24510,7 +24510,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -24587,7 +24587,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -24670,7 +24670,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -24717,7 +24717,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -24757,7 +24757,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -25099,7 +25099,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -25142,7 +25142,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -25185,7 +25185,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -25265,7 +25265,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -25304,7 +25304,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -25341,7 +25341,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -25387,7 +25387,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -25426,7 +25426,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -25510,7 +25510,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -25552,7 +25552,7 @@
     ],
     "timerSec": 180,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -25594,7 +25594,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "ghost"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -25675,7 +25675,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -25766,7 +25766,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -25851,7 +25851,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -25889,7 +25889,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -25928,7 +25928,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -26013,7 +26013,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -26058,7 +26058,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -26098,7 +26098,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -26138,7 +26138,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -26177,7 +26177,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -26263,7 +26263,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -26344,7 +26344,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -26436,7 +26436,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -26478,7 +26478,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -26520,7 +26520,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -26598,7 +26598,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -26679,7 +26679,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -26765,7 +26765,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -26805,7 +26805,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -26851,7 +26851,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -26934,7 +26934,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -26972,7 +26972,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -27011,7 +27011,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -27056,7 +27056,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -27102,7 +27102,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -27187,7 +27187,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -27266,7 +27266,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -27347,7 +27347,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -27433,7 +27433,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -27517,7 +27517,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -27558,7 +27558,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -27600,7 +27600,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -27641,7 +27641,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -27682,7 +27682,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -27774,7 +27774,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -27852,7 +27852,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -27890,7 +27890,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -27929,7 +27929,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "fog"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -28011,7 +28011,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -28057,7 +28057,7 @@
     ],
     "timerSec": 270,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -28180,7 +28180,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -28222,7 +28222,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -28265,7 +28265,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -28344,7 +28344,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -28433,7 +28433,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -28520,7 +28520,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -28597,7 +28597,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -28637,7 +28637,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -28676,7 +28676,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -28762,7 +28762,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -28801,7 +28801,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -28845,7 +28845,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -28929,7 +28929,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -28967,7 +28967,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -29009,7 +29009,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -29260,7 +29260,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "ghost"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -29300,7 +29300,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -29344,7 +29344,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -29390,7 +29390,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -29429,7 +29429,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -29506,7 +29506,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -29591,7 +29591,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -29719,7 +29719,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -29763,7 +29763,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -29846,7 +29846,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -29926,7 +29926,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -29966,7 +29966,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -30008,7 +30008,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -30093,7 +30093,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -30175,7 +30175,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -30261,7 +30261,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -30339,7 +30339,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -30385,7 +30385,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -30430,7 +30430,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -30516,7 +30516,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -30556,7 +30556,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -30596,7 +30596,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -30636,7 +30636,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -30677,7 +30677,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -30764,7 +30764,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -30803,7 +30803,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -30849,7 +30849,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -30932,7 +30932,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -31013,7 +31013,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -31102,7 +31102,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -31144,7 +31144,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -31183,7 +31183,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -31263,7 +31263,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -31518,7 +31518,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -31559,7 +31559,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -31604,7 +31604,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -31685,7 +31685,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -31731,7 +31731,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -31777,7 +31777,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -31819,7 +31819,7 @@
     ],
     "timerSec": 180,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -31863,7 +31863,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -31903,7 +31903,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -31942,7 +31942,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -32021,7 +32021,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -32106,7 +32106,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -32191,7 +32191,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -32278,7 +32278,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -32315,7 +32315,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -32357,7 +32357,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -32447,7 +32447,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -32489,7 +32489,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -32533,7 +32533,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -32694,7 +32694,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -32780,7 +32780,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -32858,7 +32858,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -32900,7 +32900,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -32941,7 +32941,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -32979,7 +32979,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -33021,7 +33021,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -33067,7 +33067,7 @@
     ],
     "timerSec": 270,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -33113,7 +33113,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -33198,7 +33198,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -33236,7 +33236,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -33277,7 +33277,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -33360,7 +33360,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -33406,7 +33406,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -33445,7 +33445,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -33486,7 +33486,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -33532,7 +33532,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -33617,7 +33617,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -33696,7 +33696,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -33788,7 +33788,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -33873,7 +33873,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -33951,7 +33951,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -34035,7 +34035,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -34080,7 +34080,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -34121,7 +34121,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -34204,7 +34204,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -34290,7 +34290,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -34330,7 +34330,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -34372,7 +34372,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -34463,7 +34463,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -34544,7 +34544,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -34623,7 +34623,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -34663,7 +34663,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -34704,7 +34704,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -34791,7 +34791,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -34874,7 +34874,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -35042,7 +35042,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -35131,7 +35131,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -35174,7 +35174,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -35215,7 +35215,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -35253,7 +35253,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -35293,7 +35293,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -35371,7 +35371,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -35456,7 +35456,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -35538,7 +35538,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -35580,7 +35580,7 @@
     ],
     "timerSec": 180,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -35622,7 +35622,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -35701,7 +35701,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -35794,7 +35794,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -35835,7 +35835,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -35877,7 +35877,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -35956,7 +35956,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -36041,7 +36041,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -36086,7 +36086,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -36126,7 +36126,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -36164,7 +36164,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -36203,7 +36203,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -36245,7 +36245,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -36287,7 +36287,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -36368,7 +36368,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -36415,7 +36415,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -36460,7 +36460,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -36546,7 +36546,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -36624,7 +36624,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -36705,7 +36705,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -36791,7 +36791,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -36831,7 +36831,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -36877,7 +36877,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -36960,7 +36960,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -37000,7 +37000,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -37037,7 +37037,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -37082,7 +37082,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -37126,7 +37126,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -37211,7 +37211,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -37329,7 +37329,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -37371,7 +37371,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -37457,7 +37457,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -37497,7 +37497,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -37543,7 +37543,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -37584,7 +37584,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -37628,7 +37628,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -37710,7 +37710,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -37802,7 +37802,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -37882,7 +37882,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -37961,7 +37961,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -38001,7 +38001,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -38045,7 +38045,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -38091,7 +38091,7 @@
     ],
     "timerSec": 270,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -38131,7 +38131,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -38171,7 +38171,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -38301,7 +38301,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -38382,7 +38382,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -38428,7 +38428,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -38471,7 +38471,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "ghost"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -38558,7 +38558,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -38635,7 +38635,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -38714,7 +38714,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -38760,7 +38760,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -38800,7 +38800,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -38881,7 +38881,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -38924,7 +38924,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -39137,7 +39137,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -39222,7 +39222,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -39300,7 +39300,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -39340,7 +39340,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -39384,7 +39384,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -39469,7 +39469,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -39507,7 +39507,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -39544,7 +39544,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -39629,7 +39629,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -39708,7 +39708,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -39801,7 +39801,7 @@
     ],
     "timerSec": 220,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -39842,7 +39842,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -39884,7 +39884,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -39924,7 +39924,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -39964,7 +39964,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -40046,7 +40046,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -40131,7 +40131,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -40215,7 +40215,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -40301,7 +40301,7 @@
     ],
     "timerSec": 190,
     "mechanics": {
-      "special": "ghost"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -40338,7 +40338,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -40377,7 +40377,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -40468,7 +40468,7 @@
     ],
     "timerSec": 240,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -40510,7 +40510,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -40554,7 +40554,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -40592,7 +40592,7 @@
     ],
     "timerSec": 120,
     "mechanics": {
-      "special": "dynamicTimer"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -40632,7 +40632,7 @@
     ],
     "timerSec": 140,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -40713,7 +40713,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -40759,7 +40759,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "ghost"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -40800,7 +40800,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "fog"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -40883,7 +40883,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -40968,7 +40968,7 @@
     ],
     "timerSec": 210,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -41049,7 +41049,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "wordTimer"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -41094,7 +41094,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "fog"
+      "special": "none"
     },
     "hints": {
       "base": 0,
@@ -41138,7 +41138,7 @@
     ],
     "timerSec": 230,
     "mechanics": {
-      "special": "hiddenWords"
+      "special": "wordTimer"
     },
     "hints": {
       "base": 0,
@@ -41219,7 +41219,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -41297,7 +41297,7 @@
     ],
     "timerSec": 130,
     "mechanics": {
-      "special": "none"
+      "special": "dynamicTimer"
     },
     "hints": {
       "base": 0,
@@ -41464,7 +41464,7 @@
     ],
     "timerSec": 150,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,
@@ -41550,7 +41550,7 @@
     ],
     "timerSec": 0,
     "mechanics": {
-      "special": "none"
+      "special": "fog"
     },
     "hints": {
       "base": 0,
@@ -41636,7 +41636,7 @@
     ],
     "timerSec": 200,
     "mechanics": {
-      "special": "none"
+      "special": "hiddenWords"
     },
     "hints": {
       "base": 0,

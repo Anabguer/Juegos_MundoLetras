@@ -226,32 +226,41 @@ function applyHiddenWordsMechanic() {
 // Mecánica de Timer por Palabra
 function applyWordTimerMechanic() {
     
-    // Ordenar palabras por longitud (más difí­cil = más larga)
-    const sortedWords = [...gameState.currentWords].sort((a, b) => b.length - a.length);
-    
-    // Asignar tiempos diferenciados: palabra más difí­cil 40s, las demás -5s cada una
-    sortedWords.forEach((word, index) => {
-        const timeForWord = 40 - (index * 5); // 40s, 35s, 30s, 25s...
-        gameState.wordTimers[word] = Math.max(timeForWord, 15); // Mínimo 15 segundos
+    // Asignar tiempo basado en la LONGITUD de cada palabra (más justo)
+    gameState.currentWords.forEach(word => {
+        // Fórmula: 15s base + (longitud de palabra * 10s)
+        // Ejemplos:
+        // - Palabra de 3 letras: 15 + (3*10) = 45s
+        // - Palabra de 5 letras: 15 + (5*10) = 65s
+        // - Palabra de 8 letras: 15 + (8*10) = 95s
+        const timeForWord = 15 + (word.length * 10);
+        gameState.wordTimers[word] = timeForWord;
     });
     
     // Iniciar timer
     gameState.wordTimerInterval = setInterval(() => {
-        let allExpired = true;
+        let anyExpired = false;
+        
         gameState.currentWords.forEach(word => {
-            if (gameState.wordTimers[word] > 0) {
-                gameState.wordTimers[word]--;
-                allExpired = false;
+            // Solo reducir timer de palabras NO encontradas
+            if (!gameState.foundWords.includes(word)) {
+                if (gameState.wordTimers[word] > 0) {
+                    gameState.wordTimers[word]--;
+                } else {
+                    // Si alguna palabra llega a 0, el nivel se pierde INMEDIATAMENTE
+                    anyExpired = true;
+                }
             }
         });
         
         updateWordsList(); // Actualizar display de timers
         
-        if (allExpired) {
+        // Si CUALQUIER palabra expiró (llegó a 0), PIERDES
+        if (anyExpired) {
             clearInterval(gameState.wordTimerInterval);
             gameState.wordTimerInterval = null;
             gameState.levelExpired = true;
-            showMessage('Tiempo agotado! Nivel no completado. Usa "Limpiar Selección" para repetir.', 'error');
+            showLevelFailed();
         }
     }, 1000);
 }

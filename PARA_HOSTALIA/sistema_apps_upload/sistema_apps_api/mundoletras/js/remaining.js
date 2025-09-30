@@ -129,6 +129,17 @@ function calculateStars() {
 
 // Mostrar nivel completado
 function showLevelComplete() {
+    // Verificar si ya hay una modal de nivel completado visible
+    const existingOverlay = document.querySelector('.level-complete-overlay');
+    if (existingOverlay) {
+        // Verificar si es la modal de nivel completado (no la de nivel perdido)
+        const isLevelCompleteModal = existingOverlay.querySelector('.level-complete-title')?.textContent.includes('Completado');
+        if (isLevelCompleteModal) {
+            console.log('⚠️ Modal de nivel completado ya visible, ignorando llamada duplicada');
+            return;
+        }
+    }
+    
     // Calcular estrellas basadas en tiempo y errores
     const stars = calculateStars();
     
@@ -147,31 +158,45 @@ function showLevelComplete() {
     overlay.className = 'level-complete-overlay';
     overlay.innerHTML = `
         <div class="level-complete-content">
-            <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
-            <h2 style="color: #10b981; margin-bottom: 0.5rem;">¡Nivel Completado!</h2>
-            <p style="margin-bottom: 1.5rem; color: #6b7280;">Nivel ${gameState.currentLevel} superado</p>
-            <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem;">
-                <div style="text-align: center;">
-                    <div style="font-size: 1.5rem; font-weight: bold; color: #fbbf24;">+${coinsEarned}</div>
-                    <div style="font-size: 0.875rem; color: #6b7280;">Monedas</div>
+            <div id="lottie-victory" style="width: 100px; height: 100px; margin: 0 auto 0.25rem;"></div>
+            <h2 class="level-complete-title" style="font-size: 1.5rem; margin-bottom: 0.25rem;">¡Nivel Completado!</h2>
+            <p class="level-complete-subtitle" style="font-size: 0.9rem; margin-bottom: 0.75rem;">Nivel ${gameState.currentLevel} superado</p>
+            <div class="level-complete-stats">
+                <div class="level-complete-stat">
+                    <div class="level-complete-stat-value">+${coinsEarned}</div>
+                    <div class="level-complete-stat-label">Monedas</div>
                 </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 1.5rem; font-weight: bold; color: #10b981;">${gameState.foundWords.length}</div>
-                    <div style="font-size: 0.875rem; color: #6b7280;">Palabras</div>
+                <div class="level-complete-stat">
+                    <div class="level-complete-stat-value">${gameState.foundWords.length}</div>
+                    <div class="level-complete-stat-label">Palabras</div>
                 </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 1.5rem; font-weight: bold; color: #fbbf24;">${'⭐'.repeat(stars)}</div>
-                    <div style="font-size: 0.875rem; color: #6b7280;">Estrellas</div>
+                <div class="level-complete-stat">
+                    <div class="level-complete-stat-value">${'⭐'.repeat(stars)}</div>
+                    <div class="level-complete-stat-label">Estrellas</div>
                 </div>
             </div>
-            <button onclick="showCoinsSummary(${coinsEarned}, ${stars}, ${timeRemaining}, ${isFirstTime})" 
-                    style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer;">
-                Ver Detalle
+            <button class="btn btn-primary" onclick="nextLevel()" 
+                    style="background: linear-gradient(135deg, rgba(252, 211, 77, 0.3), rgba(245, 158, 11, 0.4)); border: 2px solid #F59E0B; color: #FCD34D; width: 100%; margin-top: 0.5rem; padding: 0.6rem 1.5rem; font-size: 1rem;">
+                Siguiente Nivel
             </button>
         </div>
     `;
     
     document.body.appendChild(overlay);
+    
+    // Cargar y reproducir animación Lottie
+    setTimeout(() => {
+        const lottieContainer = document.getElementById('lottie-victory');
+        if (lottieContainer && typeof lottie !== 'undefined') {
+            lottie.loadAnimation({
+                container: lottieContainer,
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'sistema_apps_api/mundoletras/animations/partida_ganada.json'
+            });
+        }
+    }, 100);
     
     // Guardar progreso
     if (gameState.currentUser && gameState.currentUser.isGuest) {
@@ -180,12 +205,91 @@ function showLevelComplete() {
         saveUserProgress();
     }
     
-    // Remover overlay después de 4 segundos
-    setTimeout(() => {
-        if (overlay.parentNode) {
-            overlay.parentNode.removeChild(overlay);
+    // NO remover automáticamente - esperar a que el usuario presione "Siguiente Nivel"
+    // El overlay se eliminará cuando presionen el botón
+}
+
+// Mostrar nivel perdido
+function showLevelFailed() {
+    // Verificar si ya hay una modal de nivel perdido visible
+    const existingOverlay = document.querySelector('.level-complete-overlay');
+    if (existingOverlay) {
+        // Verificar si es la modal de nivel perdido (no la de nivel completado)
+        const isLevelFailedModal = existingOverlay.querySelector('.level-complete-title')?.textContent.includes('Perdido');
+        if (isLevelFailedModal) {
+            console.log('⚠️ Modal de nivel perdido ya visible, ignorando llamada duplicada');
+            return;
         }
-    }, 4000);
+    }
+    
+    // Reproducir sonido de perder
+    playSound('lose');
+    
+    // Crear overlay de nivel perdido
+    const overlay = document.createElement('div');
+    overlay.className = 'level-complete-overlay';
+    overlay.innerHTML = `
+        <div class="level-complete-content" style="border-color: rgba(239, 68, 68, 0.4);">
+            <div id="lottie-lose" style="width: 100px; height: 100px; margin: 0 auto 0.25rem;"></div>
+            <h2 class="level-complete-title" style="color: #EF4444; font-size: 1.5rem; margin-bottom: 0.25rem;">¡Nivel Perdido!</h2>
+            <p class="level-complete-subtitle" style="font-size: 0.9rem; margin-bottom: 0.75rem;">El tiempo se ha agotado</p>
+            <div class="level-complete-stats">
+                <div class="level-complete-stat">
+                    <div class="level-complete-stat-value">${gameState.foundWords.length}</div>
+                    <div class="level-complete-stat-label">Palabras encontradas</div>
+                </div>
+                <div class="level-complete-stat">
+                    <div class="level-complete-stat-value">${gameState.currentWordsDisplay.length - gameState.foundWords.length}</div>
+                    <div class="level-complete-stat-label">Palabras faltantes</div>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="retryLevel()" 
+                    style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.4)); border: 2px solid #EF4444; color: #FCA5A5; width: 100%; margin-top: 0.5rem; padding: 0.6rem 1.5rem; font-size: 1rem;">
+                Reintentar Nivel
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Cargar animación Lottie de corazón roto (usaremos la misma estructura)
+    setTimeout(() => {
+        const lottieContainer = document.getElementById('lottie-lose');
+        if (lottieContainer) {
+            // Por ahora usamos un emoji de corazón roto, luego puedes añadir un JSON
+            lottieContainer.innerHTML = '<div style="font-size: 6rem;">💔</div>';
+        }
+    }, 100);
+    
+    // No remover automáticamente - esperar a que el usuario presione reintentar
+}
+
+// Función para pasar al siguiente nivel
+function nextLevel() {
+    // Remover overlay
+    const overlay = document.querySelector('.level-complete-overlay');
+    if (overlay && overlay.parentNode) {
+        overlay.parentNode.removeChild(overlay);
+    }
+    
+    // Actualizar estado y avanzar al siguiente nivel
+    gameState.currentLevel++;
+    gameState.coins += 10; // Añadir monedas
+    
+    // Iniciar el siguiente nivel
+    initGame();
+}
+
+// Función para reintentar el nivel
+function retryLevel() {
+    // Remover overlay
+    const overlay = document.querySelector('.level-complete-overlay');
+    if (overlay && overlay.parentNode) {
+        overlay.parentNode.removeChild(overlay);
+    }
+    
+    // Reiniciar el nivel actual (sin avanzar)
+    initGame();
 }
 
 // Animación de palabra encontrada
@@ -198,12 +302,20 @@ function animateWordFound(word) {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 2rem;
-        font-weight: bold;
-        color: #10b981;
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #F59E0B;
+        background: linear-gradient(135deg, rgba(252, 211, 77, 0.2), rgba(245, 158, 11, 0.3));
+        padding: 0.5rem 1.2rem;
+        border-radius: 0.75rem;
+        border: 2px solid #F59E0B;
+        box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4), 0 0 0 1px rgba(252, 211, 77, 0.6);
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
         z-index: 1000;
         pointer-events: none;
-        animation: wordFound 2s ease-out forwards;
+        animation: wordFoundEnhanced 2.5s ease-out forwards;
+        letter-spacing: 0.1em;
     `;
     
     document.body.appendChild(wordElement);
@@ -213,7 +325,7 @@ function animateWordFound(word) {
         if (wordElement.parentNode) {
             wordElement.parentNode.removeChild(wordElement);
         }
-    }, 2000);
+    }, 2500);
 }
 
 
@@ -423,6 +535,12 @@ function updateHUD() {
     const levelElement = document.getElementById('level');
     if (levelElement) {
         levelElement.textContent = gameState.currentLevel;
+    }
+    
+    // Actualizar indicador de nivel
+    const levelDisplayElement = document.getElementById('level-display');
+    if (levelDisplayElement) {
+        levelDisplayElement.textContent = gameState.currentLevel;
     }
     
     // Actualizar cronómetro del nivel

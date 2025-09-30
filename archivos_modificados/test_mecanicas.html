@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1e3a8a">
+    <title>Test de Mecánicas - Mundo Letras</title>
+    
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="sistema_apps_api/mundoletras/styles.css">
+    
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .test-header h1 {
+            color: #fbbf24;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .test-header p {
+            color: #e5e7eb;
+            font-size: 1.1rem;
+        }
+        
+        .mechanics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .mechanics-controls {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .controls-title {
+            color: #fbbf24;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .controls-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: translateY(-2px);
+        }
+        
+        .control-btn.active {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1f2937;
+        }
+        
+        .current-mechanic {
+            text-align: center;
+            margin-top: 1rem;
+            color: #e5e7eb;
+            font-size: 1.1rem;
+        }
+        
+        .mechanic-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .mechanic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mechanic-title {
+            color: #fbbf24;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .mechanic-description {
+            color: #e5e7eb;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .mechanic-demo {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+        }
+        
+        .demo-cell {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e40af;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .test-button:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: translateY(-2px);
+        }
+        
+        .back-button {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .back-button:hover {
+            background: linear-gradient(135deg, #4b5563, #374151);
+            transform: translateY(-2px);
+        }
+        
+        /* Estilos específicos para cada mecánica */
+        .demo-cell.fog {
+            background-color: rgba(59, 130, 246, 0.8) !important;
+            color: #1e40af !important;
+            position: relative;
+        }
+        
+        .demo-cell.fog::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(30, 64, 175, 0.4);
+            border-radius: 0.25rem;
+            z-index: 1;
+        }
+        
+        .demo-cell.ghost {
+            opacity: 0.4 !important;
+            animation: ghostPulse 0.8s ease-in-out infinite alternate;
+        }
+        
+        @keyframes ghostPulse {
+            0% { 
+                opacity: 0.2;
+                transform: scale(0.95);
+                filter: blur(1px);
+            }
+            100% { 
+                opacity: 0.7;
+                transform: scale(1.05);
+                filter: blur(0px);
+            }
+        }
+        
+        .demo-cell.hidden {
+            background-color: rgba(239, 68, 68, 0.8) !important;
+            color: white !important;
+        }
+        
+        .demo-cell.timer {
+            background-color: rgba(245, 158, 11, 0.8) !important;
+            color: white !important;
+            animation: timerPulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes timerPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 0 4px rgba(245, 158, 11, 0);
+            }
+        }
+        
+        .demo-cell.dynamic {
+            background-color: rgba(16, 185, 129, 0.8) !important;
+            color: white !important;
+            animation: dynamicPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes dynamicPulse {
+            0%, 100% { 
+                transform: scale(1);
+                background-color: rgba(16, 185, 129, 0.8);
+            }
+            50% { 
+                transform: scale(1.02);
+                background-color: rgba(16, 185, 129, 0.6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <button class="back-button" onclick="window.location.href='app_mundoletras.html'">
+            ← Volver al Juego
+        </button>
+        
+        <div class="test-header">
+            <h1>🧪 Test de Mecánicas</h1>
+            <p>Prueba cada mecánica del juego para ver cómo se ven y funcionan</p>
+        </div>
+        
+        <div class="mechanics-controls">
+            <div class="controls-title">🎮 Controles de Mecánicas</div>
+            <div class="controls-buttons">
+                <button class="control-btn" onclick="setMechanic('none')">✨ Sin Mecánicas</button>
+                <button class="control-btn" onclick="setMechanic('fog')">🌫️ Niebla</button>
+                <button class="control-btn" onclick="setMechanic('ghost')">👻 Fantasma</button>
+                <button class="control-btn" onclick="setMechanic('hiddenWords')">🔍 Palabras Ocultas</button>
+                <button class="control-btn" onclick="setMechanic('wordTimer')">⏰ Timer por Palabra</button>
+                <button class="control-btn" onclick="setMechanic('dynamicTimer')">⏱️ Timer Dinámico</button>
+            </div>
+            <div class="current-mechanic" id="current-mechanic">
+                Mecánica actual: <strong>Sin Mecánicas</strong>
+            </div>
+        </div>
+        
+        <div class="mechanics-grid">
+            <!-- Mecánica: Niebla -->
+            <div class="mechanic-card">
+                <div class="mechanic-title">
+                    🌫️ Niebla
+                </div>
+                <div class="mechanic-description">
+                    Las letras están ocultas por una niebla azul. Se revelan al completar palabras o usar pistas.
+                </div>
+                <div class="mechanic-demo">
+                    <div class="demo-grid">
+                        <div class="demo-cell fog">A</div>
+                        <div class="demo-cell">B</div>
+                        <div class="demo-cell fog">C</div>
+                        <div class="demo-cell">D</div>
+                        <div class="demo-cell">E</div>
+                        <div class="demo-cell fog">F</div>
+                        <div class="demo-cell">G</div>
+                        <div class="demo-cell fog">H</div>
+                    </div>
+                </div>
+                <button class="test-button" onclick="testMechanic('fog')">
+                    Probar Niebla
+                </button>
+            </div>
+            
+            <!-- Mecánica: Fantasma -->
+            <div class="mechanic-card">
+                <div class="mechanic-title">
+                    👻 Fantasma
+                </div>
+                <div class="mechanic-description">
+                    Las letras aparecen translúcidas y pulsan. Son difíciles de leer pero visibles.
+                </div>
+                <div class="mechanic-demo">
+                    <div class="demo-grid">
+                        <div class="demo-cell ghost">A</div>
+                        <div class="demo-cell">B</div>
+                        <div class="demo-cell ghost">C</div>
+                        <div class="demo-cell">D</div>
+                        <div class="demo-cell">E</div>
+                        <div class="demo-cell ghost">F</div>
+                        <div class="demo-cell">G</div>
+                        <div class="demo-cell ghost">H</div>
+                    </div>
+                </div>
+                <button class="test-button" onclick="testMechanic('ghost')">
+                    Probar Fantasma
+                </button>
+            </div>
+            
+            <!-- Mecánica: Palabras Ocultas -->
+            <div class="mechanic-card">
+                <div class="mechanic-title">
+                    🔍 Palabras Ocultas
+                </div>
+                <div class="mechanic-description">
+                    Algunas palabras no aparecen en la lista. Debes encontrarlas sin saber cuáles son.
+                </div>
+                <div class="mechanic-demo">
+                    <div class="demo-grid">
+                        <div class="demo-cell">A</div>
+                        <div class="demo-cell hidden">B</div>
+                        <div class="demo-cell">C</div>
+                        <div class="demo-cell hidden">D</div>
+                        <div class="demo-cell">E</div>
+                        <div class="demo-cell">F</div>
+                        <div class="demo-cell hidden">G</div>
+                        <div class="demo-cell">H</div>
+                    </div>
+                </div>
+                <button class="test-button" onclick="testMechanic('hiddenWords')">
+                    Probar Palabras Ocultas
+                </button>
+            </div>
+            
+            <!-- Mecánica: Timer por Palabra -->
+            <div class="mechanic-card">
+                <div class="mechanic-title">
+                    ⏰ Timer por Palabra
+                </div>
+                <div class="mechanic-description">
+                    Cada palabra tiene un tiempo límite. Si no la encuentras a tiempo, se pierde.
+                </div>
+                <div class="mechanic-demo">
+                    <div class="demo-grid">
+                        <div class="demo-cell">A</div>
+                        <div class="demo-cell timer">B</div>
+                        <div class="demo-cell">C</div>
+                        <div class="demo-cell timer">D</div>
+                        <div class="demo-cell">E</div>
+                        <div class="demo-cell">F</div>
+                        <div class="demo-cell timer">G</div>
+                        <div class="demo-cell">H</div>
+                    </div>
+                </div>
+                <button class="test-button" onclick="testMechanic('wordTimer')">
+                    Probar Timer por Palabra
+                </button>
+            </div>
+            
+            <!-- Mecánica: Timer Dinámico -->
+            <div class="mechanic-card">
+                <div class="mechanic-title">
+                    ⏱️ Timer Dinámico
+                </div>
+                <div class="mechanic-description">
+                    El tiempo total del nivel cambia dinámicamente según tu progreso y acciones.
+                </div>
+                <div class="mechanic-demo">
+                    <div class="demo-grid">
+                        <div class="demo-cell dynamic">A</div>
+                        <div class="demo-cell">B</div>
+                        <div class="demo-cell dynamic">C</div>
+                        <div class="demo-cell">D</div>
+                        <div class="demo-cell">E</div>
+                        <div class="demo-cell dynamic">F</div>
+                        <div class="demo-cell">G</div>
+                        <div class="demo-cell dynamic">H</div>
+                    </div>
+                </div>
+                <button class="test-button" onclick="testMechanic('dynamicTimer')">
+                    Probar Timer Dinámico
+                </button>
+            </div>
+            
+            <!-- Mecánica: Sin Mecánicas -->
+            <div class="mechanic-card">
+                <div class="mechanic-title">
+                    ✨ Sin Mecánicas
+                </div>
+                <div class="mechanic-description">
+                    Nivel normal sin mecánicas especiales. Solo encuentra las palabras en el grid.
+                </div>
+                <div class="mechanic-demo">
+                    <div class="demo-grid">
+                        <div class="demo-cell">A</div>
+                        <div class="demo-cell">B</div>
+                        <div class="demo-cell">C</div>
+                        <div class="demo-cell">D</div>
+                        <div class="demo-cell">E</div>
+                        <div class="demo-cell">F</div>
+                        <div class="demo-cell">G</div>
+                        <div class="demo-cell">H</div>
+                    </div>
+                </div>
+                <button class="test-button" onclick="testMechanic('none')">
+                    Probar Sin Mecánicas
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentMechanic = 'none';
+        
+        function setMechanic(mechanic) {
+            currentMechanic = mechanic;
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Actualizar texto de mecánica actual
+            const mechanicNames = {
+                'none': 'Sin Mecánicas',
+                'fog': 'Niebla',
+                'ghost': 'Fantasma',
+                'hiddenWords': 'Palabras Ocultas',
+                'wordTimer': 'Timer por Palabra',
+                'dynamicTimer': 'Timer Dinámico'
+            };
+            
+            document.getElementById('current-mechanic').innerHTML = 
+                `Mecánica actual: <strong>${mechanicNames[mechanic]}</strong>`;
+            
+            // Guardar en localStorage para que el juego la use
+            localStorage.setItem('testMechanic', mechanic);
+            
+            console.log(`Mecánica establecida: ${mechanic}`);
+        }
+        
+        function testMechanic(mechanic) {
+            // Establecer la mecánica
+            setMechanic(mechanic);
+            
+            // Crear un mensaje informativo
+            const messages = {
+                'fog': '🌫️ Mecánica NIEBLA aplicada. Las letras se ocultan con niebla azul.',
+                'ghost': '👻 Mecánica FANTASMA aplicada. Las letras aparecen translúcidas.',
+                'hiddenWords': '🔍 Mecánica PALABRAS OCULTAS aplicada. Algunas palabras no se muestran.',
+                'wordTimer': '⏰ Mecánica TIMER POR PALABRA aplicada. Cada palabra tiene tiempo límite.',
+                'dynamicTimer': '⏱️ Mecánica TIMER DINÁMICO aplicada. El tiempo cambia dinámicamente.',
+                'none': '✨ Sin mecánicas especiales. Nivel normal.'
+            };
+            
+            // Mostrar mensaje
+            alert(messages[mechanic] || 'Mecánica aplicada correctamente.');
+            
+            console.log(`Probando mecánica: ${mechanic}`);
+        }
+        
+        // Inicializar con mecánica por defecto
+        document.addEventListener('DOMContentLoaded', function() {
+            setMechanic('none');
+        });
+        
+        // Efecto de letras cayendo para mantener la estética
+        function createFallingLetter() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const letter = letters[Math.floor(Math.random() * letters.length)];
+            
+            const fallingLetter = document.createElement('div');
+            fallingLetter.style.position = 'fixed';
+            fallingLetter.style.color = 'rgba(255, 255, 255, 0.1)';
+            fallingLetter.style.fontSize = '1.2rem';
+            fallingLetter.style.fontWeight = 'bold';
+            fallingLetter.style.fontFamily = 'Poppins, sans-serif';
+            fallingLetter.style.left = Math.random() * 100 + '%';
+            fallingLetter.style.top = '-50px';
+            fallingLetter.style.zIndex = '1';
+            fallingLetter.style.pointerEvents = 'none';
+            fallingLetter.style.userSelect = 'none';
+            fallingLetter.textContent = letter;
+            
+            document.body.appendChild(fallingLetter);
+            
+            // Animación de caída
+            let position = -50;
+            const fall = setInterval(() => {
+                position += 2;
+                fallingLetter.style.top = position + 'px';
+                
+                if (position > window.innerHeight + 50) {
+                    clearInterval(fall);
+                    document.body.removeChild(fallingLetter);
+                }
+            }, 50);
+        }
+        
+        // Iniciar efecto de letras cayendo
+        setInterval(createFallingLetter, 2000);
+    </script>
+</body>
+</html>
