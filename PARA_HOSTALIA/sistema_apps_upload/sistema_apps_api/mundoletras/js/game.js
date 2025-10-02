@@ -464,6 +464,7 @@ let gameState = {
     streak: 0,
     coins: 50,
     totalCoins: 50,  // Sincronizar con coins
+    previousScreen: null, // Para recordar de qué pantalla venimos
     selectedCells: [],
     foundWords: [],
     currentGrid: [],
@@ -509,7 +510,9 @@ let gameState = {
     totalCoins: 0,          // Total de monedas del usuario
     levelCoinsEarned: 0,    // Monedas ganadas en el nivel actual
     // Sistema de temas
-    currentTheme: 'bosque'  // Tema actual del nivel
+    currentTheme: 'bosque', // Tema actual del nivel
+    // Control de modales
+    showingLevelComplete: false  // Flag para evitar mostrar la modal múltiples veces
 };
 
 // Funciones de navegación básicas
@@ -556,24 +559,40 @@ function startAsGuest() {
 }
 
 function backToMainMenu() {
+    // Si venimos del juego, regresar al juego
+    if (gameState.previousScreen === 'game-screen') {
+        showScreen('game-screen');
+        gameState.previousScreen = null; // Limpiar la referencia
+        return;
+    }
+    
+    // Si venimos de otra pantalla, ir al login inicial
+    // Primero asegurar que estamos en la pantalla correcta
+    showScreen('login-screen');
+    
+    // Luego restaurar el contenido del login-screen
     const loginContent = document.getElementById('login-content');
-    loginContent.innerHTML = `
-        <button class="btn btn-primary" onclick="smartPlay()" style="font-size: 1.3rem; padding: 0.8rem 2rem; height: 50px; width: auto; max-width: 280px; background: linear-gradient(145deg, #4ade80, #22c55e); border-radius: 25px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 700; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center;">
-            ¡JUGAR!
-        </button>
-        
-        <button class="btn btn-secondary" onclick="showLogin()" style="font-size: 1rem; padding: 1rem 1.5rem; min-height: 55px; width: auto; max-width: 280px; background: linear-gradient(145deg, #60a5fa, #3b82f6); border-radius: 20px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">
-            Identificarse
-        </button>
-        
-        <button class="btn btn-secondary" onclick="showScreen('test-screen'); testLevel();" style="background: #fbbf24; color: #000; font-weight: bold; display: none;">
-            PANTALLA DE TEST
-        </button>
-        
-        <button class="btn btn-secondary" onclick="window.open('font_test.html', '_blank');" style="background: #8b5cf6; color: #fff; font-weight: bold; display: none;">
-            PRUEBA DE FUENTES
-        </button>
-    `;
+    if (loginContent) {
+        loginContent.innerHTML = `
+            <button class="btn btn-primary" onclick="smartPlay()">
+                ¡JUGAR!
+            </button>
+            
+            <button class="btn btn-secondary" onclick="showLogin()">
+                Identificarse
+            </button>
+            
+            <button class="btn btn-secondary" onclick="showScreen('test-screen'); testLevel();" style="background: #fbbf24; color: #000; font-weight: bold; display: none;">
+                PANTALLA DE TEST
+            </button>
+            
+            <button class="btn btn-secondary" onclick="window.open('font_test.html', '_blank');" style="background: #8b5cf6; color: #fff; font-weight: bold; display: none;">
+                PRUEBA DE FUENTES
+            </button>
+        `;
+    }
+    
+    gameState.previousScreen = null; // Limpiar la referencia
 }
 
 function backToMenu() {
@@ -613,11 +632,11 @@ function restoreLoginContent() {
     const loginContent = document.getElementById('login-content');
     if (loginContent) {
         loginContent.innerHTML = `
-            <button class="btn btn-primary" onclick="smartPlay()" style="font-size: 1.3rem; padding: 0.8rem 2rem; height: 50px; width: auto; max-width: 280px; background: linear-gradient(145deg, #4ade80, #22c55e); border-radius: 25px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 700; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center;">
+            <button class="btn btn-primary" onclick="smartPlay()">
                 ¡JUGAR!
             </button>
             
-            <button class="btn btn-secondary" onclick="showLogin()" style="font-size: 1rem; padding: 1rem 1.5rem; min-height: 55px; width: auto; max-width: 280px; background: linear-gradient(145deg, #60a5fa, #3b82f6); border-radius: 20px; box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2), -6px -6px 12px rgba(255, 255, 255, 0.1); border: none; color: white; font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">
+            <button class="btn btn-secondary" onclick="showLogin()">
                 Identificarse
             </button>
             
@@ -745,15 +764,12 @@ function startBackgroundMusic() {
         // Reproducir la música
         gameState.backgroundAudio.play().then(() => {
             gameState.backgroundMusicPlaying = true;
-            console.log('🎵 Música de fondo iniciada');
         }).catch((error) => {
-            console.log('⚠️ No se pudo reproducir la música de fondo:', error);
             // Fallback: usar melodía generada si el MP3 falla
             startGeneratedMusic();
         });
         
     } catch (error) {
-        console.log('⚠️ Error al iniciar música de fondo:', error);
         // Fallback: usar melodía generada
         startGeneratedMusic();
     }
@@ -843,7 +859,6 @@ function stopBackgroundMusic() {
     }
     
     gameState.backgroundMusicPlaying = false;
-    console.log('🔇 Música de fondo detenida');
 }
 
 // Configurar sistema de monedas

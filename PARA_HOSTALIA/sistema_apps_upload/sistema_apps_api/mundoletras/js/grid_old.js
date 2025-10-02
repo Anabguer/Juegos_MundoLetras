@@ -325,15 +325,34 @@ function generateGrid() {
         cell.className = 'grid-cell';
         cell.textContent = letter;
         cell.dataset.index = index;
-        // Eliminado: selección letra a letra
+        // Eliminado: cell.onclick = () => selectCell(index); - Solo drag and drop
         
         // Añadir eventos de arrastre para móvil y desktop
         addDragEvents(cell, index);
         
         gridContainer.appendChild(cell);
+        
     });
-    
+    ensureGlyphSpans();   
 }
+
+function ensureGlyphSpans() {
+    const cells = document.querySelectorAll('#game-grid .grid-cell');
+    cells.forEach(cell => {
+      // si ya está envuelto, no repetir
+      if (cell.firstElementChild?.classList?.contains('glyph')) return;
+      const ch = cell.textContent;
+      const span = document.createElement('span');
+      span.className = 'glyph';
+      span.textContent = ch;
+      cell.textContent = '';
+      cell.appendChild(span);
+    });
+  }
+  
+  // Llama a esto después de crear las celdas:
+  ensureGlyphSpans();
+  
 
 // Colocar palabras en el grid
 function placeWordsInGrid(words, gridSize) {
@@ -518,6 +537,7 @@ function placeWordsInGrid(words, gridSize) {
                             });
                             forcedPlaced = true;
                             placed = true;
+                            console.log(`✅ Palabra "${word}" colocada FORZADAMENTE en posición (${row}, ${col})`);
                         }
                     }
                 }
@@ -745,91 +765,91 @@ let colorIndex = 0;
 let isProcessingEndDrag = false; // Evitar ejecuciones duplicadas de endDrag
 const PILL_COLORS = ["c0", "c1", "c2", "c3", "c4", "c5"];
 
-// Función para forzar transparencia absoluta en una celda
+// Dejar celdas ENCONTRADAS en blanco (no transparente)
+function setFoundWhite(cell) {
+    if (!cell) return;
+    // quitar restos de estilos inline
+    cell.style.removeProperty('background-image');
+    cell.style.removeProperty('box-shadow');
+    cell.style.removeProperty('opacity');
+    cell.style.removeProperty('visibility');
+  
+    // forzar fondo blanco (como al iniciar)
+  //  cell.style.setProperty('background-color', '#ffffff', 'important');
+  //  cell.style.setProperty('background', '#ffffff', 'important');
+  
+    // mantener la letra visible
+    cell.style.setProperty('color', '#000000', 'important'); // mismo azul de tu tema
+  }
+  
+
+/*
+// Función para forzar transparencia absoluta en una celda - NUCLEAR
 function forceTransparency(cell) {
     if (!cell) return;
     
-    // Método 1: setProperty
+    // Método 1: setProperty con todas las propiedades de background
     cell.style.setProperty('background', 'transparent', 'important');
     cell.style.setProperty('background-color', 'transparent', 'important');
     cell.style.setProperty('background-image', 'none', 'important');
+    cell.style.setProperty('background-size', 'unset', 'important');
+    cell.style.setProperty('background-position', 'unset', 'important');
+    cell.style.setProperty('background-repeat', 'unset', 'important');
+    cell.style.setProperty('background-attachment', 'unset', 'important');
     cell.style.setProperty('box-shadow', 'none', 'important');
+    cell.style.setProperty('border', 'none', 'important');
+    cell.style.setProperty('outline', 'none', 'important');
+    cell.style.setProperty('color', '#000000', 'important');
+    cell.style.setProperty('opacity', '1', 'important');
+    cell.style.setProperty('visibility', 'visible', 'important');
     
     // Método 2: cssText (más agresivo)
-    cell.style.cssText += 'background: transparent !important; background-color: transparent !important; background-image: none !important; box-shadow: none !important;';
+    const transparentStyles = `
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        background-size: unset !important;
+        background-position: unset !important;
+        background-repeat: unset !important;
+        background-attachment: unset !important;
+        box-shadow: none !important;
+        border: none !important;
+        outline: none !important;
+        color: #000000 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    `;
+    cell.style.cssText += transparentStyles;
     
     // Método 3: setAttribute (nuclear)
-    cell.setAttribute('style', cell.getAttribute('style') + '; background: transparent !important; background-color: transparent !important; background-image: none !important; box-shadow: none !important;');
-}
+    const currentStyle = cell.getAttribute('style') || '';
+    cell.setAttribute('style', currentStyle + ';' + transparentStyles);
+    
+    // Método 4: Forzar con setAttribute directo
+    cell.setAttribute('data-force-transparent', 'true');
+}*/
 
+/*
 // Función para forzar transparencia en todas las celdas encontradas
 function forceAllFoundCellsTransparency() {
     const foundCells = document.querySelectorAll('#game-grid .grid-cell.is-found');
     foundCells.forEach(cell => {
         forceTransparency(cell);
     });
-}
+}*/
 
-// Función para limpiar TODAS las píldoras temporales - MÉTODO ESPECÍFICO
+// Función para limpiar TODAS las píldoras temporales - SOLUCIÓN SIMPLIFICADA
 function clearAllTemporaryPills() {
     if (!overlaySVG) return;
-
-    // Debug: verificar estado antes de limpiar
-    const allLinesBefore = overlaySVG.querySelectorAll('line');
-    const tempElementsBefore = overlaySVG.querySelectorAll('[data-temp]');
-    const permElementsBefore = overlaySVG.querySelectorAll('[data-permanent]');
-
-    // 1) Eliminar solo elementos marcados como temporales (incluyendo currentPill)
-    const tempElements = overlaySVG.querySelectorAll('[data-temp]');
-    tempElements.forEach(el => el.remove());
-
-    // 2) Resetear currentPill
+    // Elimina hijos directos del SVG que no sean permanentes (g o line sueltos)
+    overlaySVG.querySelectorAll(':scope > :not([data-permanent])').forEach(n => n.remove());
+    // Limpia grupos vacíos por si acaso
+    overlaySVG.querySelectorAll('g').forEach(g => { if (!g.hasChildNodes()) g.remove(); });
     currentPill = null;
+  }
 
-    // 3) Limpiar grupos vacíos
-    overlaySVG.querySelectorAll('g').forEach(g => {
-        if (!g.hasChildNodes()) {
-            g.remove();
-        }
-    });
-    
-    // Debug: verificar estado después de limpiar
-    const allLinesAfter = overlaySVG.querySelectorAll('line');
-    const tempElementsAfter = overlaySVG.querySelectorAll('[data-temp]');
-    const permElementsAfter = overlaySVG.querySelectorAll('[data-permanent]');
-}
-
-// Ejecutar periódicamente para mantener transparencia
-setInterval(forceAllFoundCellsTransparency, 100);
-
-// Función adicional para limpiar cualquier fondo de color que interfiera con las píldoras SVG
-function cleanCellBackgrounds() {
-    const allCells = document.querySelectorAll('#game-grid .grid-cell');
-    let cleanedCount = 0;
-    allCells.forEach(cell => {
-        // Limpiar cualquier fondo de color que no sea blanco o transparente
-        const currentBg = cell.style.backgroundColor;
-        if (currentBg && currentBg !== 'white' && currentBg !== 'transparent' && currentBg !== 'rgba(0, 0, 0, 0)') {
-            cell.style.backgroundColor = 'transparent';
-            cleanedCount++;
-        }
-        
-        // También limpiar cualquier background aplicado por CSS
-        const computedStyle = window.getComputedStyle(cell);
-        const computedBg = computedStyle.backgroundColor;
-        if (computedBg && computedBg !== 'rgba(0, 0, 0, 0)' && computedBg !== 'transparent' && computedBg !== 'rgb(255, 255, 255)') {
-            cell.style.setProperty('background-color', 'transparent', 'important');
-            cell.style.setProperty('background', 'transparent', 'important');
-            cleanedCount++;
-        }
-    });
-    
-    if (cleanedCount > 0) {
-    }
-}
-
-// Ejecutar limpieza cada 200ms para mantener las celdas limpias
-setInterval(cleanCellBackgrounds, 200);
+// Ejecutar periódicamente para mantener transparencia - MÁS FRECUENTE
+// setInterval(forceAllFoundCellsTransparency, 50);
 
 // Inicializar overlay SVG para las píldoras
 function initOverlaySVG() {
@@ -840,33 +860,17 @@ function initOverlaySVG() {
     overlaySVG.setAttribute("class", "overlay");
     overlaySVG.setAttribute("width", "100%");
     overlaySVG.setAttribute("height", "100%");
-    
-    // FORZAR ESTILOS DEL CONTENEDOR SVG
-    overlaySVG.setAttribute("style", `
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        z-index: 999 !important;
-        pointer-events: none !important;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 0.7 !important;
-    `);
-    
     // OJO: sin viewBox y sin preserveAspectRatio => coordenadas en px del elemento
     gameGrid.prepend(overlaySVG); // mejor delante para que quede debajo del texto pero sobre el fondo
-    
 }
 
 // Crear píldora SVG (coordenadas en píxeles)
 // Añadimos parámetro isTemp para marcarla como temporal o permanente
-function createPill(x1, y1, x2, y2, colorClass, isTemp = false) {
+/*function createPill(x1, y1, x2, y2, colorClass, isTemp = false) {
     const gameGrid = document.getElementById('game-grid');
     const rect = gameGrid.getBoundingClientRect();
     const base = Math.min(rect.width/10, rect.height/10);
-    const strokeWidth = Math.max(6, base * 0.72); // Vuelto al grosor original
+    const strokeWidth = Math.max(6, base * 0.72);
 
     // SIN SESGO VISUAL - usar coordenadas exactas del centro de las celdas
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -878,83 +882,68 @@ function createPill(x1, y1, x2, y2, colorClass, isTemp = false) {
     line.setAttribute("stroke-linejoin", "round");
     line.setAttribute("class", `stroke-${colorClass}`);
     line.setAttribute("stroke-width", strokeWidth);
-    line.setAttribute("opacity", "0.7");
-    
-    // FORZAR VISIBILIDAD con estilos inline más agresivos
-    line.setAttribute("style", `
-        stroke-width: ${strokeWidth}px !important;
-        opacity: 0.7 !important;
-        visibility: visible !important;
-        display: block !important;
-        z-index: 999 !important;
-        position: relative !important;
-        pointer-events: none !important;
-    `);
+    line.setAttribute("opacity", "0.95");
 
     if (isTemp) {
         line.setAttribute("data-temp", "1");
     } else {
         line.setAttribute("data-permanent", "1");
     }
-    
-    
     return line;
-}
+}*/
 
-// Crear píldora compacta para diagonales usando path SVG
-function createCompactPill(selectedCells, colorClass, isTemp = false) {
-    if (selectedCells.length < 2) return null;
-    
+function createPill(x1, y1, x2, y2, colorClass, isTemp = false) {
+    const svgNS = "http://www.w3.org/2000/svg";
     const gameGrid = document.getElementById('game-grid');
+    if (!gameGrid) return document.createElementNS(svgNS, 'g');
+  
     const rect = gameGrid.getBoundingClientRect();
-    const base = Math.min(rect.width/10, rect.height/10);
-    const strokeWidth = Math.max(6, base * 0.72); // Vuelto al grosor original
-    
-    // Obtener coordenadas de todas las celdas seleccionadas
-    const centers = selectedCells.map(index => getCellCenter(index));
-    
-    // Crear path SVG que conecta todos los puntos
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    
-    // Construir el path como una línea continua
-    let pathData = `M ${centers[0].x} ${centers[0].y}`;
-    for (let i = 1; i < centers.length; i++) {
-        pathData += ` L ${centers[i].x} ${centers[i].y}`;
+    const n = (window.gameState && window.gameState.currentGridSize) || 10;
+    const base = Math.min(rect.width / n, rect.height / n);
+    const strokeWidth = Math.max(6, base * 0.68); // un pelín más fino para que no “coma” bordes
+  
+    // Alineado óptico
+    const PILL_BIAS_H_UP = 0.10;
+    const PILL_BIAS_V_LEFT = 0.10;
+    const eps = 0.0001;
+    const isH = Math.abs(y2 - y1) < eps;
+    const isV = Math.abs(x2 - x1) < eps;
+    const isD = !isH && !isV;
+  
+    if (isH) { y1 -= PILL_BIAS_H_UP * base; y2 -= PILL_BIAS_H_UP * base; }
+    else if (isV) { x1 -= PILL_BIAS_V_LEFT * base; x2 -= PILL_BIAS_V_LEFT * base; }
+  
+    // Encoger extremos lo mínimo necesario (casi nada en H/V, moderado en diagonal)
+    const vx = x2 - x1, vy = y2 - y1;
+    const len = Math.max(Math.hypot(vx, vy), 1);
+    const ux = vx / len, uy = vy / len;
+    const shrink = isD ? base * 0.22 : base * 0.10; // <-- antes era demasiado alto
+  
+    let X1 = x1, Y1 = y1, X2 = x2, Y2 = y2;
+    if (len > shrink * 2 + 1) {
+      X1 = x1 + ux * shrink;  Y1 = y1 + uy * shrink;
+      X2 = x2 - ux * shrink;  Y2 = y2 - uy * shrink;
     }
+  
+    const g = document.createElementNS(svgNS, 'g');
+    if (isTemp) g.setAttribute('data-temp', '1'); else g.setAttribute('data-permanent', '1');
+  
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', X1); line.setAttribute('y1', Y1);
+    line.setAttribute('x2', X2); line.setAttribute('y2', Y2);
+    line.setAttribute('stroke-linecap', 'round');
+    line.setAttribute('stroke-linejoin', 'round');
+    line.setAttribute('class', `stroke-${colorClass}`);
+    line.setAttribute('stroke-width', strokeWidth);
+    line.setAttribute('opacity', '0.95');
+    // Ayuda a que el grosor no cambie con escalados CSS
+    line.setAttribute('vector-effect', 'non-scaling-stroke');
+  
+    g.appendChild(line);
+    return g;
+  } 
     
-    path.setAttribute("d", pathData);
-    path.setAttribute("stroke-linecap", "round");
-    path.setAttribute("stroke-linejoin", "round");
-    path.setAttribute("class", `stroke-${colorClass}`);
-    path.setAttribute("stroke-width", strokeWidth);
-    path.setAttribute("fill", "none");
-    path.setAttribute("opacity", "0.7");
-    
-    // FORZAR VISIBILIDAD con estilos inline más agresivos
-    path.setAttribute("style", `
-        stroke-width: ${strokeWidth}px !important;
-        opacity: 0.7 !important;
-        visibility: visible !important;
-        display: block !important;
-        z-index: 999 !important;
-        position: relative !important;
-        pointer-events: none !important;
-    `);
-
-    if (isTemp) {
-        path.setAttribute("data-temp", "1");
-    } else {
-        path.setAttribute("data-permanent", "1");
-    }
-    
-    
-    // FORZAR RE-RENDERIZADO DEL SVG
-    overlaySVG.style.display = 'none';
-    overlaySVG.offsetHeight; // Trigger reflow
-    overlaySVG.style.display = 'block';
-    
-    return path;
-}
+  window.createPill = createPill; // expose override
 
 // Obtener posición central de una celda (coordenadas en píxeles reales)
 function getCellCenter(index) {
@@ -971,6 +960,7 @@ function getCellCenter(index) {
     };
     
     // Debug: mostrar coordenadas calculadas
+    console.log(`📍 Celda ${index}: x=${center.x.toFixed(1)}, y=${center.y.toFixed(1)}`);
     
     return center;
 }
@@ -1007,8 +997,6 @@ function startDrag(e, index) {
     
     // Limpiar píldora anterior
     clearAllTemporaryPills();
-    
-    // Eliminado: selección letra a letra
     
     // Añadir clase de arrastre al body para CSS
     document.body.classList.add('dragging');
@@ -1098,68 +1086,27 @@ function handleDrag(e, index) {
         gameState.selectedCells = newPath;
         updateCellSelection();
         
-        // Crear píldora temporal durante el arrastre para mostrar evolución
+        // Dibujar píldora en tiempo real solo si el path cambió
         if (newPath.length >= 2) {
-            // Detectar si es diagonal para usar píldora compacta
-            const isDiagonal = dragDirection && dragDirection.dr !== 0 && dragDirection.dc !== 0;
+            const startCenter = getCellCenter(newPath[0]);
+            const endCenter = getCellCenter(newPath[newPath.length - 1]);
             
-            // Debug: mostrar información sobre la dirección
-            
-            // Solo crear/actualizar píldora si no existe o si el path cambió significativamente
-            let needsUpdate = false;
-            
-            if (!currentPill) {
-                needsUpdate = true;
-            } else {
-                // Para diagonales, comparar longitud del path
-                if (isDiagonal) {
-                    const currentPathLength = currentPill.getAttribute('data-path-length') || '0';
-                    if (parseInt(currentPathLength) !== newPath.length) {
-                        needsUpdate = true;
-                    }
-                } else {
-                    // Para horizontales/verticales, comparar coordenadas
-                    const startCenter = getCellCenter(newPath[0]);
-                    const endCenter = getCellCenter(newPath[newPath.length - 1]);
-                    const tolerance = 0.1;
-                    const x1 = parseFloat(currentPill.getAttribute('x1'));
-                    const y1 = parseFloat(currentPill.getAttribute('y1'));
-                    const x2 = parseFloat(currentPill.getAttribute('x2'));
-                    const y2 = parseFloat(currentPill.getAttribute('y2'));
-                    
-                    if (Math.abs(x1 - startCenter.x) > tolerance || 
-                        Math.abs(y1 - startCenter.y) > tolerance ||
-                        Math.abs(x2 - endCenter.x) > tolerance || 
-                        Math.abs(y2 - endCenter.y) > tolerance) {
-                        needsUpdate = true;
-                    }
-                }
-            }
-            
-            if (needsUpdate) {
+            // Solo crear nueva píldora si no existe o si el path cambió significativamente
+            if (!currentPill || 
+                currentPill.getAttribute('x1') != startCenter.x || 
+                currentPill.getAttribute('y1') != startCenter.y ||
+                currentPill.getAttribute('x2') != endCenter.x || 
+                currentPill.getAttribute('y2') != endCenter.y) {
+                
                 // Limpiar píldora anterior
                 if (currentPill) {
                     currentPill.remove();
                 }
                 
-                // Crear nueva píldora temporal
-                if (isDiagonal) {
-                    // Para diagonales, usar píldora compacta SVG que sigue cada paso
-                    currentPill = createCompactPill(newPath, PILL_COLORS[colorIndex % PILL_COLORS.length], true);
-                    currentPill.setAttribute('data-path-length', newPath.length.toString());
-                    overlaySVG.appendChild(currentPill);
-                } else {
-                    // Para horizontales/verticales, usar píldora simple SVG
-                    const startCenter = getCellCenter(newPath[0]);
-                    const endCenter = getCellCenter(newPath[newPath.length - 1]);
-                    currentPill = createPill(startCenter.x, startCenter.y, endCenter.x, endCenter.y, PILL_COLORS[colorIndex % PILL_COLORS.length], true);
-                    overlaySVG.appendChild(currentPill);
-                }
-                
-                // FORZAR RE-RENDERIZADO INMEDIATO DEL SVG
-                overlaySVG.style.display = 'none';
-                overlaySVG.offsetHeight; // Trigger reflow
-                overlaySVG.style.display = 'block';
+                // Crear nueva píldora marcada como temporal
+                console.log(`🎨 Creando píldora temporal: (${startCenter.x.toFixed(1)}, ${startCenter.y.toFixed(1)}) -> (${endCenter.x.toFixed(1)}, ${endCenter.y.toFixed(1)})`);
+                currentPill = createPill(startCenter.x, startCenter.y, endCenter.x, endCenter.y, PILL_COLORS[0], true);
+                overlaySVG.appendChild(currentPill);
             }
         }
     }
@@ -1194,13 +1141,31 @@ function endDrag(e, index) {
     // Remover clase de arrastre
     document.body.classList.remove('dragging');
     
-    // Verificar si la selección es válida
-    if (gameState.selectedCells.length >= 2) {
-        // La píldora temporal ya existe (creada durante el arrastre)
-        // Solo verificar si es una palabra válida
+    // Verificar si se formó una palabra válida
+    if (gameState.selectedCells.length >= 2 && isValidWordSelection()) {
+        // Crear píldora permanente con color único SOLO UNA VEZ
+        if (gameState.selectedCells.length >= 2) {
+            const startCenter = getCellCenter(gameState.selectedCells[0]);
+            const endCenter = getCellCenter(gameState.selectedCells[gameState.selectedCells.length - 1]);
+            
+            console.log(`🎨 Creando píldora permanente: (${startCenter.x.toFixed(1)}, ${startCenter.y.toFixed(1)}) -> (${endCenter.x.toFixed(1)}, ${endCenter.y.toFixed(1)})`);
+            const permanentPill = createPill(
+                startCenter.x, startCenter.y,
+                endCenter.x, endCenter.y,
+                PILL_COLORS[colorIndex % PILL_COLORS.length],
+                false // isTemp = false
+            );
+            overlaySVG.appendChild(permanentPill);
+            colorIndex++;
+        }
+        
+        // Limpiar píldoras temporales
+        clearAllTemporaryPills();
+        
         checkForWord();
     } else {
         // Si la selección no es válida, limpiar inmediatamente
+        clearAllTemporaryPills();
         clearSelection();
     }
     
@@ -1246,7 +1211,8 @@ function initDragEvents() {
     }, { passive: false });
 }
 
-// Función selectCell eliminada - solo drag and drop
+// Función selectCell eliminada - Solo drag and drop
+// La selección ahora se maneja únicamente a través de drag and drop
 
 // Verificar si la selección temporal forma una línea recta
 function isValidSelection(cells) {
@@ -1465,15 +1431,6 @@ function checkForWord() {
         // Palabra encontrada - revelar todas las celdas con niebla de la palabra
         gameState.foundWords.push(foundWord);
         
-        // Convertir píldora temporal en permanente
-        if (currentPill) {
-            currentPill.removeAttribute('data-temp');
-            currentPill.setAttribute('data-permanent', '1');
-            currentPill.setAttribute('class', `stroke-${PILL_COLORS[colorIndex % PILL_COLORS.length]}`);
-            colorIndex++;
-            currentPill = null; // Ya no es temporal
-        }
-        
         // Limpiar pistas de la palabra encontrada
         clearHintsForWord(foundWord);
         
@@ -1532,11 +1489,13 @@ function checkForWord() {
             cell.classList.add('is-found');
 
             // Forzar transparencia absoluta - solución drástica
-            forceTransparency(cell);
+//            forceTransparency(cell);
+            // Dejarla en BLANCO (no transparente)
+            setFoundWhite(cell);
+
             // Animación escalonada para cada celda
             setTimeout(() => {
                 cell.style.transform = 'scale(1.2)';
-                // Removido: cell.style.backgroundColor = wordColor; (interfiere con píldoras SVG)
                 setTimeout(() => {
                     cell.style.transform = '';
                 }, 200);
@@ -1580,13 +1539,7 @@ function checkForWord() {
         // Mostrar mensaje de error
         showMessage(`"${selectedWord}" no es una palabra válida`, 'error');
         
-        // Limpiar píldora temporal
-        if (currentPill) {
-            currentPill.remove();
-            currentPill = null;
-        }
-        
-        // Limpiar selección inmediatamente
+        // Limpiar selección inmediatamente - Solo drag and drop
         gameState.selectedCells = [];
         updateCellSelection();
     }
@@ -1717,11 +1670,12 @@ function submitSelection() {
             cell.classList.add('is-found');
 
             // Forzar transparencia absoluta - solución drástica
-            forceTransparency(cell);
+            //forceTransparency(cell);
+            // Dejarla en BLANCO (no transparente)
+            setFoundWhite(cell);
             // Animación escalonada para cada celda
             setTimeout(() => {
                 cell.style.transform = 'scale(1.2)';
-                // Removido: cell.style.backgroundColor = wordColor; (interfiere con píldoras SVG)
                 setTimeout(() => {
                     cell.style.transform = '';
                 }, 200);
@@ -1765,4 +1719,52 @@ function submitSelection() {
     updateWordsList();
 }
 
+/* ===== FINAL OVERRIDES (layering, pills, glyph spans, found styling) ===== */
 
+(function(){
+  // Ensure letters are wrapped in .glyph spans so overlay sits under text
+  function ensureGlyphSpans() {
+    const cells = document.querySelectorAll('#game-grid .grid-cell');
+    cells.forEach(cell => {
+      if (cell.firstElementChild && cell.firstElementChild.classList && cell.firstElementChild.classList.contains('glyph')) return;
+      const ch = cell.textContent;
+      const span = document.createElement('span');
+      span.className = 'glyph';
+      span.textContent = ch;
+      cell.textContent = '';
+      cell.appendChild(span);
+    });
+  }
+  ensureGlyphSpans();
+  // Also watch for grid rebuilds
+  const grid = document.getElementById('game-grid');
+  if (grid) {
+    new MutationObserver(()=>ensureGlyphSpans()).observe(grid, {childList:true, subtree:true});
+  }
+
+  // Keep found cells clean (no inline backgrounds from older code); set letters black
+  function applyFoundCellStyle(){
+    document.querySelectorAll('#game-grid .grid-cell.is-found').forEach(cell=>{
+      cell.style.removeProperty('background');
+      cell.style.removeProperty('background-color');
+      cell.style.removeProperty('background-image');
+      cell.style.removeProperty('box-shadow');
+      cell.style.setProperty('color', '#000', 'important');
+    });
+  }
+  applyFoundCellStyle();
+  setInterval(applyFoundCellStyle, 400);
+
+  // Robust temp pill cleanup: remove non-permanent direct children of the SVG
+  
+  function clearAllTemporaryPills() {
+    if (!overlaySVG) return;
+    // elimina hijos directos del SVG que no sean permanentes
+    overlaySVG.querySelectorAll(':scope > :not([data-permanent])').forEach(n => n.remove());
+    // limpia grupos vacíos
+    overlaySVG.querySelectorAll('g').forEach(g => { if (!g.hasChildNodes()) g.remove(); });
+    currentPill = null;
+  }
+  
+  window.clearAllTemporaryPills = clearAllTemporaryPills;
+})();

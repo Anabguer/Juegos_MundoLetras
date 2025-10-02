@@ -468,7 +468,7 @@
         .game-grid {
             display: grid;
             gap: 0;
-            background: white;
+            background: transparent;
             border-radius: 0;
             padding: 0;
             max-width: 90vw;
@@ -2239,50 +2239,29 @@
 
 /* Asegura que el overlay esté por encima del fondo y por debajo del texto */
 #game-grid { position: relative; }
-#game-grid .overlay { 
-    position: absolute; 
-    inset: 0; 
-    pointer-events: none; 
-    z-index: 2; 
-    display: block !important;
-    visibility: visible !important;
-}
-#game-grid .overlay path,
-#game-grid .overlay line {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-#game-grid .grid-cell { position: relative; z-index: 5; }
+#game-grid .overlay { position: absolute; inset: 0; pointer-events: none; z-index: 10; }
+#game-grid .grid-cell { position: relative; z-index: 20; }
 
 /* Estados PROPIOS del grid (nada de .selected genérico) - MÁXIMA ESPECIFICIDAD */
-#game-grid .grid-cell.is-selected,
-#game-grid .grid-cell.is-found {
-    background: transparent !important;
-    background-color: transparent !important;
+#game-grid .grid-cell.is-selected {
+    background: white !important;
+    background-color: white !important;
     background-image: none !important;
     box-shadow: none !important;
-    color: #1e40af !important;
+    color: #000000 !important;
+    z-index: 1 !important;
 }
 
-/* Forzar transparencia absoluta - GANA SOBRE CUALQUIER OTRA REGLA */
+/* REGLA ÚNICA PARA CELDAS ENCONTRADAS */
 #game-grid .grid-cell.is-found {
-    background: transparent !important;
-    background-color: transparent !important;
+    background: white !important;
+    background-color: white !important;
     background-image: none !important;
     box-shadow: none !important;
     color: #1e40af !important;
     opacity: 1 !important;
-}
-
-/* REGLA MÁXIMA ESPECIFICIDAD - Usando atributo data-index */
-#game-grid .grid-cell[data-index].is-found {
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: #1e40af !important;
-    opacity: 1 !important;
+    position: relative !important;
+    z-index: 20 !important;
 }
 
 /* Mata cualquier pseudo-elemento que meta color */
@@ -2311,36 +2290,20 @@
 }
 
 /* Colores de trazos */
-.stroke-c0 { stroke: #ff7bbf !important; }
-.stroke-c1 { stroke: #4cc3ff !important; }
-.stroke-c2 { stroke: #9bdb4a !important; }
-.stroke-c3 { stroke: #f7b500 !important; }
-.stroke-c4 { stroke: #8b7bff !important; }
-.stroke-c5 { stroke: #ff8e5a !important; }
+.stroke-c0 { stroke: #ff7bbf; }
+.stroke-c1 { stroke: #4cc3ff; }
+.stroke-c2 { stroke: #9bdb4a; }
+.stroke-c3 { stroke: #f7b500; }
+.stroke-c4 { stroke: #8b7bff; }
+.stroke-c5 { stroke: #ff8e5a; }
 
-/* Asegurar que las píldoras SVG sean visibles */
-#game-grid .overlay path.stroke-c0,
-#game-grid .overlay path.stroke-c1,
-#game-grid .overlay path.stroke-c2,
-#game-grid .overlay path.stroke-c3,
-#game-grid .overlay path.stroke-c4,
-#game-grid .overlay path.stroke-c5 {
-    stroke-width: 25px !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
-    z-index: 10 !important;
-}
+/* Colores de relleno para píldoras temporales */
+.fill-c0 { fill: #ff7bbf; }
+.fill-c1 { fill: #4cc3ff; }
+.fill-c2 { fill: #9bdb4a; }
+.fill-c3 { fill: #f7b500; }
+.fill-c4 { fill: #8b7bff; }
+.fill-c5 { fill: #ff8e5a; }
 
-/* REGLA FINAL - MÁXIMA ESPECIFICIDAD ABSOLUTA */
-#game-grid .grid-cell[data-index].is-found {
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: #1e40af !important;
-    opacity: 1 !important;
-    position: relative !important;
-    z-index: 3 !important;
-}
+ 
     

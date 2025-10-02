@@ -132,13 +132,15 @@ function showLevelComplete() {
     // Verificar si ya hay una modal de nivel completado visible
     const existingOverlay = document.querySelector('.level-complete-overlay');
     if (existingOverlay) {
-        // Verificar si es la modal de nivel completado (no la de nivel perdido)
-        const isLevelCompleteModal = existingOverlay.querySelector('.level-complete-title')?.textContent.includes('Completado');
-        if (isLevelCompleteModal) {
-            console.log('⚠️ Modal de nivel completado ya visible, ignorando llamada duplicada');
-            return;
-        }
+        // Ya existe una modal, no crear otra
+        return;
     }
+    
+    // Marcar que se está mostrando el nivel completado para evitar llamadas duplicadas
+    if (gameState.showingLevelComplete) {
+        return;
+    }
+    gameState.showingLevelComplete = true;
     
     // Calcular estrellas basadas en tiempo y errores
     const stars = calculateStars();
@@ -265,67 +267,111 @@ function showLevelFailed() {
 }
 
 // Función para pasar al siguiente nivel
-function nextLevel() {
+async function nextLevel() {
     // Remover overlay
     const overlay = document.querySelector('.level-complete-overlay');
     if (overlay && overlay.parentNode) {
         overlay.parentNode.removeChild(overlay);
     }
+    
+    // Limpiar flag de modal mostrada
+    gameState.showingLevelComplete = false;
     
     // Actualizar estado y avanzar al siguiente nivel
     gameState.currentLevel++;
-    gameState.coins += 10; // Añadir monedas
     
-    // Iniciar el siguiente nivel
-    initGame();
+    // Guardar progreso DESPUÉS de incrementar el nivel
+    if (gameState.currentUser && gameState.currentUser.isGuest) {
+        saveGuestProgress();
+    } else if (gameState.currentUser && !gameState.currentUser.isGuest) {
+        await saveUserProgress();
+    }
+    
+    // Generar el siguiente nivel correctamente
+    await generateNextLevel();
 }
 
 // Función para reintentar el nivel
-function retryLevel() {
+async function retryLevel() {
     // Remover overlay
     const overlay = document.querySelector('.level-complete-overlay');
     if (overlay && overlay.parentNode) {
         overlay.parentNode.removeChild(overlay);
     }
     
-    // Reiniciar el nivel actual (sin avanzar)
-    initGame();
+    // Limpiar flag de modal mostrada
+    gameState.showingLevelComplete = false;
+    
+    // Reiniciar el nivel actual (sin avanzar) usando generateNextLevel
+    await generateNextLevel();
 }
 
-// Animación de palabra encontrada
-function animateWordFound(word) {
-    // Crear elemento temporal para animación
-    const wordElement = document.createElement('div');
-    wordElement.textContent = word;
-    wordElement.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 1.8rem;
-        font-weight: 900;
-        color: #F59E0B;
-        background: linear-gradient(135deg, rgba(252, 211, 77, 0.2), rgba(245, 158, 11, 0.3));
-        padding: 0.5rem 1.2rem;
-        border-radius: 0.75rem;
-        border: 2px solid #F59E0B;
-        box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4), 0 0 0 1px rgba(252, 211, 77, 0.6);
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(8px);
-        z-index: 1000;
-        pointer-events: none;
-        animation: wordFoundEnhanced 2.5s ease-out forwards;
-        letter-spacing: 0.1em;
-    `;
+// Animación de palabra volando desde el grid hasta la lista
+function animateWordFlying(word) {
+    // Obtener la posición inicial (primera celda de la palabra encontrada)
+    const selectedCells = gameState.selectedCells;
+    if (selectedCells.length === 0) return;
     
-    document.body.appendChild(wordElement);
+    const firstCell = document.querySelector(`[data-index="${selectedCells[0]}"]`);
+    if (!firstCell) return;
     
-    // Remover después de la animación
-    setTimeout(() => {
-        if (wordElement.parentNode) {
-            wordElement.parentNode.removeChild(wordElement);
+    const startRect = firstCell.getBoundingClientRect();
+    
+    // Encontrar el elemento de la palabra en la lista
+    const wordsList = document.getElementById('words-list');
+    if (!wordsList) return;
+    
+    // Buscar el elemento de la palabra en la lista y su índice
+    let targetWordElement = null;
+    let wordIndex = 0;
+    const wordItems = wordsList.querySelectorAll('.word-item');
+    wordItems.forEach((item, index) => {
+        if (item.textContent.trim() === word || item.textContent.trim().startsWith(word)) {
+            targetWordElement = item;
+            wordIndex = gameState.currentWordsDisplay.indexOf(word);
         }
-    }, 2500);
+    });
+    
+    if (!targetWordElement) return;
+    
+    const endRect = targetWordElement.getBoundingClientRect();
+    
+    // Obtener el color según el índice de la palabra
+    const colorIndex = wordIndex % WORD_COLORS.length;
+    const color = WORD_COLORS[colorIndex];
+    
+    // Crear elemento temporal para la animación
+    const flyingWord = document.createElement('div');
+    flyingWord.className = 'flying-word';
+    flyingWord.textContent = word;
+    flyingWord.style.left = startRect.left + startRect.width / 2 + 'px';
+    flyingWord.style.top = startRect.top + startRect.height / 2 + 'px';
+    flyingWord.style.backgroundColor = color.bg;
+    flyingWord.style.color = color.text;
+    
+    // Calcular la diferencia
+    const deltaX = (endRect.left + endRect.width / 2) - (startRect.left + startRect.width / 2);
+    const deltaY = (endRect.top + endRect.height / 2) - (startRect.top + startRect.height / 2);
+    
+    flyingWord.style.setProperty('--target-x', deltaX + 'px');
+    flyingWord.style.setProperty('--target-y', deltaY + 'px');
+    
+    document.body.appendChild(flyingWord);
+    
+    // Remover después de la animación y actualizar la lista
+    setTimeout(() => {
+        if (flyingWord.parentNode) {
+            flyingWord.parentNode.removeChild(flyingWord);
+        }
+        // Actualizar la lista de palabras para mostrar en gris
+        updateWordsList();
+    }, 1000);
+}
+
+// Animación de palabra encontrada (mantener compatibilidad)
+function animateWordFound(word) {
+    // Solo llamar a la animación de vuelo, sin palabra en el centro
+    animateWordFlying(word);
 }
 
 
@@ -578,6 +624,18 @@ function updateHUD() {
     updateCoinsDisplay();
 }
 
+// Colores variados para palabras encontradas
+const WORD_COLORS = [
+    { bg: '#ef4444', text: '#ffffff' },  // Rojo
+    { bg: '#f59e0b', text: '#ffffff' },  // Naranja
+    { bg: '#eab308', text: '#ffffff' },  // Amarillo
+    { bg: '#22c55e', text: '#ffffff' },  // Verde
+    { bg: '#06b6d4', text: '#ffffff' },  // Cyan
+    { bg: '#3b82f6', text: '#ffffff' },  // Azul
+    { bg: '#8b5cf6', text: '#ffffff' },  // Violeta
+    { bg: '#ec4899', text: '#ffffff' },  // Rosa
+];
+
 // Actualizar lista de palabras
 function updateWordsList() {
     const wordsList = document.getElementById('words-list');
@@ -585,7 +643,7 @@ function updateWordsList() {
     
     wordsList.innerHTML = '';
     
-    gameState.currentWordsDisplay.forEach(word => {
+    gameState.currentWordsDisplay.forEach((word, index) => {
         const wordItem = document.createElement('div');
         wordItem.className = 'word-item';
         
@@ -602,6 +660,7 @@ function updateWordsList() {
         } else if (isFound) {
             wordItem.textContent = word;
             wordItem.classList.add('found');
+            // Las palabras encontradas se mantienen en gris (por CSS)
         } else {
             wordItem.textContent = word;
         }

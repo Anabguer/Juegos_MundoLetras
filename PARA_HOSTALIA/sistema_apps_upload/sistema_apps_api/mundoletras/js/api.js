@@ -16,6 +16,11 @@ function switchTab(tabName) {
 }
 
 function showLogin() {
+    // Guardar la pantalla actual para poder regresar
+    const currentActiveScreen = document.querySelector('.screen.active');
+    if (currentActiveScreen) {
+        gameState.previousScreen = currentActiveScreen.id;
+    }
     const loginContent = document.getElementById('login-content');
     loginContent.innerHTML = `
         <!-- Pestañas -->
@@ -1034,19 +1039,32 @@ function smartPlay() {
 
 // Función para hacer login automático con credenciales guardadas
 function doLoginWithCredentials(email, password) {
-    // Hacer la petición de login
-    fetch(CONFIG.API_BASE_URL + 'auth.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            action: 'login',
-            email: email,
-            password: password
-        })
+    // Crear un timeout de 5 segundos para el fetch
+    const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Timeout')), 5000);
+    });
+    
+    // Hacer la petición de login con timeout
+    Promise.race([
+        fetch(CONFIG.API_BASE_URL + 'auth.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'login',
+                email: email,
+                password: password
+            })
+        }),
+        timeoutPromise
+    ])
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server error');
+        }
+        return response.json();
     })
-    .then(response => response.json())
     .then(data => {
         if (data.success) {
             // Login exitoso
@@ -1080,7 +1098,8 @@ function doLoginWithCredentials(email, password) {
         }
     })
     .catch(error => {
-        // En caso de error, jugar como invitado
+        // En caso de error (timeout, 502, red, etc.), jugar como invitado silenciosamente
+        // Error silencioso - el usuario no necesita ver esto
         startAsGuest();
     });
 }
